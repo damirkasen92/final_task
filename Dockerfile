@@ -7,8 +7,8 @@ RUN install-php-extensions \
     opcache \
     apcu
 
-ENV APP_ENV=dev
-ENV APP_DEBUG=1
+ENV APP_ENV=prod
+ENV APP_DEBUG=0
 ENV SERVER_NAME=":8080"
 ENV FRANKENPHP_DOCUMENT_ROOT="/app/public"
 
@@ -16,8 +16,8 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 COPY ./Caddyfile /etc/caddy/Caddyfile
 COPY ./opcache.ini $PHP_INI_DIR/conf.d/opcache.ini
 
-# RUN cp "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
-RUN cp $PHP_INI_DIR/php.ini-development $PHP_INI_DIR/php.ini
+RUN cp "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
+# RUN cp $PHP_INI_DIR/php.ini-development $PHP_INI_DIR/php.ini
 
 WORKDIR /app
 
@@ -29,11 +29,11 @@ COPY . .
 RUN composer install \
     --no-cache \ 
     --prefer-dist \
-    # --no-dev \
-    # --no-scripts \
+    --no-dev \
+    --no-scripts \
     --no-progress
 
-# RUN composer dump-autoload --optimize --classmap-authoritative --no-dev
+RUN composer dump-autoload --optimize --classmap-authoritative --no-dev
 
 RUN set -eux; \
     mkdir -p var/cache var/log; \
