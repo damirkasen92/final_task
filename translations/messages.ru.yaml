@@ -1,0 +1,45 @@
+roles:
+    admin: 'Админ'
+#    creator: 'Creator'
+    user: 'Пользователь'
+navbar:
+    menu:
+        home: 'Главная'
+        login: 'Войти'
+        logout: 'Выйти'
+        registration: 'Зарегистрироваться'
+admin:
+    title: 'Админ панель'
+    buttons:
+        block: 'Заблокировать пользователя'
+        unblock: 'Разблокировать пользователя'
+        delete: 'Удалить пользователя'
+        make_admin: 'Дать права Админа'
+        unmake_admin: 'Убрать права Админа'
+        popover_title: 'Вы можете отменить команду в течение'
+        undo: 'Отмена'
+    table:
+        header:
+            name: 'Имя'
+            email: 'Email'
+            role: 'Роль'
+            blocked: 'Блокировка пользователя'
+login:
+    login: 'Логин'
+    email: 'Email'
+    password: 'Пароль'
+registration:
+    registration: 'Зарегистрироваться'
+    email: 'Email'
+    name: 'Имя'
+    password: 'Пароль'
+    repeat_password: 'Повторить пароль'
+    repeat_passwords_error: 'Пароли не совпадают'
+forms:
+    submit: 'Отправить'
+home:
+    title: 'Домашняя'
+lang: 'Язык'
+
+inventory:
+    title: 'Инвентари'

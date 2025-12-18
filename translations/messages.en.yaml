@@ -1,0 +1,45 @@
+roles:
+    admin: 'Admin'
+#    creator: 'Creator'
+    user: 'User'
+navbar:
+    menu:
+        home: 'Home'
+        login: 'Login'
+        logout: 'Logout'
+        registration: 'Sign Up'
+admin:
+    title: 'Admin panel'
+    buttons:
+        block: 'Block user'
+        unblock: 'Unblock user'
+        delete: 'Delete user'
+        make_admin: 'Add admin rights'
+        unmake_admin: 'Remove admin rights'
+        popover_title: 'You can cancel the command within'
+        undo: 'Undo'
+    table:
+        header:
+            name: 'Name'
+            email: 'Email'
+            role: 'Role'
+            blocked: 'Is Blocked'
+login:
+    login: 'Login'
+    email: 'Email'
+    password: 'Password'
+registration:
+    registration: 'Sign Up'
+    email: 'Email'
+    name: 'Name'
+    password: 'Password'
+    repeat_password: 'Repeat Password'
+    repeat_passwords_error: 'Passwords do not match'
+forms:
+    submit: 'Submit'
+home:
+    title: 'Home'
+lang: 'Language'
+
+inventory:
+    title: 'Inventories'

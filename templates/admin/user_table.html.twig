@@ -1,0 +1,47 @@
+<turbo-frame id="admin-table">
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th>
+                <input
+                    class="main-checkbox"
+                    type="checkbox" name="check"
+                    data-controller="checkbox"
+                    data-action="click->checkbox#click"
+                >
+            </th>
+            <th>{{ 'admin.table.header.name'|trans }}</th>
+            <th>{{ 'admin.table.header.email'|trans }}</th>
+            <th>{{ 'admin.table.header.role'|trans }}</th>
+            <th>{{ 'admin.table.header.blocked'|trans }}</th>
+        </tr>
+        </thead>
+        <tbody>
+
+        {% for user in users %}
+            <tr>
+                <td>
+                    <input class="sub-checkbox" type="checkbox" name="check"
+                           data-controller="sub-checkbox"
+                           data-action="click->sub-checkbox#click"
+                           data-id="{{ user.id }}"
+                    >
+                </td>
+                <td>{{ user.name }}</td>
+                <td>{{ user.email }}</td>
+                <td>
+                    {% if role_admin in user.roles %}
+                        {{ 'roles.admin'|trans }}
+                    {% else %}
+                        {{ 'roles.user'|trans }}
+                    {% endif %}
+                </td>
+                <td>{{ user.blocked ? 'blocked' : 'free' }}</td>
+            </tr>
+        {% endfor %}
+
+        </tbody>
+    </table>
+
+</turbo-frame>

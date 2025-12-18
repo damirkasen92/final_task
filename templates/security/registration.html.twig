@@ -1,0 +1,37 @@
+{% extends './base.html.twig' %}
+
+{% block title %} {{ 'registration.registration'|trans }} {% endblock %}
+
+{% block body %}
+    <div class="register-wrapper col-12 col-md-6 mx-auto">
+        <h1 class="mb-3">{{ 'registration.registration'|trans }}</h1>
+
+        {% include '/includes/errors_alert.html.twig' %}
+
+        <form action="{{ path('registration') }}" method="post">
+            <input type="hidden" name="_csrf_token" data-controller="csrf-protection" value="{{ csrf_token('authenticate') }}">
+
+            <div class="mb-3">
+                <label for="name" class="form-label">{{ 'registration.name'|trans }}</label>
+                <input type="text" id="name" class="form-control" name="name" value="" required/>
+            </div>
+
+            <div class="mb-3">
+                <label for="email" class="form-label">{{ 'registration.email'|trans }}:</label>
+                <input type="text" id="email" class="form-control" name="email" value="" required/>
+            </div>
+
+            <div class="mb-3">
+                <label for="password" class="form-label">{{ 'registration.password'|trans }}:</label>
+                <input type="password" id="password" class="form-control" name="password" required/>
+            </div>
+
+            <div class="mb-3">
+                <label for="repeat_password" class="form-label">{{ 'registration.repeat_password'|trans }}:</label>
+                <input type="password" id="repeat_password" class="form-control" name="repeat_password" required/>
+            </div>
+
+            <button type="submit" class="btn btn-dark">{{ 'forms.submit'|trans }}</button>
+        </form>
+    </div>
+{% endblock %}

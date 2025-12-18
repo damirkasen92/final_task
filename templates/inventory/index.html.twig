@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} {{ 'home.title'|trans }} {% endblock %}
+
+{% block body %}
+<div class="container">
+    <h1 class="mb-3 text-center">{{ 'inventory.title'|trans }}</h1>
+
+    <div class="mb-3 create-inventory-wrapper">
+
+    </div>
+
+    <div class="mb-3 create-inventory-wrapper">
+        <h2 class="text-center">{{ 'inventory.my' }}</h2>
+    </div>
+
+    <div class="mb-3 create-inventory-wrapper">
+        <h2 class="text-center">{{ 'inventory.access' }}</h2>
+    </div>
+</div>
+{% endblock %}
