@@ -55,11 +55,4 @@ RUN chmod +x entry.sh
 
 EXPOSE 8080
 
-RUN set -e; \
-    php bin/console cache:clear --no-warmup; \
-    php bin/console importmap:install --no-interaction; \
-    php bin/console assets:install --no-interaction; \
-    php bin/console asset-map:compile; \
-    php bin/console doctrine:migrations:migrate --no-interaction;
-
 ENTRYPOINT [ "/app/entry.sh" ]
