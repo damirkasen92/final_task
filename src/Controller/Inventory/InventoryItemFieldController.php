@@ -38,6 +38,20 @@ class InventoryItemFieldController extends BaseController
         ]);
     }
 
+    #[Route('/inventory/{id}/edit/fields', name: 'edit_item_fields', methods: ['POST'])]
+    public function editItemFields(Inventory $inventory, ItemFieldRepository $itemFieldRepository) {
+        $this->denyAccessUnlessGranted(InventoryAttributes::EDIT->value, $inventory);
+
+        return $this->json($this->jsonSuccessData);
+
+        // return $this->render('inventory/includes/ui/item_fields.html.twig', [
+        //     'inventory'  => $inventory,
+        //     'itemFields' => $itemFieldRepository->findBy([
+        //         'inventory' => $inventory,
+        //     ]),
+        // ]);
+    }
+
     #[Route('/inventory/{id}/create/field', name: 'create_item_field', methods: ['POST'])]
     public function createItemField(Request $request, Inventory $inventory, InventoryService $inventoryService)
     {
