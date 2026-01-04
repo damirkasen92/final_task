@@ -11,6 +11,10 @@ ENV APP_ENV=prod
 ENV APP_DEBUG=0
 ENV SERVER_NAME=":8080"
 ENV FRANKENPHP_DOCUMENT_ROOT="/app/public"
+ENV DEFAULT_URI="https://final-task-761966872328.europe-west1.run.app"
+ENV DATABASE_URL=$DATABASE_URL
+ENV GOOGLE_CLOUD_KEY_PATH=$GOOGLE_CLOUD_KEY_PATH
+ENV GOOGLE_BUCKET_NAME=$GOOGLE_BUCKET_NAME
 
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 COPY ./Caddyfile /etc/caddy/Caddyfile
@@ -27,7 +31,7 @@ COPY ./composer.json ./composer.lock ./symfony.lock ./
 COPY . .
 
 RUN composer install \
-    --no-cache \ 
+    --no-cache \
     --prefer-dist \
     --no-dev \
     --no-scripts \
