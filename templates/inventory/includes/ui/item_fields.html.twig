@@ -1,0 +1,41 @@
+<turbo-frame id="inventory-item-fields">
+    <div class="table-responsive">
+        <table
+            class="table"
+            data-controller="inventory--sort"
+            data-reorder-path="{{
+                path('inventory_field_reorder', {
+                    id: inventory.id
+                })
+            }}"
+        >
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>Title</th>
+                    <th>Type</th>
+                    <th>Is Displayed</th>
+                </tr>
+            </thead>
+            <tbody id="sortable">
+                {% for itemField in itemFields %}
+                <tr
+                    data-id="{{ itemField.id }}"
+                    data-order="{{ itemField.orderIndex }}"
+                    data-inventory-id="{{ itemField.inventory.id }}"
+                >
+                    <td>
+                        <input type="checkbox" value="{{ itemField.id }}" />
+                    </td>
+                    <td>{{ itemField.title }}</td>
+                    <td>{{ itemField.type.value }}</td>
+                    <td>
+                        {% if itemField.isDisplayed %} yes {% else %} no {%
+                        endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</turbo-frame>

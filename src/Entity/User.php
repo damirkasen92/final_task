@@ -155,7 +155,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function removeInventory(Inventory $inventory): static
     {
         if ($this->inventories->removeElement($inventory)) {
-            // set the owning side to null (unless already changed)
             if ($inventory->getOwner() === $this) {
                 $inventory->setOwner(null);
             }
@@ -209,5 +208,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setBlocked(bool $blocked): void
     {
         $this->blocked = $blocked;
+    }
+
+    public function __toString(): string
+    {
+        return $this->email ?? '';
     }
 }

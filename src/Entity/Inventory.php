@@ -11,7 +11,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\UX\Turbo\Attribute\Broadcast;
 
 #[ORM\Entity(repositoryClass: InventoryRepository::class)]
-#[Broadcast]
+// #[Broadcast]
 class Inventory
 {
     #[ORM\Id]
@@ -25,8 +25,9 @@ class Inventory
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $description = null;
 
-    #[ORM\Column]
-    private ?string $category = null;
+    #[ORM\ManyToOne(targetEntity: Category::class)]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Category $category = null;
 
     #[ORM\Column]
     private ?bool $isPublic = null;
@@ -41,7 +42,7 @@ class Inventory
     private Collection $items;
 
     #[ORM\ManyToOne(inversedBy: 'inventories')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
     private ?User $owner = null;
 
     /**
@@ -57,17 +58,25 @@ class Inventory
     private Collection $tags;
 
     /**
-     * @var Collection<int, InventoryField>
+     * @var Collection<int, ItemField>
      */
-    #[ORM\OneToMany(targetEntity: InventoryField::class, mappedBy: 'inventory', orphanRemoval: true)]
-    private Collection $inventoryFields;
+    #[ORM\OneToMany(targetEntity: ItemField::class, mappedBy: 'inventory', orphanRemoval: true)]
+    #[ORM\OrderBy(['orderIndex' => 'ASC'])]
+    private Collection $itemFields;
+
+    #[ORM\Version]
+    #[ORM\Column(type: 'integer')]
+    private int $version;
+
+    #[ORM\Column(nullable: true)]
+    private ?array $customIdFormat = null;
 
     public function __construct()
     {
         $this->items = new ArrayCollection();
         $this->writers = new ArrayCollection();
         $this->tags = new ArrayCollection();
-        $this->inventoryFields = new ArrayCollection();
+        $this->itemFields = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -116,9 +125,11 @@ class Inventory
         return $this->imageUrl;
     }
 
-    public function setImageUrl(?string $url): void
+    public function setImageUrl(?string $url): self
     {
         $this->imageUrl = $url;
+
+        return $this;
     }
 
     /**
@@ -192,14 +203,16 @@ class Inventory
         return $this;
     }
 
-    public function getCategory(): ?string
+    public function getCategory(): ?Category
     {
         return $this->category;
     }
 
-    public function setCategory(?string $category): void
+    public function setCategory(Category $category): self
     {
         $this->category = $category;
+
+        return $this;
     }
 
     /**
@@ -230,31 +243,55 @@ class Inventory
     }
 
     /**
-     * @return Collection<int, InventoryField>
+     * @return Collection<int, ItemField>
      */
-    public function getInventoryFields(): Collection
+    public function getItemFields(): Collection
     {
-        return $this->inventoryFields;
+        return $this->itemFields;
     }
 
-    public function addInventoryField(InventoryField $inventoryField): static
+    public function addItemField(ItemField $itemField): static
     {
-        if (!$this->inventoryFields->contains($inventoryField)) {
-            $this->inventoryFields->add($inventoryField);
-            $inventoryField->setInventory($this);
+        if (!$this->itemFields->contains($itemField)) {
+            $this->itemFields->add($itemField);
+            $itemField->setInventory($this);
         }
 
         return $this;
     }
 
-    public function removeInventoryField(InventoryField $inventoryField): static
+    public function removeItemField(ItemField $itemField): static
     {
-        if ($this->inventoryFields->removeElement($inventoryField)) {
+        if ($this->itemFields->removeElement($itemField)) {
             // set the owning side to null (unless already changed)
-            if ($inventoryField->getInventory() === $this) {
-                $inventoryField->setInventory(null);
+            if ($itemField->getInventory() === $this) {
+                $itemField->setInventory(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getVersion()
+    {
+        return $this->version;
+    }
+
+    public function setVersion($version)
+    {
+        $this->version = $version;
+
+        return $this;
+    }
+
+    public function getCustomIdFormat(): ?array
+    {
+        return $this->customIdFormat;
+    }
+
+    public function setCustomIdFormat(?array $customIdFormat): static
+    {
+        $this->customIdFormat = $customIdFormat;
 
         return $this;
     }

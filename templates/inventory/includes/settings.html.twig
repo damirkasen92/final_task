@@ -1,0 +1,24 @@
+<turbo-frame id="inventory-container">
+    <div data-animate>
+        <h2 class="my-3 text-center">Edit Inventory</h2>
+        {{ form_start(form, { action: path('update_inventory_settings', { id: inventory.id }), method: 'PATCH', attr: { id: 'update-form', 'data-controller': 'inventory--update-inventory', 'data-inventory--update-inventory-target': 'form', 'data-success-message': 'inventory.update.successful'|trans } }) }}
+
+        <div class="errors"></div>
+
+        {{ form_row(form.title) }}
+        {{ form_row(form.description, { attr: { 'data-controller': 'ui--markdown', 'data-ui--markdown-target': 'textarea' } }) }}
+        {{ form_row(form.category) }}
+
+        {{ form_label(form.imageUrl) }}
+
+        <figure class="mb-3">
+            <img src="{{ inventoryImage }}" alt="" class="img-fluid" />
+            <figcaption>{{ 'inventory.settings.picture'|trans }}</figcaption>
+        </figure>
+
+        {{ form_widget(form.imageUrl) }}
+        {{ form_row(form.tags) }}
+
+        {{ form_end(form) }}
+    </div>
+</turbo-frame>

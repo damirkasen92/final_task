@@ -1,0 +1,7 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <turbo-frame id="inventory-container">
+    {{ form(form, { action: path('create_item', { id: inventory.id }) }) }}
+    </turbo-frame>
+{% endblock %}

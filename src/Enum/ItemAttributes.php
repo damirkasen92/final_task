@@ -4,8 +4,8 @@ namespace App\Enum;
 
 enum ItemAttributes: string
 {
-    case VIEW = 'VIEW';
-    case ADD = 'ADD';
-    case EDIT = 'EDIT';
-    case DELETE = 'DELETE';
+    case VIEW = 'ITEM_VIEW';
+    case ADD = 'ITEM_ADD';
+    case EDIT = 'ITEM_EDIT';
+    case DELETE = 'ITEM_DELETE';
 }

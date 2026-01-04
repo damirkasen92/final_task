@@ -1,13 +1,18 @@
 roles:
     admin: 'Admin'
-#    creator: 'Creator'
     user: 'User'
+
+popover:
+    popover_title: 'You can cancel the command within'
+    undo: 'Undo'
+
 navbar:
     menu:
         home: 'Home'
         login: 'Login'
         logout: 'Logout'
         registration: 'Sign Up'
+        inventories: 'Inventories'
 admin:
     title: 'Admin panel'
     buttons:
@@ -16,8 +21,7 @@ admin:
         delete: 'Delete user'
         make_admin: 'Add admin rights'
         unmake_admin: 'Remove admin rights'
-        popover_title: 'You can cancel the command within'
-        undo: 'Undo'
+
     table:
         header:
             name: 'Name'
@@ -41,5 +45,85 @@ home:
     title: 'Home'
 lang: 'Language'
 
+security:
+    user_checker:
+        blocked: 'This user is blocked'
+    constraints:
+        inventory:
+            title:
+                len:
+                min:
+                max:
+                blank:
+            file: 'File must be a pdf or an image type'
+
 inventory:
     title: 'Inventories'
+    create:
+        create_successful: 'Inventory has been created'
+    toolbar:
+        create: 'Create inventory'
+        delete: 'Delete inventory'
+        undo: 'Undo'
+    table:
+        title: 'Title'
+        category: 'Category'
+        tags: 'Tags'
+        picture: 'Picture'
+
+    modal:
+        create:
+            title: 'Create inventory'
+            item_field: 'Create item field'
+
+    tabs:
+        items: 'Items'
+        discussions: 'Discussions'
+        settings: 'Settings'
+        custom_id: 'Custom-id'
+        access_settings: 'Access settings'
+        item_fields: 'Item Fields'
+
+    create_inventory:
+        title: 'Title'
+        description: 'Description'
+        category: 'Category'
+        image_url: 'Image'
+        tags: 'Tags'
+        writers: 'Writers'
+        is_public: 'Is Public'
+    settings:
+        picture: 'Current picture'
+
+item_fields:
+    string: 'String'
+    text: 'Text'
+    integer: 'Numeric'
+    link: 'Image/PDF'
+    bool: 'Yes/No'
+
+item_field:
+    create_item_field_error: 'The number of allowed %field% fields is exceeded'
+
+custom_id:
+    title: Custom id
+    description: You can set up items with inventory numbers in your preferred format.
+        To create a format, add new elements, edit them, drag to reorder, or drag elements out of the form to delete them.
+    random: "D - decimal\nX - hexadecimal\nO - octal\nB - binary.\nUse numbers from 1 to 20.\nFor example: D6 outputs 999999.\nIt is acceptable to put a separator at the end - or _ for example: D6_"
+    static:
+        The text will be static.
+    uuid: |
+        A unique id will be generated.
+        Separators are possible at the end - or _ for example: unique_id-
+    date: |
+        dd - day
+        ddd - day of the week
+        mm - month
+        yyyy - year
+        It is mandatory to use - or _ between abbreviations.
+        Separators are possible at the end - or _ for example: date_
+    seq: |
+        The current + 1 index for item will be used.
+        Separators are possible at the end - or _ for example: seq-
+
+

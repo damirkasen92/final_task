@@ -8,8 +8,12 @@ import './stimulus_bootstrap.js';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './styles/app.css';
 
-import $ from 'jquery';
-import 'bootstrap';
+import jQuery from 'jquery';
 
-window.$ = $;
-window.jQuery = $;
+window.$ = jQuery;
+window.jQuery = jQuery;
+
+import 'bootstrap';
+import Sortable from 'sortablejs';
+
+window.Sortable = Sortable;

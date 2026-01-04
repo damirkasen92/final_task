@@ -1,0 +1,32 @@
+x admin panel when delete, block, unmake. It needs to search myself and refreshToken
+x refactor admin panel js
+x save chosen theme
+! save chosen lang
+
+- TODO registration logic and authorization via google and facebook
+x google storage symfony
+x Description markdown
+- autosave in inventory
+- You need to implement optimistic locking for inventories (which can be modified simultaneously by the creator and admins) and for items (which are modifiable by multiple users with write access at the same time).
+- meilisearch on inventory and item
+
+- Table of items in the inventory (with links to individual item pages).
+- Discussion section.
+x General settings — title, description, etc.
+x ***Custom inventory numbers.***
+x Access settings — either all authenticated users (for public inventories) or specific users (for non-public ones).
+x ***Editable set of fields for all items in the inventory.***
+- Inventory statistics/aggregation, such as the number of items, averages and ranges for numeric fields, most frequently used values for string fields, etc. The owner doesn't edit anything on this tab.
+
+- ITEM
+x automatically generated fields like created_by, created_at, or custom_id—the latter being editable despite its automatic generation
+x Up to 3 single-line text fields.
+x Up to 3 multi-line text fields.
+x Up to 3 numeric fields.
+x Up to 3 document/image fields (entered as a link).
+x Up to 3 true/false fields (displayed as checkboxes).
+- Each custom field includes:
+- Title.
+- Description (displayed as a tooltip or hint in forms).
+- A boolean flag indicating whether the field should be displayed in the item table view (on the inventory's tab).
+- Fields can be reordered via drag-and-drop.

@@ -43,6 +43,16 @@ services:
       - mercure_config:/config
 ###< symfony/mercure-bundle ###
 
+  meilisearch:
+    image: getmeili/meilisearch
+    restart: unless-stopped
+    ports: 
+      - "7700:7700"
+    environment:
+      MEILI_MASTER_KEY: "supersecret"
+    volumes: 
+      - meili_data:/meili_data
+
 volumes:
 ###> doctrine/doctrine-bundle ###
   database_data:
@@ -52,3 +62,4 @@ volumes:
   mercure_data:
   mercure_config:
 ###< symfony/mercure-bundle ###
+  meili_data:

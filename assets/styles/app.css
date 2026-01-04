@@ -1,1 +1,58 @@
+[data-bs-theme="light"] .btn-dark {
+    background-color: #000;
+    color: #fff;
+}
 
+[data-bs-theme="dark"] .btn-dark {
+    background-color: #fff;
+    color: #000;
+}
+
+[data-bs-theme="light"] .nav-link {
+    color: #000;
+}
+
+[data-bs-theme="dark"] .nav-link {
+    color: #fff;
+}
+
+.table {
+    table-layout: fixed;
+}
+
+[data-animate] {
+    opacity: 0;
+    transform: translateY(6px);
+    animation: fadeIn .25s ease-out forwards;
+}
+
+@keyframes fadeIn {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+#elements .list-group-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#elements .list-group-item > span {
+    flex: 0 0 0;
+}
+
+#elements .list-group-item > div {
+    flex: 1 1 0;
+    margin-left: 2rem;
+}
+
+.drag-handle {
+    font-size: 2rem;
+    cursor: pointer;
+}
+
+.cursor-pointer {
+    cursor: pointer;
+}

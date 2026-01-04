@@ -1,0 +1,86 @@
+<turbo-frame id="inventory-container">
+    <div data-animate data-controller="inventory--item-field">
+        <h2 class="my-3 text-center">Inventory Item Fields</h2>
+
+        <div>
+            <div
+                class="toolbar d-flex justify-content-center align-items-center mb-4"
+            >
+                <button
+                    class="btn btn-dark me-3"
+                    data-bs-toggle="modal"
+                    data-bs-target="#createItemField"
+                >
+                    Create
+                </button>
+                <button class="btn btn-dark me-3" type="button">Edit</button>
+                <button
+                    class="btn btn-dark"
+                    type="button"
+                    data-delete="{{
+                        path('delete_item_fields', { id: inventory.id })
+                    }}"
+                    data-action="click->inventory--item-field#delete"
+                >
+                    Delete
+                </button>
+            </div>
+            <turbo-frame
+                id="inventory-item-fields"
+                src="{{ path('show_item_fields', { id: inventory.id }) }}"
+            >
+            </turbo-frame>
+        </div>
+    </div>
+
+    <div
+        class="modal fade"
+        id="createItemField"
+        tabindex="-1"
+        aria-labelledby="createItemField"
+        aria-hidden="true"
+    >
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="createItemField">
+                        {{ 'inventory.modal.create.item_field' | trans }}
+                    </h1>
+                    <button
+                        type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Close"
+                    ></button>
+                </div>
+                <div class="modal-body">
+                    <div class="container">
+                        {{
+                            form_start(form, {
+                                id: 'itemFieldForm',
+                                action: path('create_item_field', { id: inventory.id }),
+                                method: 'POST',
+                            })
+                        }}
+
+                        <div class="errors"></div>
+
+                        {{ form_row(form.title) }}
+                        {{
+                            form_row(form.description, {
+                                attr: {
+                                    'data-controller': 'ui--markdown',
+                                    'data-ui--markdown-target': 'textarea'
+                                }
+                            })
+                        }}
+                        {{ form_row(form.isDisplayed) }}
+                        {{ form_row(form.type) }}
+
+                        {{ form_end(form) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</turbo-frame>

@@ -13,3 +13,6 @@ controllers:
         _locale: 'en|ru'
     defaults:
         _locale: 'en'
+    prefix:
+        en: /
+        ru: /ru

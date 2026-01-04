@@ -5,27 +5,21 @@ namespace App\Controller;
 use App\Dto\RegistrationDto;
 use App\Exception\RegistrationException;
 use App\Service\Registration\RegistrationService;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-#[Route(path: [
-    'en' => '/',
-    'ru' => '/ru',
-])]
 class RegistrationController extends BaseController
 {
     public function __construct(
         private readonly RegistrationService $registrationService,
         private readonly ValidatorInterface $validator,
-    )
-    {
+    ) {
     }
 
     #[Route(path: '/registration', name: 'show_registration', methods: ['GET'])]
-    public function show(): Response
+    public function showRegistration(): Response
     {
         return $this->render('security/registration.html.twig');
     }

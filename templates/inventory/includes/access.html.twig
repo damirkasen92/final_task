@@ -1,0 +1,21 @@
+<turbo-frame id="inventory-container">
+    <div data-animate>
+        {{ form_start(form, {
+            action: path('update_access_settings', { id: inventory.id }),
+            method: 'PATCH',
+            attr: {
+                id: 'accessSettings',
+                'data-controller': 'inventory--access-settings',
+                'data-inventory--access-settings-target': 'form',
+                'data-success-message': 'inventory.access.successful'|trans
+            }})
+        }}
+
+        <did class="errors"></did>
+
+        {{ form_row(form.writers) }}
+        {{ form_row(form.isPublic) }}
+
+        {{ form_end(form) }}
+    </div>
+</turbo-frame>

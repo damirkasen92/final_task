@@ -2,43 +2,38 @@
 
 namespace App\Dto;
 
-use Doctrine\Common\Collections\Collection;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Validator\Constraints as Assert;
+use App\Entity\Category;
+use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Form\FormInterface;
 
 readonly class InventoryDto
 {
-    #[Assert\Type('string')]
-    #[Assert\NotBlank]
-    #[Assert\Length(min: 1, max: 255)]
     public string $title;
 
-    #[Assert\Type('string')]
     public ?string $description;
 
-    #[Assert\Type('string')]
-    #[Assert\NotBlank]
-    public string $category;
+    public Category $category;
 
-    #[Assert\Type('bool')]
-    #[Assert\NotBlank]
-    public bool $isPublic;
+    public ?bool $isPublic;
 
-    #[Assert\Type('string')]
     public ?string $imageUrl;
 
-    #[Assert\Type('array')]
-    public array $tags;
+    public ?ArrayCollection $writers;
 
-    public static function fromRequest(Request $request): self
+    public ?ArrayCollection $tags;
+
+    public ?int $version;
+
+    public static function fromForm(FormInterface $form): static
     {
         $dto = new self();
-        $dto->title = $request->request->get('title');
-        $dto->description = $request->request->get('description', null);
-        $dto->category = $request->request->get('category');
-        $dto->isPublic = $request->request->get('isPublic');
-        $dto->imageUrl = $request->request->get('imageUrl');
-        $dto->tags = $request->request->all('tags');
+        $dto->title = $form->get('title')->getData();
+        $dto->description = $form->get('description')->getData();
+        $dto->category = $form->get('category')->getData();
+        $dto->isPublic = $form->get('isPublic')->getData();
+        $dto->imageUrl = $form->get('imageUrl')->getData();
+        $dto->writers = $form->get('writers')->getData();
+        $dto->tags = $form->get('tags')->getData();
 
         return $dto;
     }

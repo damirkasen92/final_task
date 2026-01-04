@@ -30,6 +30,9 @@ security:
                 path: logout
                 target: home
 
+            access_denied_handler: App\Security\Handler\AccessDeniedHandler
+            user_checker: App\Security\UserChecker
+
             # Activate different ways to authenticate:
             # https://symfony.com/doc/current/security.html#the-firewall
 
@@ -38,7 +41,7 @@ security:
 
     # Note: Only the *first* matching rule is applied
     access_control:
-#         - { path: ^/admin, roles: ROLE_ADMIN }
+        # - { path: ^/(login|registration), roles: IS_ANONYMOUS }
         # - { path: ^/profile, roles: ROLE_USER }
 
     role_hierarchy:
