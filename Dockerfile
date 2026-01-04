@@ -12,8 +12,7 @@ RUN install-php-extensions \
     gd \
     mbstring \
     openssl \
-    xsl \
-    zip
+    xsl
 
 ENV APP_ENV=prod
 ENV APP_DEBUG=0
@@ -57,7 +56,6 @@ EXPOSE 8080
 
 RUN set -e; \
     php bin/console cache:clear --no-warmup; \
-    php bin/console cache:warmup; \
     php bin/console importmap:install --no-interaction; \
     php bin/console assets:install --no-interaction; \
     php bin/console asset-map:compile; \
