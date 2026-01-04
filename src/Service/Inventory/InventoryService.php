@@ -1,8 +1,6 @@
 <?php
-
 namespace App\Service\Inventory;
 
-use App\Dto\ItemFieldDto;
 use App\Entity\Inventory;
 use App\Entity\ItemField;
 use App\Exception\InventoryServiceException;
@@ -11,7 +9,6 @@ use App\Repository\ItemFieldRepository;
 use App\Service\Google\GoogleStorageService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
-use Symfony\Component\Form\FormInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 class InventoryService
@@ -69,19 +66,17 @@ class InventoryService
         $this->em->flush();
     }
 
-    public function createItemField(ItemField $itemField, Inventory $inventory) {
-        $count = $this->itemFieldRepository->count([
-            'inventory' => $inventory,
-            'type'      => $itemField->getType(),
-        ]);
+    public function createItemField(ItemField $itemField, Inventory $inventory)
+    {
+        $slotNumber = $this->getFreeSlotNumber($inventory, $itemField);
 
-        if ($count >= 3) {
+        if ($slotNumber > 3) {
             throw new InventoryServiceException($this->translator->trans('item_field.create_item_field_error', [
-                'field' => $itemField->getType()
+                'field' => $itemField->getType(),
             ]));
         }
 
-        $itemField->setSlot($itemField->getType()->value . ($count + 1));
+        $itemField->setSlot($itemField->getType()->value . $slotNumber);
         $itemField->setInventory($inventory);
         $itemField->setOrderIndex($inventory->getItemFields()->count() + 1);
 
@@ -89,7 +84,36 @@ class InventoryService
         $this->em->flush();
     }
 
-    public function setOrder(array $order, Inventory $inventory) {
+    private function getFreeSlotNumber(Inventory $inventory, ItemField $itemField) {
+        $existingSlots = $this->itemFieldRepository->findBy([
+            'inventory' => $inventory,
+            'type'      => $itemField->getType(),
+        ]);
+
+        $usedIndexes = [];
+
+        foreach ($existingSlots as $slot) {
+            $suffix = (int) substr(
+                $slot->getSlot(),
+                \strlen($slot->getType()->value),
+            );
+
+            if ($suffix > 0) {
+                $usedIndexes[] = $suffix;
+            }
+        }
+
+        $newIndex = 1;
+
+        while (\in_array($newIndex, $usedIndexes, true)) {
+            $newIndex++;
+        }
+
+        return $newIndex;
+    }
+
+    public function setOrder(array $order, Inventory $inventory)
+    {
         $itemFields = $this->itemFieldRepository->findBy([
             'inventory' => $inventory,
         ]);
@@ -103,7 +127,8 @@ class InventoryService
         $this->em->flush();
     }
 
-    public function saveCustomId(Inventory $inventory, array $data) {
+    public function saveCustomId(Inventory $inventory, array $data)
+    {
         $inventory->setCustomIdFormat($data['elements']);
         $this->em->flush();
     }

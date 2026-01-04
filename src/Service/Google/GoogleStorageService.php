@@ -5,6 +5,7 @@ namespace App\Service\Google;
 use Google\Cloud\Storage\Bucket;
 use Google\Cloud\Storage\StorageClient;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Contracts\Cache\CacheInterface;
 use Symfony\Contracts\Cache\ItemInterface;
@@ -20,10 +21,18 @@ class GoogleStorageService
         private string $googleKeyPath,
         private string $bucketName,
         private CacheInterface $cache,
+        private KernelInterface $kernel,
     ) {
-        $this->bucket = new StorageClient([
-            'keyFilePath' => $googleKeyPath,
-        ])->bucket($this->bucketName);
+        if ($this->kernel->getEnvironment() === 'dev') {
+            $this->bucket = new StorageClient([
+                'keyFilePath' => $googleKeyPath,
+            ])->bucket($this->bucketName);
+        } else {
+            $this->bucket = new StorageClient([
+                'keyFile' => json_decode($googleKeyPath, true),
+            ])->bucket($this->bucketName);
+        }
+
         $this->uid = Uuid::v4();
     }
 
