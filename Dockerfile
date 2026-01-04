@@ -2,10 +2,18 @@ FROM dunglas/frankenphp:php8.4-alpine
 
 RUN install-php-extensions \
     intl \
+    pdo \
     pdo_pgsql \
     zip \
     opcache \
-    apcu
+    apcu \
+    curl \
+    fileinfo \
+    gd \
+    mbstring \
+    openssl \
+    xsl \
+    zip
 
 ENV APP_ENV=prod
 ENV APP_DEBUG=0
