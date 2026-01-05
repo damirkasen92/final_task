@@ -1,29 +1,38 @@
-[data-bs-theme="light"] .btn-dark {
+[data-bs-theme='light'] .btn-dark {
     background-color: #000;
     color: #fff;
 }
 
-[data-bs-theme="dark"] .btn-dark {
+[data-bs-theme='dark'] .btn-dark {
     background-color: #fff;
     color: #000;
 }
 
-[data-bs-theme="light"] .nav-link {
+[data-bs-theme='light'] .nav-link {
     color: #000;
 }
 
-[data-bs-theme="dark"] .nav-link {
+[data-bs-theme='dark'] .nav-link {
     color: #fff;
 }
 
 .table {
-    table-layout: fixed;
+    table-layout: auto;
+    width: 100%;
+}
+
+.table th {
+    white-space: nowrap;
+}
+
+.table img {
+    max-width: 200px;
 }
 
 [data-animate] {
     opacity: 0;
     transform: translateY(6px);
-    animation: fadeIn .25s ease-out forwards;
+    animation: fadeIn 0.25s ease-out forwards;
 }
 
 @keyframes fadeIn {

@@ -1,0 +1,29 @@
+<turbo-frame id="inventory-container">
+    <div data-animate>
+        {{ form_start(form, { action: path('update_item', { id: item.id }) }) }}
+
+        {{ form_errors(form) }}
+
+        {% for row in form %} {% if 'link' in row.vars.name and
+        row.vars.attr['data-preview-url'] %}
+        <div class="mb-3">
+            {{ form_label(row) }}
+            <figure>
+                <img
+                    src="{{ row.vars.attr['data-preview-url'] }}"
+                    alt="Preview"
+                    class="img-fluid"
+                />
+                <figcaption>Current file</figcaption>
+            </figure>
+            {{ form_widget(row) }}
+        </div>
+        {% else %}
+
+        {{ form_row(row) }}
+
+        {% endif %} {% endfor %}
+
+        {{ form_end(form) }}
+    </div>
+</turbo-frame>

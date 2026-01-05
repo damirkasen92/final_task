@@ -15,10 +15,21 @@ class InventoryRepository extends ServiceEntityRepository
         parent::__construct($registry, Inventory::class);
     }
 
-    public function getInventories(int $userId)
+    public function getInventories(int $userId, array $criteria = [])
     {
         return $this->findBy([
             'owner' => $userId,
+            ...$criteria,
         ]);
+    }
+
+    public function getMaxOrderIndex(Inventory $inventory)
+    {
+        return $this->createQueryBuilder('f')
+            ->select('MAX(f.orderIndex)')
+            ->where('f.inventory = :inventory')
+            ->setParameter('inventory', $inventory->getId())
+            ->getQuery()
+            ->getSingleScalarResult();
     }
 }

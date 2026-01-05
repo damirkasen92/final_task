@@ -23,6 +23,11 @@
                     data-id="{{ itemField.id }}"
                     data-order="{{ itemField.orderIndex }}"
                     data-inventory-id="{{ itemField.inventory.id }}"
+                    data-title="{{ itemField.title }}"
+                    data-description="{{ itemField.description }}"
+                    data-type="{{ itemField.type.value }}"
+                    data-is-displayed="{{ itemField.isDisplayed ? true : false }}"
+                    data-url="{{ path('edit_item_fields', {id: itemField.inventory.id, itemFieldId: itemField.id}) }}"
                 >
                     <td>
                         <input type="checkbox" value="{{ itemField.id }}" />

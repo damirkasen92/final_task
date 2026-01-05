@@ -1,0 +1,5 @@
+knp_paginator:
+    template:
+        pagination: '@KnpPaginator/Pagination/bootstrap_v5_pagination.html.twig'
+        sortable: '@KnpPaginator/Pagination/bootstrap_v5_md_sortable_link.html.twig'
+        rel_links: '@KnpPaginator/Pagination/rel_links.html.twig'

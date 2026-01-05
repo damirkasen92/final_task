@@ -9,6 +9,8 @@
 parameters:
     google_cloud_key_path: '%env(GOOGLE_CLOUD_KEY_PATH)%'
     google_bucket_name: '%env(GOOGLE_BUCKET_NAME)%'
+    meilisearch_uri: '%env(MEILISEARCH_URI)%'
+    meilisearch_key: '%env(MEILISEARCH_KEY)%'
 
 services:
     # default configuration for services in *this* file
@@ -28,3 +30,8 @@ services:
         arguments:
             $googleKeyPath: '%google_cloud_key_path%'
             $bucketName: '%google_bucket_name%'
+
+    Meilisearch\Client:
+        arguments:
+            - '%meilisearch_uri%'
+            - '%meilisearch_key%'

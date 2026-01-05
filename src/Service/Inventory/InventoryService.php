@@ -8,11 +8,14 @@ use App\Repository\InventoryRepository;
 use App\Repository\ItemFieldRepository;
 use App\Service\Google\GoogleStorageService;
 use Doctrine\ORM\EntityManagerInterface;
+use Meilisearch\Client;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 class InventoryService
 {
+    private const int MAX_SLOT = 3;
+
     private ?Inventory $inventory;
 
     public function __construct(
@@ -21,13 +24,16 @@ class InventoryService
         private GoogleStorageService $googleStorageService,
         private Security $security,
         private ItemFieldRepository $itemFieldRepository,
-        private TranslatorInterface $translator
+        private TranslatorInterface $translator,
+        private Client $client
     ) {
     }
 
-    public function getInventoriesWithImage(int $userId)
+    public function getInventoriesWithImage(int $userId, string $query = '')
     {
-        $inventories = $this->inventoryRepository->getInventories($userId);
+        $inventories = $this->inventoryRepository->getInventories(
+            $userId, $this->getIndexesFromEngine($query)
+        );
 
         /** @var Inventory $inventory */
         foreach ($inventories as $inventory) {
@@ -43,8 +49,22 @@ class InventoryService
         return $inventories;
     }
 
+    private function getIndexesFromEngine(string $query): array
+    {
+        $index   = $this->client->index('inventories');
+        $results = $index->search($query, ['limit' => 10])->getHits();
+        return ['id' => array_column($results, 'id')];
+    }
+
     public function createInventory(Inventory $inventory): void
     {
+        $inventory->setCustomIdFormat([
+            [
+                'type'  => 'seq',
+                'value' => '',
+            ],
+        ]);
+
         $this->em->persist($inventory);
         $this->em->flush();
     }
@@ -66,25 +86,65 @@ class InventoryService
         $this->em->flush();
     }
 
+    /**
+     * @throws InventoryServiceException
+     */
     public function createItemField(ItemField $itemField, Inventory $inventory)
     {
         $slotNumber = $this->getFreeSlotNumber($inventory, $itemField);
 
-        if ($slotNumber > 3) {
+        if ($slotNumber > self::MAX_SLOT) {
             throw new InventoryServiceException($this->translator->trans('item_field.create_item_field_error', [
-                'field' => $itemField->getType(),
+                '%field%' => $itemField->getType(),
             ]));
         }
 
         $itemField->setSlot($itemField->getType()->value . $slotNumber);
         $itemField->setInventory($inventory);
-        $itemField->setOrderIndex($inventory->getItemFields()->count() + 1);
+        $maxOrderIndex = $this->inventoryRepository->getMaxOrderIndex($inventory);
+        $itemField->setOrderIndex($maxOrderIndex + 1);
 
         $this->em->persist($itemField);
         $this->em->flush();
     }
 
-    private function getFreeSlotNumber(Inventory $inventory, ItemField $itemField) {
+    /**
+     * @throws InventoryServiceException
+     */
+    public function updateItemField(ItemField $itemField, Inventory $inventory)
+    {
+        $oldType = substr($itemField->getSlot(), 0, \strlen($itemField->getType()->value));
+
+        if ($oldType !== $itemField->getType()->value) {
+            $slotNumber = $this->getFreeSlotNumber($inventory, $itemField);
+
+            if ($slotNumber > self::MAX_SLOT) {
+                throw new InventoryServiceException($this->translator->trans('item_field.create_item_field_error', [
+                    '%field%' => $itemField->getType(),
+                ]));
+            }
+
+            $itemField->setSlot($itemField->getType()->value . $slotNumber);
+        }
+
+        $this->em->flush();
+    }
+
+    public function deleteItemFields(array $itemFieldIds): void
+    {
+        $itemFields = $this->itemFieldRepository->findBy([
+            'id' => $itemFieldIds,
+        ]);
+
+        foreach ($itemFields as $itemField) {
+            $this->em->remove($itemField);
+        }
+
+        $this->em->flush();
+    }
+
+    private function getFreeSlotNumber(Inventory $inventory, ItemField $itemField)
+    {
         $existingSlots = $this->itemFieldRepository->findBy([
             'inventory' => $inventory,
             'type'      => $itemField->getType(),

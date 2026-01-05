@@ -5,6 +5,7 @@ use App\Entity\Item;
 use App\Entity\ItemField;
 use App\Repository\InventoryRepository;
 use App\Repository\ItemFieldRepository;
+use App\Service\Google\GoogleStorageService;
 use App\Service\Item\CustomIdGenerator;
 use App\Service\Regexp\RegexpBuilder;
 use Symfony\Component\Form\AbstractType;
@@ -13,32 +14,34 @@ use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints as Assert;
-use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 class ItemType extends AbstractType
 {
+    private $customIdElements;
+
     public function __construct(
         private InventoryRepository $inventoryRepository,
         private ItemFieldRepository $itemFieldRepository,
         private CustomIdGenerator $customIdGenerator,
-        private RegexpBuilder $regexpBuilder
+        private RegexpBuilder $regexpBuilder,
+        private GoogleStorageService $googleStorageService
     ) {
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        $this->customIdElements = $this->getCustomIdElements($options);
+
         $builder
             ->add('customId', TextType::class, [
-                'data'        => $this->getCustomId($options),
+                'data'        => $this->getCustomId($this->customIdElements),
                 'constraints' => [
                     new Assert\Callback(function ($value, ExecutionContextInterface $context) use ($options) {
-                        $elements = $this->getCustomIdElements($options);
-                        $regex = $this->regexpBuilder->buildRegex($elements);
+                        $regex = $this->regexpBuilder->buildRegex($this->customIdElements);
 
                         if (! preg_match($regex, $value)) {
                             $context->buildViolation('Неверный формат custom ID: ' . $value)->addViolation();
@@ -51,49 +54,89 @@ class ItemType extends AbstractType
 
         $builder->add('submit', SubmitType::class, [
             'label' => 'Submit',
-            'attr'  => ['class' => 'btn btn-primary'],
+            'attr'  => ['class' => 'btn btn-dark'],
         ]);
     }
 
-    private function getCustomIdElements(array $options)
+    private function getCustomIdElements(array $options): ?array
     {
+        if ($options['inventory'] === null) {
+            return [];
+        }
+
         return $this->inventoryRepository->find($options['inventory'])
             ->getCustomIdFormat();
     }
 
-    private function getCustomId($options)
+    private function getCustomId($elements): string
     {
-        return $this->customIdGenerator->generate($this->getCustomIdElements($options));
+        return $this->customIdGenerator->generate($elements);
     }
 
-    private function addDynamicFields(FormBuilderInterface $builder, array $options)
+    private function addDynamicFields(FormBuilderInterface $builder, array $options): void
     {
         $itemFields = $this->itemFieldRepository->findBy([
             'inventory' => $options['inventory'],
+        ], [
+            'orderIndex' => 'asc',
         ]);
+
+        $item = $options['data'] ?? [];
 
         /** @var ItemField $itemField */
         foreach ($itemFields as $itemField) {
             $builder->add(
                 $itemField->getSlot(),
                 $this->getTypeFromItemFieldType($itemField->getType()->value),
-                [
-                    'required' => true,
-                    'constraints' => [
-                        new NotBlank()
-                    ]
-                ]
+                $this->getOptionsForItemField($itemField->getType()->value, $item, $itemField),
             );
         }
     }
 
-    private function getTypeFromItemFieldType(string $type)
+    private function getOptionsForItemField($type, ?Item $item, ?ItemField $itemField): array
+    {
+        return match ($type) {
+            'text'  => [
+                'required' => false,
+                'attr'     => [
+                    'data-controller'          => 'ui--markdown',
+                    'data-ui--markdown-target' => 'textarea',
+                ],
+            ],
+            'link'  => [
+                'required' => false,
+                'attr'     => [
+                    'data-preview-url' => $this->getLink($item, $itemField),
+                ],
+            ],
+            default => [
+                'required' => false,
+            ],
+        };
+    }
+
+    private function getLink(?Item $item, ?ItemField $itemField): string | null
+    {
+        if (! $item) {
+            return null;
+        }
+
+        $link = $item->{'get' . ucfirst($itemField->getSlot())}();
+
+        if (\is_null($link)) {
+            return null;
+        }
+
+        return $this->googleStorageService->getFileUrl($link);
+    }
+
+    private function getTypeFromItemFieldType(string $type): string
     {
         return match ($type) {
             'string'  => TextType::class,
             'text'    => TextareaType::class,
             'integer' => IntegerType::class,
-            'link'    => UrlType::class,
+            'link'    => GoogleFileType::class,
             'bool'    => CheckboxType::class,
         };
     }

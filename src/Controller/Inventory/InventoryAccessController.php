@@ -5,7 +5,7 @@ use App\Controller\BaseController;
 use App\Entity\Inventory;
 use App\Enum\InventoryAttributes;
 use App\Enum\JsonStatuses;
-use App\Form\InventoryFormType;
+use App\Form\InventoryType;
 use App\Service\Inventory\InventoryService;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -19,7 +19,7 @@ class InventoryAccessController extends BaseController
     {
         $this->denyAccessUnlessGranted(InventoryAttributes::EDIT->value, $inventory);
 
-        $form = $this->createForm(InventoryFormType::class, $inventory, [
+        $form = $this->createForm(InventoryType::class, $inventory, [
             'update' => true,
             'create' => false,
         ]);
@@ -35,7 +35,7 @@ class InventoryAccessController extends BaseController
     {
         $this->denyAccessUnlessGranted(InventoryAttributes::EDIT->value, $inventory);
 
-        $form = $this->createForm(InventoryFormType::class, $inventory, [
+        $form = $this->createForm(InventoryType::class, $inventory, [
             'update' => true,
             'create' => false,
         ])->handleRequest($request);

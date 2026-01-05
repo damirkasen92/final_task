@@ -19,7 +19,7 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\Type;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-class InventoryFormType extends AbstractType
+class InventoryType extends AbstractType
 {
     public function __construct(
         private GoogleStorageService $googleStorageService,
@@ -66,7 +66,6 @@ class InventoryFormType extends AbstractType
                     'required' => false,
                     'mapped' => true,
                     'data_class' => null,
-                    'default_image' => $options['default_image'],
                 ])
                 ->add('tags', EntityType::class, [
                     'label' => $this->translator->trans('inventory.create_inventory.tags'),
@@ -114,7 +113,6 @@ class InventoryFormType extends AbstractType
             'data_class' => Inventory::class,
             'update' => true,
             'create' => true,
-            'default_image' => null,
         ]);
     }
 }

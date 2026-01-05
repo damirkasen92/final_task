@@ -75,6 +75,8 @@ inventory:
         create:
             title: 'Create inventory'
             item_field: 'Create item field'
+        edit:
+            item_field: 'Edit item field'
 
     tabs:
         items: 'Items'

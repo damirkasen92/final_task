@@ -1,16 +1,40 @@
+x admin page
+x Admins have full access
 x admin panel when delete, block, unmake. It needs to search myself and refreshToken
 x refactor admin panel js
 x save chosen theme
 ! save chosen lang
 
-- TODO registration logic and authorization via google and facebook
-x google storage symfony
-x Description markdown
+- protect inventory crud
+- protect item crud
+- writer access only change items and Discussion
+- as public (allowing any authenticated user to add items)
+x meilisearch on inventory
+- meilisearch on item (search)
 - autosave in inventory
 - You need to implement optimistic locking for inventories (which can be modified simultaneously by the creator and admins) and for items (which are modifiable by multiple users with write access at the same time).
-- meilisearch on inventory and item
+- TODO registration logic and authorization via google and facebook
 
-- Table of items in the inventory (with links to individual item pages).
+
+Users without write access can only view items; they cannot add, edit, or delete them.
+
+Every user has their own personal page, where they can manage two sortable/filterable tables:
+* A table of inventories they own (with options to create new, delete, or edit).
+* A table of inventories they have write access to.
+
+The main page of the app contains:
+* A table of the latest inventories, showing the name, description (or image), and creator.
+* A table of the top 5 most popular inventories, based on the number of items.
+* A tag cloud — when a user clicks a tag, a list of related inventories is displayed (you should reuse the standard “search results” page layout for that)
+
+Each inventory page includes a discussion tab. Posts are linear—new posts are always added to the end; inserting posts between existing ones is not allowed. Posts should be updated automatically—when someone adds a post, it should appear for all users viewing the page within 2–5 seconds (real-time or near real-time updates). Every post displays Markdown text, user name (which works as a link to the user's personal page), and a date/time.
+
+Each item has a "like" feature (a user can give one like per item, and no more than one like from the same user is allowed).
+
+x google storage symfony
+x Description markdown
+
+x Table of items in the inventory (with links to individual item pages).
 - Discussion section.
 x General settings — title, description, etc.
 x ***Custom inventory numbers.***
@@ -18,15 +42,15 @@ x Access settings — either all authenticated users (for public inventories) or
 x ***Editable set of fields for all items in the inventory.***
 - Inventory statistics/aggregation, such as the number of items, averages and ranges for numeric fields, most frequently used values for string fields, etc. The owner doesn't edit anything on this tab.
 
-- ITEM
+x ITEM
 x automatically generated fields like created_by, created_at, or custom_id—the latter being editable despite its automatic generation
 x Up to 3 single-line text fields.
 x Up to 3 multi-line text fields.
 x Up to 3 numeric fields.
 x Up to 3 document/image fields (entered as a link).
 x Up to 3 true/false fields (displayed as checkboxes).
-- Each custom field includes:
-- Title.
-- Description (displayed as a tooltip or hint in forms).
-- A boolean flag indicating whether the field should be displayed in the item table view (on the inventory's tab).
-- Fields can be reordered via drag-and-drop.
+x Each custom field includes:
+x Title.
+x Description (displayed as a tooltip or hint in forms).
+x A boolean flag indicating whether the field should be displayed in the item table view (on the inventory's tab).
+x Fields can be reordered via drag-and-drop.

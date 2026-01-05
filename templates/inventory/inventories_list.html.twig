@@ -13,12 +13,13 @@
                         />
                     </th>
                     <th>{{ 'inventory.table.title' | trans }}</th>
+                    <th>{{ 'inventory.table.description' | trans }}</th>
                     <th>{{ 'inventory.table.category' | trans }}</th>
                     <th>{{ 'inventory.table.tags' | trans }}</th>
                     <th>{{ 'inventory.table.picture' | trans }}</th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody data-controller="ui--mark-parse">
                 {% for inventory in inventories %}
                 <tr>
                     <td>
@@ -39,6 +40,12 @@
                             target="_top"
                             >{{ inventory.title }}</a
                         >
+                    </td>
+                    <td>
+                        <span
+                            class="description"
+                            data-description="{{ inventory.description|e('js') }}"
+                        ></span>
                     </td>
                     <td>{{ inventory.category }}</td>
                     <td>

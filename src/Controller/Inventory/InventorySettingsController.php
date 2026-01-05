@@ -4,11 +4,9 @@ namespace App\Controller\Inventory;
 use App\Controller\BaseController;
 use App\Entity\Inventory;
 use App\Enum\InventoryAttributes;
-use App\Enum\JsonStatuses;
-use App\Form\InventoryFormType;
+use App\Form\InventoryType;
 use App\Service\Google\GoogleStorageService;
 use App\Service\Inventory\InventoryService;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -20,17 +18,19 @@ class InventorySettingsController extends BaseController
     {
         $this->denyAccessUnlessGranted(InventoryAttributes::EDIT->value, $inventory);
 
+        $imageUrl = $inventory->getImageUrl();
+
         return $this->render('inventory/includes/settings.html.twig', [
             'form'           => $this->createForm(
-                InventoryFormType::class,
+                InventoryType::class,
                 $inventory,
                 [
                     'update' => false,
                 ]
             ),
             'inventory'      => $inventory,
-            'inventoryImage' => $inventory->getImageUrl() ? $googleStorageService
-                ->getFileUrl($inventory->getImageUrl()) : null,
+            'inventoryImage' => $imageUrl ? $googleStorageService
+                ->getFileUrl($imageUrl) : null,
         ]);
     }
 
@@ -39,9 +39,8 @@ class InventorySettingsController extends BaseController
     {
         $this->denyAccessUnlessGranted(InventoryAttributes::EDIT->value, $inventory);
 
-        $form = $this->createForm(InventoryFormType::class, $inventory, [
-            'default_image' => $inventory->getImageUrl(),
-            'update'        => false,
+        $form = $this->createForm(InventoryType::class, $inventory, [
+            'update' => false,
         ])->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -51,7 +50,7 @@ class InventorySettingsController extends BaseController
         }
 
         return $this->json([
-            ...$this->jsonErrorData,
+             ...$this->jsonErrorData,
             'errors' => $this->getErrors($form),
         ], Response::HTTP_BAD_REQUEST);
     }

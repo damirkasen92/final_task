@@ -7,7 +7,7 @@
             class="nav-link active"
             id="items-tab"
             type="button"
-            data-src="{{ path('show_create_item', { id: inventory.id }) }}"
+            data-src="{{ path('show_items', { id: inventory.id }) }}"
         >
             {{ 'inventory.tabs.items' | trans }}
         </button>
@@ -64,8 +64,8 @@
 </ul>
 
 <div class="tab-content">
-    <div class="col col-lg-8 ms-auto me-auto">
-        <turbo-frame id="inventory-container"></turbo-frame>
+    <div>
+        <turbo-frame id="inventory-container" src="{{ path('show_items', { id: inventory.id }) }}"></turbo-frame>
     </div>
 </div>
 

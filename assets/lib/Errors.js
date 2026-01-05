@@ -2,10 +2,16 @@ export default class Errors {
     static showErrors($form, errors) {
         let $errorsBlock = $form.find('.errors');
 
-        for (let fieldName in errors) {
-            errors[fieldName].forEach((error) => {
-                this.showError($errorsBlock, fieldName, error);
-            });
+        if (Array.isArray(errors)) {
+            for (let fieldName in errors) {
+                errors[fieldName].forEach((error) => {
+                    this.showError($errorsBlock, fieldName, error);
+                });
+            }
+        }
+
+        if (typeof errors === 'string') {
+            this.showError($errorsBlock, '', errors);
         }
     }
 

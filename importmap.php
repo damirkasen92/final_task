@@ -69,4 +69,7 @@ return [
     '@symfony/ux-autocomplete' => [
         'version' => '2.31.0',
     ],
+    'dompurify' => [
+        'version' => '3.3.1',
+    ],
 ];

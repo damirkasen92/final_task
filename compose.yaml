@@ -46,11 +46,12 @@ services:
   meilisearch:
     image: getmeili/meilisearch
     restart: unless-stopped
-    ports: 
+    ports:
       - "7700:7700"
     environment:
       MEILI_MASTER_KEY: "supersecret"
-    volumes: 
+      MEILISEARCH_HOST: "http://localhost:7700"
+    volumes:
       - meili_data:/meili_data
 
 volumes:

@@ -1,5 +1,4 @@
 <?php
-
 namespace App\EventListener;
 
 use App\Entity\Inventory;
