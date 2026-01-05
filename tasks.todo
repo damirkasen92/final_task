@@ -5,6 +5,7 @@ x refactor admin panel js
 x save chosen theme
 ! save chosen lang
 
+- refactor
 - protect inventory crud
 - protect item crud
 - writer access only change items and Discussion

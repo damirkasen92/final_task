@@ -15,21 +15,21 @@ RUN install-php-extensions \
     openssl \
     xsl
 
-ENV APP_ENV=prod
-ENV APP_DEBUG=0
-ENV SERVER_NAME=":8080"
+ENV APP_ENV=dev
+ENV APP_DEBUG=1
+ENV SERVER_NAME=":80"
 ENV FRANKENPHP_DOCUMENT_ROOT="/app/public"
-ENV DEFAULT_URI="https://final-task-761966872328.europe-west1.run.app"
-ENV DATABASE_URL=$DATABASE_URL
-ENV GOOGLE_CLOUD_KEY_PATH=$GOOGLE_CLOUD_KEY_PATH
-ENV GOOGLE_BUCKET_NAME=$GOOGLE_BUCKET_NAME
+# ENV DEFAULT_URI="https://final-task-761966872328.europe-west1.run.app"
+# ENV DATABASE_URL=$DATABASE_URL
+# ENV GOOGLE_CLOUD_KEY_PATH=$GOOGLE_CLOUD_KEY_PATH
+# ENV GOOGLE_BUCKET_NAME=$GOOGLE_BUCKET_NAME
 
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 COPY ./Caddyfile /etc/caddy/Caddyfile
 COPY ./opcache.ini $PHP_INI_DIR/conf.d/opcache.ini
 
-RUN cp "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
-# RUN cp $PHP_INI_DIR/php.ini-development $PHP_INI_DIR/php.ini
+# RUN cp "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
+RUN cp $PHP_INI_DIR/php.ini-development $PHP_INI_DIR/php.ini
 
 WORKDIR /app
 
@@ -41,11 +41,11 @@ COPY . .
 RUN composer install \
     --no-cache \
     --prefer-dist \
-    --no-dev \
+    # --no-dev \
     --no-scripts \
     --no-progress
 
-RUN composer dump-autoload --optimize --classmap-authoritative --no-dev
+RUN composer dump-autoload --optimize --classmap-authoritative
 
 RUN set -eux; \
     mkdir -p var/cache var/log; \
@@ -53,6 +53,6 @@ RUN set -eux; \
 
 RUN chmod +x entry.sh
 
-EXPOSE 8080
+# EXPOSE 80
 
 ENTRYPOINT [ "/app/entry.sh" ]
