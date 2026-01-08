@@ -142,6 +142,7 @@ item_field:
         create: Create
         edit: Edit
         delete: Delete
+    empty_list: 'There are no fields yet'
 
 custom_id:
     title: Custom id

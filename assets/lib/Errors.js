@@ -16,10 +16,10 @@ export default class Errors {
     }
 
     static showError($block, fieldName, error) {
+        let message = fieldName ? `${fieldName}: ${error}` : error;
+
         $block
-            .append(
-                `<div class="alert alert-danger" role="alert">${fieldName}: ${error}</div>`
-            )
+            .append(`<div class="alert alert-danger" role="alert">${message}</div>`)
             .css('display', 'none')
             .slideDown(this.animationSpeed);
     }

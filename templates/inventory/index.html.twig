@@ -16,12 +16,7 @@
                 {{ 'inventory.toolbar.delete' | trans }}
             </button>
 
-            <button
-                type="button"
-                class="btn btn-dark my-1"
-                data-bs-toggle="modal"
-                data-bs-target="#createInventory"
-            >
+            <button type="button" class="btn btn-dark my-1" data-bs-toggle="modal" data-bs-target="#createInventory">
                 {{ 'inventory.toolbar.create' | trans }}
             </button>
         </div>
@@ -41,16 +36,12 @@
         </div>
 
         <div class="table-responsive">
-            <turbo-frame
-                id="inventories-list"
-                src="{{ path('inventories_list') }}"
-            ></turbo-frame>
+            <turbo-frame id="inventories-list" src="{{ path('inventories_list') }}"></turbo-frame>
         </div>
     </div>
 </div>
 
-{% include 'inventory/create.html.twig' %} {% include 'includes/toast.html.twig'
-%}
+{% include 'inventory/includes/create.html.twig' %} {% include 'includes/toast.html.twig' %}
 
 <script id="translations" type="application/json">
     {{ {

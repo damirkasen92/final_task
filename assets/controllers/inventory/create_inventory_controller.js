@@ -11,9 +11,7 @@ export default class extends Controller {
     }
 
     #init() {
-        $('.toast .toast-body').text(
-            trans('inventory.create.create_successful')
-        );
+        $('.toast .toast-body').text(trans('inventory.create.create_successful'));
 
         $(this.formTarget).on('submit', (evt) => {
             evt.preventDefault();
@@ -53,11 +51,10 @@ export default class extends Controller {
         });
 
         $form.find('select').each((idx, el) => {
-            if (!$(el).attr('name').includes('category'))
-                if (el.tomselect) el.tomselect.clear();
+            if (!$(el).attr('name').includes('category')) if (el.tomselect) el.tomselect.clear();
         });
 
         $('[type="file"]').val(null);
-        easyMDE.value('');
+        window.editors[$form.find('textarea').attr('id')].value('');
     }
 }

@@ -1,0 +1,181 @@
+roles:
+    admin: 'Админ'
+    user: 'Пользователь'
+
+popover:
+    popover_title: 'Вы можете отменить команду в течение'
+    undo: 'Отменить'
+
+navbar:
+    menu:
+        home: 'Главная'
+        login: 'Вход'
+        logout: 'Выход'
+        registration: 'Регистрация'
+        inventories: 'Инвентари'
+admin:
+    title: 'Админ-панель'
+    buttons:
+        block: 'Заблокировать пользователя'
+        unblock: 'Разблокировать пользователя'
+        delete: 'Удалить пользователя'
+        make_admin: 'Добавить права администратора'
+        unmake_admin: 'Убрать права администратора'
+
+    table:
+        header:
+            name: 'Имя'
+            email: 'Эл. почта'
+            role: 'Роль'
+            blocked: 'Заблокирован'
+login:
+    login: 'Вход'
+    email: 'Эл. почта'
+    password: 'Пароль'
+registration:
+    registration: 'Регистрация'
+    email: 'Эл. почта'
+    name: 'Имя'
+    password: 'Пароль'
+    repeat_password: 'Повторите пароль'
+    repeat_passwords_error: 'Пароли не совпадают'
+    email_already_exists: 'Такой пользователь уже существует'
+forms:
+    upload_file: 'Загрузить файл'
+    file_not_selected: 'Файл не выбран'
+    submit: 'Отправить'
+home:
+    title: 'Главная'
+lang: 'Язык'
+
+security:
+    user_checker:
+        blocked: 'Этот пользователь заблокирован'
+    constraints:
+        inventory:
+            title:
+                len:
+                min:
+                max:
+                blank:
+            file: 'Файл должен быть pdf или изображением'
+
+inventory:
+    title: 'Инвентари'
+    create:
+        create_successful: 'Инвентарь был создан'
+    toolbar:
+        create: 'Создать инвентарь'
+        delete: 'Удалить инвентарь'
+        undo: 'Отменить'
+    table:
+        title: 'Название'
+        category: 'Категория'
+        tags: 'Теги'
+        picture: 'Изображение'
+        description: 'Описание'
+        empty: 'Инвентарей пока нет'
+        no_search_results: 'Нет результатов поиска'
+        search: 'Поиск'
+    access:
+        successful: 'Настройки были обновлены'
+
+    items:
+        toolbar:
+            create: 'Создать'
+            edit: 'Редактировать'
+            delete: 'Удалить'
+
+    modal:
+        create:
+            title: 'Создать инвентарь'
+            item_field: 'Создать поле элемента'
+        edit:
+            item_field: 'Редактировать поле элемента'
+
+    tabs:
+        items: 'Элементы'
+        discussions: 'Обсуждения'
+        settings: 'Настройки'
+        custom_id: 'Пользовательский ID'
+        access_settings: 'Настройки доступа'
+        item_fields: 'Поля элементов'
+
+    create_inventory:
+        title: 'Название'
+        description: 'Описание'
+        category: 'Категория'
+        image_url: 'Изображение'
+        tags: 'Теги'
+        writers: 'Авторы'
+        is_public: 'Публичный'
+    update:
+        successful: 'Инвентарь был успешно обновлён'
+    settings:
+        picture: 'Текущее изображение'
+
+item:
+    table:
+        empty: 'Элементов пока нет'
+
+item_fields:
+    string: 'Строка'
+    text: 'Текст'
+    integer: 'Число'
+    link: 'Изображение/PDF'
+    bool: 'Да/Нет'
+
+item_field:
+    create_item_field_error: 'Превышено количество допустимых полей %field%'
+    create:
+        title: 'Название'
+        description: 'Описание'
+        is_displayed: 'Отображается'
+        type: 'Тип'
+        success: 'Поле элемента было успешно создано'
+    edit:
+        success: 'Поле элемента было успешно отредактировано'
+    sort:
+        error: 'Произошла ошибка на сервере. Пожалуйста, попробуйте позже'
+    index:
+        title: 'Поля элементов инвентаря'
+        create: 'Создать'
+        edit: 'Редактировать'
+        delete: 'Удалить'
+    empty_list: 'Здесь пока нет полей'
+
+custom_id:
+    title: 'Пользовательский ID'
+    description: 'Вы можете настроить элементы с номерами инвентаря в предпочитаемом формате.
+        Чтобы создать формат, добавьте новые элементы, редактируйте их, перетаскивайте для изменения порядка или удаляйте, перетаскивая их за пределы формы.'
+    random: "D - десятичный\nX - шестнадцатеричный\nO - восьмеричный\nB - двоичный.\nИспользуйте числа от 1 до 20.\nНапример: D6 выдаёт 999999.\nДопустимо поставить разделитель в конце - или _, например: D6_"
+    static:
+        'Текст будет статичным.'
+    uuid: |
+        Будет сгенерирован уникальный ID.
+        Разделители возможны в конце - или _, например: unique_id-
+    date: |
+        dd - день
+        ddd - день недели
+        mm - месяц
+        yyyy - год
+        Обязательно использовать - или _ между сокращениями.
+        Разделители возможны в конце - или _, например: date_
+    seq: |
+        Будет использован текущий индекс элемента + 1.
+        Разделители возможны в конце - или _, например: seq-
+    add_element: 'Добавить элемент'
+    check: 'Формат пользовательского ID недействителен'
+
+    validation:
+        fixed: 'Фиксированное значение не может быть пустым'
+        suffix: 'Допустимые значения только - или _ для %type%'
+        date: 'Неверный формат даты: %value% для %type%'
+        rand:
+            format: 'Неверный формат: %value% для %type%'
+            number: 'Число слишком большое: %number% для %type%'
+
+conflict_resolve:
+    title: 'Разрешение конфликта'
+    description: 'Вы можете разрешить конфликт, выбрав подходящие данные'
+    success: 'Конфликт был успешно разрешён'

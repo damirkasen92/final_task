@@ -19,9 +19,7 @@ export default class extends Controller {
     }
 
     #initInputs() {
-        this.#$form
-            .find('[type="text"]')
-            .on('input', this.#onChange.bind(this));
+        this.#$form.find('[type="text"]').on('input', this.#onChange.bind(this));
     }
 
     #initSelects() {
@@ -30,17 +28,16 @@ export default class extends Controller {
             .each((_, li) => {
                 let $select = $(li).find('select');
                 let $icon = $(li).find('[data-help]');
-                $select.on(
-                    'change',
-                    this.#updatePopover.bind(this, $select, $icon)
-                );
+                $select.on('change', () => {
+                    this.#updatePopover($select, $icon);
+                    this.#onChange();
+                });
                 this.#updatePopover($select, $icon);
             });
     }
 
     #updatePopover($select, $icon) {
-        let description =
-            $select.find('option:selected').data('description') || '';
+        let description = $select.find('option:selected').data('description') || '';
         $icon.attr('data-bs-content', description);
 
         let popover = Popover.getInstance($icon[0]);
@@ -57,7 +54,7 @@ export default class extends Controller {
             animation: this.#duration,
             handle: '.drag-handle',
             onChange: (evt) => {
-                this.#doPost();
+                this.#onChange();
             },
             onEnd: (evt) => {
                 this.#removeElement(evt);
@@ -79,9 +76,7 @@ export default class extends Controller {
                     });
 
                 if (response.status) {
-                    $('.custom-id-preview')
-                        .text(response.customId)
-                        .fadeIn(this.#duration);
+                    $('.custom-id-preview').text(response.customId).fadeIn(this.#duration);
                 } else {
                     this.#showError(response.responseJSON.error);
                 }
@@ -138,13 +133,12 @@ export default class extends Controller {
         const rect = this.listTarget.getBoundingClientRect();
         const x = evt.originalEvent.clientX;
         const y = evt.originalEvent.clientY;
-        const outside =
-            x < rect.left || x > rect.right || y < rect.top || y > rect.bottom;
+        const outside = x < rect.left || x > rect.right || y < rect.top || y > rect.bottom;
 
         if (outside) {
             $(evt.item).slideUp(this.#duration, () => {
                 $(evt.item).remove();
-                this.#doPost();
+                this.#onChange();
             });
         }
     }
@@ -159,5 +153,6 @@ export default class extends Controller {
 
         this.#initInputs();
         this.#initSelects();
+        this.#onChange();
     }
 }

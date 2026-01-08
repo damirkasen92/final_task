@@ -1,17 +1,19 @@
 import { Controller } from '@hotwired/stimulus';
 
 export default class extends Controller {
+    #duration = 200;
+
     connect() {
-        $(this.element).on('change', function (e) {
+        $(this.element).on('change', (e) => {
             const file = e.target.files[0];
             const $preview = $('#preview');
 
             if (file) {
                 const reader = new FileReader();
 
-                reader.onload = function (ev) {
+                reader.onload = (ev) => {
                     $preview.attr('src', ev.target.result);
-                    $preview.slideDown(200);
+                    $preview.slideDown(this.#duration);
                 };
 
                 reader.readAsDataURL(file);

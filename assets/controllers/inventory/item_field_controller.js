@@ -28,13 +28,11 @@ export default class extends Controller {
             success: (response) => {
                 if (!response.status) return;
 
-                $checkboxes
-                    .parents('tr')
-                    .find('td')
-                    .wrapInner("<div class='slide'></div>");
-                $('.slide').slideUp(() => {
-                    $checkboxes.parents('tr').remove();
-                }, this.#duration);
+                $checkboxes.parents('tr').find('td').wrapInner("<div class='slide'></div>");
+
+                $('.slide').slideUp(this.#duration, () => {
+                    this.#refreshContainer();
+                });
             },
             error: (response) => {
                 console.error(response);
@@ -56,10 +54,7 @@ export default class extends Controller {
             },
             error: (response) => {
                 Errors.hideErrors(this.#$form, () => {
-                    Errors.showErrors(
-                        this.#$form,
-                        response.responseJSON.errors
-                    );
+                    Errors.showErrors(this.#$form, response.responseJSON.errors);
                 });
             },
         });
@@ -78,10 +73,7 @@ export default class extends Controller {
             },
             error: (response) => {
                 Errors.hideErrors(this.#$editForm, () => {
-                    Errors.showErrors(
-                        this.#$editForm,
-                        response.responseJSON.errors
-                    );
+                    Errors.showErrors(this.#$editForm, response.responseJSON.errors);
                 });
             },
         });
@@ -102,10 +94,7 @@ export default class extends Controller {
             this.#openEditForm();
         });
 
-        $('#inventory-item-fields').on(
-            'turbo:frame-load',
-            this.#initToolbarBtns.bind(this)
-        );
+        $('#inventory-item-fields').on('turbo:frame-load', this.#initToolbarBtns.bind(this));
     }
 
     #initToolbarBtns() {
@@ -147,16 +136,14 @@ export default class extends Controller {
         this.#$editForm.attr('action', url);
         this.#$editForm.find('[name="item_field[id]"]').val(id);
         this.#$editForm.find('[name="item_field[title]"]').val(title);
-        easyMDE.value(description);
-        this.#$editForm
-            .find('[name="item_field[isDisplayed]"]')
-            .prop('checked', isDisplayed);
+        window.editors[this.#$form.find('textarea').attr('id')].value(description);
+        this.#$editForm.find('[name="item_field[isDisplayed]"]').prop('checked', isDisplayed);
         this.#$editForm.find('[name="item_field[type]"]').val(type);
     }
 
     #clearForm($form) {
         $form.find('[type="text"]').val(null);
-        easyMDE.value('');
+        window.editors[this.#$form.find('textarea').attr('id')].value('');
     }
 
     #showToast(text) {

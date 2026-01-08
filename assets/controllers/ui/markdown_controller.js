@@ -15,7 +15,7 @@ export default class extends Controller {
     #init() {
         if (this.#mdInstance) return;
 
-        window.easyMDE = this.#mdInstance = new EasyMDE({
+        window.editors[$(this.textareaTarget).attr('id')] = this.#mdInstance = new EasyMDE({
             element: this.textareaTarget,
             spellChecker: false,
             forceSync: true,

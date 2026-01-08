@@ -83,7 +83,7 @@ class ItemType extends AbstractType
             'orderIndex' => 'asc',
         ]);
 
-        $item = $options['data'] ?? [];
+        $item = $options['data'] ?? null;
 
         /** @var ItemField $itemField */
         foreach ($itemFields as $itemField) {
@@ -95,9 +95,13 @@ class ItemType extends AbstractType
         }
     }
 
-    private function getOptionsForItemField($type, ?Item $item, ?ItemField $itemField): array
+    private function getOptionsForItemField($type, ?Item $item, ItemField $itemField): array
     {
-        return match ($type) {
+        $sharedOptions = [
+            'label' => $itemField->getTitle(),
+        ];
+
+        $matchedOptions = match ($type) {
             'text' => [
                 'required' => false,
                 'attr' => [
@@ -115,11 +119,13 @@ class ItemType extends AbstractType
                 'required' => false,
             ],
         };
+
+        return array_merge($sharedOptions, $matchedOptions);
     }
 
-    private function getLink(?Item $item, ?ItemField $itemField): string|null
+    private function getLink(?Item $item, ItemField $itemField): string|null
     {
-        if (!$item || !$itemField) {
+        if (!$item) {
             return null;
         }
 

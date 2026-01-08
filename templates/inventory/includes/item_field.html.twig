@@ -3,31 +3,18 @@
         <h2 class="my-3 text-center">{{ 'item_field.index.title' | trans }}</h2>
 
         <div>
-            <div
-                class="toolbar d-flex justify-content-center align-items-center mb-4"
-            >
-                <button
-                    class="btn btn-dark me-3"
-                    data-bs-toggle="modal"
-                    data-bs-target="#createItemField"
-                >
+            <div class="toolbar d-flex justify-content-center align-items-center mb-4">
+                <button class="btn btn-dark me-3" data-bs-toggle="modal" data-bs-target="#createItemField">
                     {{ 'item_field.index.create' | trans }}
                 </button>
-                <button
-                    class="btn btn-dark me-3"
-                    id="edit-btn"
-                    type="button"
-                    disabled
-                >
+                <button class="btn btn-dark me-3" id="edit-btn" type="button" disabled>
                     {{ 'item_field.index.edit' | trans }}
                 </button>
                 <button
                     class="btn btn-dark"
                     type="button"
                     id="delete-btn"
-                    data-delete="{{
-                        path('delete_item_fields', { id: inventory.id })
-                    }}"
+                    data-delete="{{ path('delete_item_fields', { id: inventory.id }) }}"
                     data-action="click->inventory--item-field#delete"
                     disabled
                 >
@@ -37,30 +24,18 @@
             <turbo-frame
                 id="inventory-item-fields"
                 src="{{ path('show_item_fields', { id: inventory.id }) }}"
-            >
-            </turbo-frame>
+            ></turbo-frame>
         </div>
     </div>
 
-    <div
-        class="modal fade"
-        id="createItemField"
-        tabindex="-1"
-        aria-labelledby="createItemField"
-        aria-hidden="true"
-    >
+    <div class="modal fade" id="createItemField" tabindex="-1" aria-labelledby="createItemField" aria-hidden="true">
         <div class="modal-dialog modal-xl">
             <div class="modal-content">
                 <div class="modal-header">
                     <h1 class="modal-title fs-5" id="createItemField">
                         {{ 'inventory.modal.create.item_field' | trans }}
                     </h1>
-                    <button
-                        type="button"
-                        class="btn-close"
-                        data-bs-dismiss="modal"
-                        aria-label="Close"
-                    ></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <div class="container">
@@ -95,25 +70,14 @@
 
     {# edit #}
 
-    <div
-        class="modal fade"
-        id="editItemField"
-        tabindex="-1"
-        aria-labelledby="editItemField"
-        aria-hidden="true"
-    >
+    <div class="modal fade" id="editItemField" tabindex="-1" aria-labelledby="editItemField" aria-hidden="true">
         <div class="modal-dialog modal-xl">
             <div class="modal-content">
                 <div class="modal-header">
                     <h1 class="modal-title fs-5" id="editItemField">
                         {{ 'inventory.modal.edit.item_field' | trans }}
                     </h1>
-                    <button
-                        type="button"
-                        class="btn-close"
-                        data-bs-dismiss="modal"
-                        aria-label="Close"
-                    ></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <div class="container">
@@ -129,9 +93,10 @@
                         {{ form_row(editForm.title) }}
                         {{
                             form_row(editForm.description, {
+                                id: 'edit-description',
                                 attr: {
                                     'data-controller': 'ui--markdown',
-                                    'data-ui--markdown-target': 'textarea'
+                                    'data-ui--markdown-target': 'textarea',
                                 }
                             })
                         }}

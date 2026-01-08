@@ -23,8 +23,8 @@ class InventoryItemFieldController extends BaseController
         $this->denyAccessUnlessGranted(InventoryAttributes::EDIT->value, $inventory);
 
         return $this->render('inventory/includes/item_field.html.twig', [
-            'form'      => $this->createForm(ItemFieldType::class),
-            'editForm'  => $this->createForm(ItemFieldType::class),
+            'form' => $this->createForm(ItemFieldType::class),
+            'editForm' => $this->createForm(ItemFieldType::class),
             'inventory' => $inventory,
         ]);
     }
@@ -35,7 +35,7 @@ class InventoryItemFieldController extends BaseController
         $this->denyAccessUnlessGranted(InventoryAttributes::EDIT->value, $inventory);
 
         return $this->render('inventory/includes/ui/item_fields.html.twig', [
-            'inventory'  => $inventory,
+            'inventory' => $inventory,
             'itemFields' => $itemFieldRepository->findBy([
                 'inventory' => $inventory,
             ], [
@@ -63,14 +63,14 @@ class InventoryItemFieldController extends BaseController
                 return $this->json($this->jsonSuccessData);
             } catch (InventoryServiceException $e) {
                 return $this->json([
-                     ...$this->jsonErrorData,
+                    ...$this->jsonErrorData,
                     'errors' => $e->getMessage(),
                 ], Response::HTTP_BAD_REQUEST);
             }
         }
 
         return $this->json([
-             ...$this->jsonErrorData,
+            ...$this->jsonErrorData,
             'errors' => $this->getErrors($form),
         ], Response::HTTP_BAD_REQUEST);
     }
@@ -88,16 +88,14 @@ class InventoryItemFieldController extends BaseController
                 return $this->json($this->jsonSuccessData, Response::HTTP_CREATED);
             } catch (InventoryServiceException $e) {
                 return $this->json([
-                     ...$this->jsonErrorData,
-                    'errors' => [
-                        'create error' => [$e->getMessage()],
-                    ],
+                    ...$this->jsonErrorData,
+                    'errors' => $e->getMessage(),
                 ], Response::HTTP_BAD_REQUEST);
             }
         }
 
         return $this->json([
-             ...$this->jsonErrorData,
+            ...$this->jsonErrorData,
             'errors' => $this->getErrors($form),
         ], Response::HTTP_BAD_REQUEST);
     }

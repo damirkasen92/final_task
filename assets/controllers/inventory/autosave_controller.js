@@ -12,15 +12,14 @@ export default class extends Controller {
         $(() => {
             this.#$form = $(this.element);
             this.#$form.on('input change', (evt) => {
-                if ($(evt.target).prop('tagName').toLowerCase() === 'textarea')
-                    return;
+                if ($(evt.target).prop('tagName').toLowerCase() === 'textarea') return;
 
                 this.#markAsDirty(evt.target);
             });
 
             if ($('textarea').length)
-                easyMDE.codemirror.on('change', (evt) => {
-                    this.#markAsDirty(easyMDE.element);
+                window.editors[this.#$form.find('textarea').attr('id')].codemirror.on('change', (evt) => {
+                    this.#markAsDirty(window.editors[this.#$form.find('textarea').attr('id')].element);
                 });
 
             $(document).on('turbo:before-visit', () => {
@@ -60,9 +59,7 @@ export default class extends Controller {
     }
 
     #changePicture(url) {
-        $('.setting-image')
-            .parent()
-            .css('height', $('.setting-image').css('height'));
+        $('.setting-image').parent().css('height', $('.setting-image').css('height'));
 
         $('.setting-image').fadeOut(this.#duration, () => {
             $('.setting-image').attr('src', url);
@@ -108,11 +105,8 @@ export default class extends Controller {
                 $el.val().forEach((v) => {
                     formData.append(name, v);
                 });
-            } else if (
-                $('textarea').length &&
-                $el.prop('tagName').toLowerCase() === 'textarea'
-            ) {
-                formData.append(name, easyMDE.value());
+            } else if ($('textarea').length && $el.prop('tagName').toLowerCase() === 'textarea') {
+                formData.append(name, window.editors[this.#$form.find('textarea').attr('id')].value());
             } else if ($el.attr('type') === 'file') {
                 formData.append(name, $el[0].files[0]);
             } else {

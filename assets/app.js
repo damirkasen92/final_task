@@ -15,6 +15,8 @@ window.jQuery = jQuery;
 
 import 'bootstrap';
 
+window.editors = {};
+
 window.trans = (name) => {
     return $('#translations').length ? JSON.parse($('#translations').text())[name] : {};
 };
