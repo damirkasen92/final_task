@@ -31,4 +31,5 @@ WORKDIR /app
 COPY ./composer.json ./composer.lock ./symfony.lock ./
 COPY . .
 
+RUN chmod +x entry.sh
 RUN composer install --no-dev --optimize-autoloader --classmap-authoritative --no-scripts --no-cache --prefer-dist
