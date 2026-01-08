@@ -8,7 +8,6 @@ use App\Enum\ItemFieldTypes;
 use App\Repository\ItemFieldRepository;
 use App\Repository\ItemRepository;
 use App\Service\FileStorage\FileStorageInterface;
-use App\Service\Inventory\InventoryService;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\Pagination\PaginationInterface;
 use Knp\Component\Pager\PaginatorInterface;
@@ -17,7 +16,6 @@ class ItemService
 {
     public function __construct(
         private EntityManagerInterface $em,
-        private InventoryService $inventoryService,
         private ItemRepository $itemRepository,
         private ItemFieldRepository $itemFieldRepository,
         private PaginatorInterface $paginator,

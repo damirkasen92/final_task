@@ -1,0 +1,33 @@
+<div class="mb-3">
+    <div>
+        {{ form_label(row) }}
+    </div>
+    <figure class="mb-3 {{ row.vars.attr['data-preview-url'] ?  : 'visually-hidden' }}">
+        <img src="{{ row.vars.attr['data-preview-url'] }}" alt="" class="img-fluid setting-image" />
+        <figcaption>
+            {{ 'inventory.settings.picture' | trans }}
+        </figcaption>
+    </figure>
+
+    <label class="btn btn-dark">
+        <span>
+            {{ 'forms.upload_file' | trans }}
+        </span>
+
+        {{
+            form_widget(row, {
+                attr: {
+                    id: 'file-input',
+                    'data-controller': 'ui--file',
+                    class: 'visually-hidden'
+                }
+            })
+        }}
+    </label>
+
+    <span id="file-name" class="text-muted">{{ 'forms.file_not_selected' | trans }}</span>
+
+    <div class="mt-2">
+        <img id="preview" src="#" class="img-thumbnail" style="display: none; max-width: 200px" />
+    </div>
+</div>

@@ -1,0 +1,34 @@
+<tr>
+    <td width="4%">
+        <input
+            class="sub-checkbox form-check-input"
+            type="checkbox"
+            name="check"
+            data-controller="ui--sub-checkbox"
+            data-action="click->ui--sub-checkbox#click"
+            data-id="{{ inventory.id }}"
+        />
+    </td>
+    <td width="24%">
+        <a href="{{ path('show_inventory', { id: inventory.id }) }}" target="_top">
+            {{ inventory.title }}
+        </a>
+    </td>
+    {#
+    <td>
+        <span class="description" data-description="{{ inventory.description|e('js') }}"></span>
+    </td>
+    #}
+    <td width="24%">{{ inventory.category }}</td>
+    <td width="24%">
+        {% if (inventory.tags|length) > 0 %} {% for tag in inventory.tags %}
+        {{ tag.name }}
+        <br />
+        {% endfor %} {% else %} - {% endif %}
+    </td>
+    <td width="24%">
+        {% if inventory.imageUrl %}
+        <img src="{{ inventory.imageUrl }}" alt="" class="img-fluid object-fit-contain" />
+        {% else %} - {% endif %}
+    </td>
+</tr>

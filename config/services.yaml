@@ -30,8 +30,10 @@ services:
         arguments:
             $googleKey: '%google_cloud_key%'
             $bucketName: '%google_bucket_name%'
-
     App\Service\FileStorage\FileStorageInterface: '@App\Service\FileStorage\Google\GoogleStorageService'
+
+    App\Service\Inventory\MeiliSearch: ~
+    App\Service\Inventory\SearchEngineInterface: '@App\Service\Inventory\MeiliSearch'
 
     Meilisearch\Client:
         arguments:

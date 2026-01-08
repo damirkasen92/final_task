@@ -2,12 +2,11 @@
 namespace App\Service\Inventory;
 
 use App\Entity\Inventory;
+use App\Enum\IndexesEnum;
 use Meilisearch\Client;
 
 class InventoryIndexer
 {
-    private const string INDEX_NAME = 'inventories';
-
     public function __construct(
         private Client $client
     ) {
@@ -16,16 +15,17 @@ class InventoryIndexer
     public function index(Inventory $inventory): void
     {
         $document = [
-            'id'          => $inventory->getId(),
-            'title'       => $inventory->getTitle(),
+            'id' => $inventory->getId(),
+            'title' => $inventory->getTitle(),
             'description' => $inventory->getDescription(),
+            'user_id' => $inventory->getOwner()->getId()
         ];
 
-        $this->client->index(self::INDEX_NAME)->addDocuments([$document]);
+        $this->client->index(IndexesEnum::inventories->value)->addDocuments([$document]);
     }
 
     public function deleteIndex(Inventory $inventory)
     {
-        $this->client->index(self::INDEX_NAME)->deleteDocument($inventory->getId());
+        $this->client->index(IndexesEnum::inventories->value)->deleteDocument($inventory->getId());
     }
 }

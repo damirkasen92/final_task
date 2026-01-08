@@ -1,0 +1,38 @@
+<div class="mb-3">
+    <div>
+        {{ form_label(form.imageUrl) }}
+    </div>
+
+    {% if inventoryImage is defined %}
+
+    <figure class="mb-3 {{ inventoryImage ? '' : 'visually-hidden' }}">
+        <img src="{{ inventoryImage }}" alt="" class="img-fluid setting-image" />
+        <figcaption>
+            {{ 'inventory.settings.picture' | trans }}
+        </figcaption>
+    </figure>
+
+    {% endif %}
+
+    <label class="btn btn-dark">
+        <span>
+            {{ 'forms.upload_file' | trans }}
+        </span>
+
+        {{
+            form_widget(form.imageUrl, {
+                attr: {
+                    id: 'file-input',
+                    'data-controller': 'ui--file',
+                    class: 'visually-hidden'
+                }
+            })
+        }}
+    </label>
+
+    <span id="file-name" class="text-muted">{{ 'forms.file_not_selected' | trans }}</span>
+
+    <div class="mt-2">
+        <img id="preview" src="#" class="img-thumbnail" style="display: none; max-width: 200px" />
+    </div>
+</div>

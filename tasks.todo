@@ -20,8 +20,8 @@ x autosave in inventory
 x Users without write access can only view items; they cannot add, edit, or delete them.
 
 Every user has their own personal page, where they can manage two sortable/filterable tables:
-* A table of inventories they own (with options to create new, delete, or edit).
-* A table of inventories they have write access to.
+x A table of inventories they own (with options to create new, delete, or edit).
+x A table of inventories they have write access to.
 
 The main page of the app contains:
 * A table of the latest inventories, showing the name, description (or image), and creator.

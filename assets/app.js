@@ -18,7 +18,15 @@ import 'bootstrap';
 window.editors = {};
 
 window.trans = (name) => {
-    return $('#translations').length ? JSON.parse($('#translations').text())[name] : {};
+    for (const translationEl of $('[data-translations]')) {
+        let data = JSON.parse($(translationEl).text());
+
+        if (name in data) {
+            return data[name];
+        }
+    }
+
+    return '';
 };
 
 langRedirect();

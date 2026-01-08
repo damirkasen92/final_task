@@ -80,6 +80,9 @@ inventory:
     access:
         successful: 'Настройки были обновлены'
 
+    mine: 'Мои инвентари'
+    theirs: 'Инвентари с доступом на запись'
+
     items:
         toolbar:
             create: 'Создать'

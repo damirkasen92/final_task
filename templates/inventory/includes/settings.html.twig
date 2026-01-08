@@ -31,38 +31,7 @@
         }}
         {{ form_row(form.category) }}
 
-        <div class="mb-3">
-            {{ form_label(form.imageUrl) }}
-
-            <figure class="mb-3 {{ inventoryImage ? '' : 'visually-hidden' }}">
-                <img src="{{ inventoryImage }}" alt="" class="img-fluid setting-image" />
-                <figcaption>
-                    {{ 'inventory.settings.picture' | trans }}
-                </figcaption>
-            </figure>
-
-            <label class="btn btn-dark">
-                <span>
-                    {{ 'forms.upload_file' | trans }}
-                </span>
-
-                {{
-                    form_widget(form.imageUrl, {
-                        attr: {
-                            id: 'file-input',
-                            'data-controller': 'ui--file',
-                            class: 'visually-hidden'
-                        }
-                    })
-                }}
-            </label>
-
-            <span id="file-name" class="text-muted">{{ 'forms.file_not_selected' | trans }}</span>
-
-            <div class="mt-2">
-                <img id="preview" src="#" class="img-thumbnail" style="display: none; max-width: 200px" />
-            </div>
-        </div>
+        {% include "inventory/includes/ui/form_file_field.html.twig" %}
 
         {{ form_row(form.tags) }}
 
@@ -75,7 +44,7 @@
         window.conflictPath = "{{ path('resolve_inventory_conflict', {id: inventory.id}) }}";
     </script>
 
-    <script id="translations" type="application/json">
+    <script data-translations type="application/json">
         {{ {
             'inventory.update.successful': 'inventory.update.successful' | trans,
             'forms.submit': 'forms.submit' | trans,

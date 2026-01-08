@@ -6,8 +6,7 @@
                 method: 'PATCH',
                 attr: {
                     id: 'accessSettings',
-                    'data-controller':
-                        'inventory--access-settings inventory--autosave',
+                    'data-controller': 'inventory--access-settings inventory--autosave',
                     'data-inventory--access-settings-target': 'form',
                     'data-autosave-path': path('autosave_inventory_settings', {
                         id: inventory.id
@@ -26,7 +25,7 @@
         {{ form_end(form) }}
     </div>
 
-    <script id="translations" type="application/json">
+    <script data-translations type="application/json">
         {{ {
             'inventory.access.successful': 'inventory.access.successful' | trans,
         }|json_encode|raw }}

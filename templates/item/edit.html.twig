@@ -4,21 +4,8 @@
 
         {{ form_errors(form) }}
 
-        {% for row in form %} {% if 'link' in row.vars.name and
-        row.vars.attr['data-preview-url'] %}
-        <div class="mb-3">
-            {{ form_label(row) }}
-            <figure>
-                <img
-                    src="{{ row.vars.attr['data-preview-url'] }}"
-                    alt="Preview"
-                    class="img-fluid"
-                />
-                <figcaption>Current file</figcaption>
-            </figure>
-            {{ form_widget(row) }}
-        </div>
-        {% else %}
+        {% for row in form %} {% if 'link' in row.vars.name %} {% include "item/ui/form_file_field.html.twig" %} {% else
+        %}
 
         {{ form_row(row) }}
 

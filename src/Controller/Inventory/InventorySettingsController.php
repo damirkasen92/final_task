@@ -46,8 +46,8 @@ class InventorySettingsController extends BaseController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $result = $inventoryService->updateInventory(
-                $original,
-                $inventory
+                // $original,
+                // $inventory
             );
 
             // if ($result->getStatus() === 'conflict') {

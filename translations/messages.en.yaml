@@ -80,6 +80,9 @@ inventory:
     access:
         successful: 'Settings have been updated'
 
+    mine: 'My inventories'
+    theirs: 'Inventory with write access'
+
     items:
         toolbar:
             create: Create

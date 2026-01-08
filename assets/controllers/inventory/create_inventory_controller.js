@@ -55,6 +55,7 @@ export default class extends Controller {
         });
 
         $('[type="file"]').val(null);
+        $('[type="file"]').trigger('change');
         window.editors[$form.find('textarea').attr('id')].value('');
     }
 }

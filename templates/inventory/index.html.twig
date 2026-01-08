@@ -35,15 +35,13 @@
             <div id="search-results"></div>
         </div>
 
-        <div class="table-responsive">
-            <turbo-frame id="inventories-list" src="{{ path('inventories_list') }}"></turbo-frame>
-        </div>
+        <turbo-frame id="inventories-list" src="{{ path('inventories_list') }}"></turbo-frame>
     </div>
 </div>
 
 {% include 'inventory/includes/create.html.twig' %} {% include 'includes/toast.html.twig' %}
 
-<script id="translations" type="application/json">
+<script data-translations type="application/json">
     {{ {
         'popover.undo': 'popover.undo' | trans,
         'popover.popover_title': 'popover.popover_title' | trans

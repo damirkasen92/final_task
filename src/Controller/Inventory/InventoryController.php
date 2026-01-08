@@ -35,9 +35,11 @@ class InventoryController extends BaseController
 
         /** @var User $user */
         $user = $this->getUser();
-        return $this->render('inventory/inventories_list.html.twig', [
+        return $this->render('inventory/includes/inventories_list.html.twig', [
             'inventories' => $inventoryService
                 ->getInventoriesWithImage($user->getId(), $query),
+            'inventories_writes' => $inventoryService
+                ->getWriteAccessInventoriesWithImages($user->getId(), $query)
         ]);
     }
 

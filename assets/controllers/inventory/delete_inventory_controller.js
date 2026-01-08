@@ -8,12 +8,10 @@ export default class extends Controller {
     #popover;
 
     connect() {
+        console.log(trans('popover.undo'));
+
         this.#$deleteBtn = $(this.deleteBtnTarget);
-        this.#popover = new UndoPopover(
-            this.deleteBtnTarget,
-            trans('popover.undo'),
-            trans('popover.popover_title')
-        );
+        this.#popover = new UndoPopover(this.deleteBtnTarget, trans('popover.undo'), trans('popover.popover_title'));
 
         this.#$deleteBtn.on('click', (evt) => {
             if (this.#getIds().length === 0) return;
@@ -40,8 +38,6 @@ export default class extends Controller {
     }
 
     #getIds() {
-        return Array.from($('.sub-checkbox:checked')).map((inventory) =>
-            $(inventory).data('id')
-        );
+        return Array.from($('.sub-checkbox:checked')).map((inventory) => $(inventory).data('id'));
     }
 }
