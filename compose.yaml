@@ -12,7 +12,7 @@ services:
       APP_DEBUG: ${APP_DEBUG}
     volumes:
       - /app/var
-    entrypoint: ./entry.sh
+    entrypoint: /app/entry.sh
 
 ###> doctrine/doctrine-bundle ###
   database:
