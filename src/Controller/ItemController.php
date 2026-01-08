@@ -3,9 +3,9 @@ namespace App\Controller;
 
 use App\Entity\Inventory;
 use App\Entity\Item;
+use App\Enum\ItemAttributes;
 use App\Form\ItemType;
 use App\Service\Item\ItemService;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
 
@@ -14,29 +14,30 @@ class ItemController extends BaseController
     #[Route('/inventory/{id}/item/create', name: 'show_create_item', methods: ['GET'])]
     public function showCreateItem(Inventory $inventory)
     {
+        $this->denyAccessUnlessGranted(ItemAttributes::ADD->value, $inventory);
+
         $form = $this->createForm(ItemType::class, null, [
             'inventory' => $inventory->getId(),
         ]);
 
         return $this->render('item/create.html.twig', [
-            'form'      => $form,
+            'form' => $form,
             'inventory' => $inventory,
         ]);
     }
 
     #[Route('/inventory/{id}/item/create', name: 'create_item', methods: ['POST'])]
-    public function createItem(Request $request, Inventory $inventory, EntityManagerInterface $em)
+    public function createItem(Request $request, Inventory $inventory, ItemService $itemService)
     {
+        $this->denyAccessUnlessGranted(ItemAttributes::ADD->value, $inventory);
+
         $item = new Item();
         $form = $this->createForm(ItemType::class, $item, [
             'inventory' => $inventory->getId(),
         ])->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $inventory->addItem($item);
-
-            $em->persist($item);
-            $em->flush();
+            $itemService->createItem($inventory, $item);
 
             return $this->redirectToRoute('show_items', [
                 'id' => $inventory->getId(),
@@ -45,12 +46,15 @@ class ItemController extends BaseController
 
         return $this->render('item/create.html.twig', [
             'form' => $form,
+            'inventory' => $inventory,
         ]);
     }
 
     #[Route('/item/{id}/update', name: 'show_update_item', methods: ['GET'])]
     public function showUpdateItem(Request $request, Item $item)
     {
+        $this->denyAccessUnlessGranted(ItemAttributes::EDIT->value, $item);
+
         $form = $this->createForm(ItemType::class, $item, [
             'inventory' => $item->getInventory(),
         ]);
@@ -64,6 +68,8 @@ class ItemController extends BaseController
     #[Route('/item/{id}/update', name: 'update_item', methods: ['POST'])]
     public function updateItem(Request $request, Item $item, ItemService $itemService)
     {
+        $this->denyAccessUnlessGranted(ItemAttributes::EDIT->value, $item);
+
         $form = $this->createForm(ItemType::class, $item, [
             'inventory' => $item->getInventory(),
         ])->handleRequest($request);
@@ -77,15 +83,17 @@ class ItemController extends BaseController
         }
 
         return $this->render('item/edit.html.twig', [
-            'form'      => $form,
+            'form' => $form,
             'inventory' => $item->getInventory(),
-            'item'      => $item,
+            'item' => $item,
         ]);
     }
 
     #[Route('/inventory/{id}/items', name: 'delete_items', methods: ['DELETE'])]
     public function deleteItems(Request $request, Inventory $inventory, ItemService $itemService)
     {
+        $this->denyAccessUnlessGranted(ItemAttributes::DELETE->value, $inventory);
+
         $itemIds = $request->request->all('item_ids');
         $itemService->deleteItems($itemIds, $inventory);
 
@@ -100,9 +108,9 @@ class ItemController extends BaseController
         $itemsDto = $itemService->getItems($inventory);
 
         return $this->render('item/index.html.twig', [
-            'inventory'      => $inventory,
-            'pagination'     => $itemsDto->pagination,
-            'itemSlots'      => $itemsDto->itemSlots,
+            'inventory' => $inventory,
+            'pagination' => $itemsDto->pagination,
+            'itemSlots' => $itemsDto->itemSlots,
             'itemFieldNames' => $itemsDto->itemFieldNames,
         ]);
     }

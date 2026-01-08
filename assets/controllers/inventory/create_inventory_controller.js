@@ -8,18 +8,17 @@ export default class extends Controller {
 
     connect() {
         this.#init();
+    }
+
+    #init() {
+        $('.toast .toast-body').text(
+            trans('inventory.create.create_successful')
+        );
 
         $(this.formTarget).on('submit', (evt) => {
             evt.preventDefault();
             this.#doPost($(evt.target));
         });
-    }
-
-    #init() {
-        $('[data-toast]').css('z-index', 2000);
-        $('.toast .toast-body').text(
-            $(this.formTarget).data('success-message')
-        );
     }
 
     #doPost($form) {
@@ -41,13 +40,9 @@ export default class extends Controller {
                 }
             },
             error: (response) => {
-                console.log(response);
-
-                if ($form.find('.errors').children().length) {
-                    Errors.hideErrors($form, () => {
-                        Errors.showErrors($form, response.responseJSON.errors);
-                    });
-                } else Errors.showErrors($form, response.responseJSON.errors);
+                Errors.hideErrors($form, () => {
+                    Errors.showErrors($form, response.responseJSON.errors);
+                });
             },
         });
     }

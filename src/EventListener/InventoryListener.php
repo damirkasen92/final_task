@@ -8,7 +8,7 @@ use Doctrine\ORM\Events;
 use Symfony\Bundle\SecurityBundle\Security;
 
 #[AsEntityListener(event: Events::prePersist, entity: Inventory::class)]
-class InventoryCreated
+class InventoryListener
 {
     public function __construct(
         private Security $security,

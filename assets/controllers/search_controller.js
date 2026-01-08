@@ -4,6 +4,7 @@ export default class extends Controller {
     static targets = ['input'];
 
     #timer = null;
+    #delay = 500;
 
     connect() {
         const $input = $(this.inputTarget);
@@ -14,9 +15,9 @@ export default class extends Controller {
             this.#timer = setTimeout(() => {
                 $('#inventories-list').attr(
                     'src',
-                    'inventories/list?q=' + e.target.value
+                    $input.data('path') + '?q=' + e.target.value
                 );
-            }, 500);
+            }, this.#delay);
         });
     }
 }

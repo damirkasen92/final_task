@@ -1,6 +1,6 @@
 <turbo-frame id="inventory-container">
     <div data-animate data-controller="inventory--item-field">
-        <h2 class="my-3 text-center">Inventory Item Fields</h2>
+        <h2 class="my-3 text-center">{{ 'item_field.index.title' | trans }}</h2>
 
         <div>
             <div
@@ -11,9 +11,16 @@
                     data-bs-toggle="modal"
                     data-bs-target="#createItemField"
                 >
-                    Create
+                    {{ 'item_field.index.create' | trans }}
                 </button>
-                <button class="btn btn-dark me-3" id="edit-btn" type="button" disabled>Edit</button>
+                <button
+                    class="btn btn-dark me-3"
+                    id="edit-btn"
+                    type="button"
+                    disabled
+                >
+                    {{ 'item_field.index.edit' | trans }}
+                </button>
                 <button
                     class="btn btn-dark"
                     type="button"
@@ -24,7 +31,7 @@
                     data-action="click->inventory--item-field#delete"
                     disabled
                 >
-                    Delete
+                    {{ 'item_field.index.delete' | trans }}
                 </button>
             </div>
             <turbo-frame
@@ -86,7 +93,6 @@
         </div>
     </div>
 
-
     {# edit #}
 
     <div
@@ -138,4 +144,12 @@
             </div>
         </div>
     </div>
+
+    <script id="translations" type="application/json">
+        {{ {
+            'form.create.success': 'item_field.create.success' | trans,
+            'form.edit.success': 'item_field.edit.success' | trans,
+            'sort.error': 'item_field.sort.error' | trans,
+        }|json_encode|raw }}
+    </script>
 </turbo-frame>

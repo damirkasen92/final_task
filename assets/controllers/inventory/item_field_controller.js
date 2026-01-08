@@ -51,22 +51,16 @@ export default class extends Controller {
             success: (response) => {
                 Errors.hideErrors(this.#$form);
                 this.#refreshContainer();
-                this.#showToast('Item Field was created successfully');
+                this.#showToast(trans('form.create.success'));
                 this.#clearForm(this.#$form);
             },
             error: (response) => {
-                if (this.#$form.find('.errors').children().length) {
-                    Errors.hideErrors(this.#$form, () => {
-                        Errors.showErrors(
-                            this.#$form,
-                            response.responseJSON.errors
-                        );
-                    });
-                } else
+                Errors.hideErrors(this.#$form, () => {
                     Errors.showErrors(
                         this.#$form,
                         response.responseJSON.errors
                     );
+                });
             },
         });
     }
@@ -80,22 +74,15 @@ export default class extends Controller {
             success: (response) => {
                 Errors.hideErrors(this.#$editForm);
                 this.#refreshContainer();
-                this.#showToast('Item Field was updated successfully');
-                this.#clearForm(this.#$editForm);
+                this.#showToast(trans('form.edit.success'));
             },
             error: (response) => {
-                if (this.#$editForm.find('.errors').children().length) {
-                    Errors.hideErrors(this.#$editForm, () => {
-                        Errors.showErrors(
-                            this.#$editForm,
-                            response.responseJSON.errors
-                        );
-                    });
-                } else
+                Errors.hideErrors(this.#$editForm, () => {
                     Errors.showErrors(
                         this.#$editForm,
                         response.responseJSON.errors
                     );
+                });
             },
         });
     }
@@ -109,22 +96,27 @@ export default class extends Controller {
         this.#$editForm.on('submit', (evt) => {
             evt.preventDefault();
             this.#updateItemField();
-        })
+        });
 
         $('#edit-btn').on('click', () => {
             this.#openEditForm();
         });
 
-        $('#inventory-item-fields').on('turbo:frame-load', () => {
-            $('#edit-btn').prop('disabled', true);
-            $('#delete-btn').prop('disabled', true);
+        $('#inventory-item-fields').on(
+            'turbo:frame-load',
+            this.#initToolbarBtns.bind(this)
+        );
+    }
 
-            $('#sortable [type="checkbox"]').on('click', (evt) => {
-                let checked = $('#sortable [type="checkbox"]:checked').length;
+    #initToolbarBtns() {
+        $('#edit-btn').prop('disabled', true);
+        $('#delete-btn').prop('disabled', true);
 
-                $('#edit-btn').prop('disabled', checked !== 1);
-                $('#delete-btn').prop('disabled', checked === 0);
-            });
+        $('#sortable [type="checkbox"]').on('click', (evt) => {
+            let checked = $('#sortable [type="checkbox"]:checked').length;
+
+            $('#edit-btn').prop('disabled', checked !== 1);
+            $('#delete-btn').prop('disabled', checked === 0);
         });
     }
 
@@ -169,9 +161,7 @@ export default class extends Controller {
 
     #showToast(text) {
         let toast = new Toast($('.toast')[0]);
-        $('.toast')
-            .find('.toast-body')
-            .text(text);
+        $('.toast').find('.toast-body').text(text);
         toast.show();
     }
 

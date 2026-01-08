@@ -8,9 +8,7 @@ export default class extends Controller {
                 let $btn = $(this);
                 let src = $btn.data('src');
 
-                $('[data-controller="inventory--inventory"]')
-                    .find('button.active')
-                    .removeClass('active');
+                $('[data-controller="inventory--inventory"]').find('button.active').removeClass('active');
                 $btn.addClass('active');
                 $('#inventory-container').attr('src', src);
             });

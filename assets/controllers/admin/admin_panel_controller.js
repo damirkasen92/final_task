@@ -1,11 +1,11 @@
-import { Controller } from "@hotwired/stimulus";
-import UndoPopover from "../../lib/UndoPopover.js";
+import { Controller } from '@hotwired/stimulus';
+import UndoPopover from '../../lib/UndoPopover.js';
 
 export default class extends Controller {
     #mainUrl = null;
 
     connect() {
-        this.#mainUrl = $("#admin-table").attr("src");
+        this.#mainUrl = $('#admin-table').attr('src');
     }
 
     handle(evt) {
@@ -13,14 +13,14 @@ export default class extends Controller {
 
         const popover = new UndoPopover(
             evt.target,
-            $("[data-popover-btn]").data("popover-btn"),
-            $("[data-popover-title]").data("popover-title")
+            $('[data-popover-btn]').data('popover-btn'),
+            $('[data-popover-title]').data('popover-title')
         );
 
         popover.setOnHideAction(() => {
-            $(".admin-toolbar > button").prop("disabled", false);
+            $('.admin-toolbar > button').prop('disabled', false);
         });
-        $(".admin-toolbar > button").prop("disabled", true);
+        $('.admin-toolbar > button').prop('disabled', true);
 
         popover.show(() => {
             this.#doFetch(evt);
@@ -29,24 +29,24 @@ export default class extends Controller {
 
     #doFetch(evt, callback = null) {
         $.post({
-            url: $(evt.target).data("src"),
+            url: $(evt.target).data('src'),
             data: {
                 userIds: this.#getUserIds(),
             },
-            success: (response, textStatus, xhr) => {
+            success: (response) => {
                 if (callback) callback(response);
 
                 if (response.redirect) {
                     location.href = response.redirect;
                 }
 
-                $("#admin-table").attr("src", this.#mainUrl);
+                $('#admin-table').attr('src', this.#mainUrl);
             },
         });
     }
 
     #getUserIds() {
-        return Array.from($(".sub-checkbox:checked")).map(
+        return Array.from($('.sub-checkbox:checked')).map(
             (cb) => cb.dataset.id
         );
     }

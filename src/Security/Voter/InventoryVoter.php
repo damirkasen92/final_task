@@ -17,8 +17,7 @@ final class InventoryVoter extends Voter
 {
     public function __construct(
         private InventoryRepository $inventoryRepository,
-    )
-    {
+    ) {
 
     }
 
@@ -44,7 +43,7 @@ final class InventoryVoter extends Voter
             return false;
         }
 
-        if (in_array(UserRoles::ADMIN->value, $user->getRoles(), true)) {
+        if (\in_array(UserRoles::ADMIN->value, $user->getRoles(), true)) {
             return true;
         }
 
@@ -55,30 +54,24 @@ final class InventoryVoter extends Voter
         return $this->checkInventory($attribute, $subject, $user);
     }
 
-    private function checkInventory(string $attribute, Inventory $subject, User $user) {
+    private function checkInventory(string $attribute, Inventory $subject, User $user)
+    {
         if ($subject->getOwner() === $user) {
             return true;
         }
 
-        return match ($attribute) {
-            InventoryAttributes::TAB_ITEMS->value,
-            InventoryAttributes::TAB_DISCUSSION->value => $subject->hasWriteAccess($user),
-            default => false,
-        };
+        return false;
     }
 
-    private function checkInventories(string $attribute, InventoryIdsDto $subject, User $user): bool {
+    private function checkInventories(string $attribute, InventoryIdsDto $subject, User $user): bool
+    {
         $inventories = $this->inventoryRepository
             ->findBy(['id' => $subject->ids]);
 
         if ($this->belongsToUser($user, $inventories))
             return true;
 
-        return match ($attribute) {
-            // InventoryAttributes::TAB_ITEMS->value,
-            // InventoryAttributes::TAB_DISCUSSION->value => $this->hasWriteAccess($user, $inventories),
-            default => false,
-        };
+        return false;
     }
 
     private function belongsToUser(User $user, array $inventories): bool

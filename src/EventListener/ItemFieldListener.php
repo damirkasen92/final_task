@@ -10,7 +10,7 @@ use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 #[AsEntityListener(event: Events::prePersist, entity: ItemField::class)]
-class ItemFieldCreated
+class ItemFieldListener
 {
     public function __construct(
         private Security $security,
@@ -20,8 +20,6 @@ class ItemFieldCreated
 
     public function prePersist(ItemField $itemField, PrePersistEventArgs $event)
     {
-        // $event->getObjectManager()->
-        // $this->requestStack->getCurrentRequest()->get
-        // $itemField->setInventory()
+
     }
 }

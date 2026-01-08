@@ -2,19 +2,19 @@
     <div id="custom-id" class="pb-4" data-animate>
         <h2 class="mb-3 text-center">{{ 'custom_id.title'|trans }}</h2>
 
-        <div class="text-center">
-            <div class="mb-3">Custom ID:</div>
+        <div class="text-center custom-id-preview-wrap">
             <div class="custom-id-preview mb-3">
                 {{ customId }}
             </div>
         </div>
 
-        <div class="errors mb-3"></div>
+        <p class="custom-id-description">{{ 'custom_id.description'|trans }}</p>
 
         {{ form_start(form, { action: path('set_custom_id', { id: inventory.id }), method: 'POST' }) }}
 
+        <div class="errors mb-3"></div>
+
         <div data-controller="inventory--custom-id">
-            <p>{{ 'custom_id.description'|trans }}</p>
             <ul id="elements" data-prototype='{% include "inventory/includes/ui/custom_type.html.twig" with { 'form': form } %}'
                 data-inventory--custom-id-target="list"
                 class="list-group mb-4"
@@ -29,18 +29,14 @@
                         <div class="mb-3">
                             {{ form_label(elementForm.value) }}
                             <div class="input-group">
-                                {{ form_widget(elementForm.value, {
-                                    attr: {
-                                        'data-type': elementForm.type.vars.value
-                                    }
-                                }) }}
+                                {{ form_widget(elementForm.value) }}
                                 <span class="input-group-text" id="visible-addon"><i data-help class="bi bi-question-circle cursor-pointer"></i></span>
                             </div>
                         </div>
                     </li>
                 {% endfor %}
             </ul>
-            <button id="add-element" type="button" class="btn btn-dark" data-action="click->inventory--custom-id#addElement">Add element</button>
+            <button id="add-element" type="button" class="btn btn-dark" data-action="click->inventory--custom-id#addElement">{{ 'custom_id.add_element'|trans }}</button>
         </div>
 
         <input type="hidden" id="csrf_token" value="{{ csrf_token('custom_id_format') }}" />

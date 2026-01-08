@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Service\Item;
 
 use App\Exception\CustomIdGeneratorException;
@@ -8,12 +9,13 @@ use Symfony\Component\Uid\Uuid;
 class CustomIdGenerator
 {
     public function __construct(private ItemRepository $itemRepository)
-    {}
+    {
+    }
 
     public function generate(array $elements): string
     {
         $format = $elements;
-        $parts  = [];
+        $parts = [];
 
         foreach ($format as $element) {
             $parts[] = $this->renderElement($element);
@@ -25,15 +27,15 @@ class CustomIdGenerator
     private function renderElement(array $element): string
     {
         return match ($element['type']) {
-            'fixed'  => $element['value'],
+            'fixed' => $element['value'],
             'rand20' => $this->parseValue($element['value'], random_int(0, (2 ** 20) - 1)),
             'rand32' => $this->parseValue($element['value'], random_int(0, (2 ** 32) - 1)),
-            'rand6'  => $this->parseValue($element['value'], random_int(0, 999999)),
-            'rand9'  => $this->parseValue($element['value'], random_int(0, 999999999)),
-            'guid'   => Uuid::v4()->toRfc4122() . $element['value'],
-            'date'   => $this->parseDate($element['value']),
-            'seq'    => (string) $this->itemRepository->getMaxSequence() . $element['value'],
-            default  => throw new CustomIdGeneratorException("Unknown element type"),
+            'rand6' => $this->parseValue($element['value'], random_int(0, 999999)),
+            'rand9' => $this->parseValue($element['value'], random_int(0, 999999999)),
+            'guid' => Uuid::v4()->toRfc4122() . $element['value'],
+            'date' => $this->parseDate($element['value']),
+            'seq' => (string) $this->itemRepository->getMaxSequence() . $element['value'],
+            default => throw new CustomIdGeneratorException("Unknown element type"),
         };
     }
 

@@ -12,8 +12,6 @@
                 data-controller="inventory--delete-inventory"
                 data-inventory--delete-inventory-target="deleteBtn"
                 data-delete-path="{{ path('delete_inventory') }}"
-                data-undo-text="{{ 'popover.undo' | trans }}"
-                data-undo-title="{{ 'popover.popover_title' | trans }}"
             >
                 {{ 'inventory.toolbar.delete' | trans }}
             </button>
@@ -33,10 +31,11 @@
                 class="form-control"
                 type="text"
                 id="inventory-search"
-                placeholder="Поиск..."
+                placeholder="{{ 'inventory.table.search' | trans }}..."
                 autocomplete="off"
                 data-controller="search"
                 data-search-target="input"
+                data-path="{{ path('inventories_list') }}"
             />
             <div id="search-results"></div>
         </div>
@@ -51,4 +50,13 @@
 </div>
 
 {% include 'inventory/create.html.twig' %} {% include 'includes/toast.html.twig'
-%} {% endblock %}
+%}
+
+<script id="translations" type="application/json">
+    {{ {
+        'popover.undo': 'popover.undo' | trans,
+        'popover.popover_title': 'popover.popover_title' | trans
+    }|json_encode|raw }}
+</script>
+
+{% endblock %}

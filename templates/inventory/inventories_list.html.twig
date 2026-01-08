@@ -1,11 +1,13 @@
 <turbo-frame id="inventories-list">
     <div data-animate>
+        {% if inventories|length > 0 %}
+
         <table class="table">
             <thead>
                 <tr>
                     <th>
                         <input
-                            class="main-checkbox"
+                            class="main-checkbox form-check-input"
                             type="checkbox"
                             name="check"
                             data-controller="ui--checkbox"
@@ -24,7 +26,7 @@
                 <tr>
                     <td>
                         <input
-                            class="sub-checkbox"
+                            class="sub-checkbox form-check-input"
                             type="checkbox"
                             name="check"
                             data-controller="ui--sub-checkbox"
@@ -68,5 +70,17 @@
                 {% endfor %}
             </tbody>
         </table>
+
+        {% else %}
+
+        <h2 class="text-center mt-3">
+            {% if app.request.query.get('q')|length > 0 %}
+            {{ 'inventory.table.no_search_results' | trans }}
+            {% else %}
+            {{ 'inventory.table.empty' | trans }}
+            {% endif %}
+        </h2>
+
+        {% endif %}
     </div>
 </turbo-frame>

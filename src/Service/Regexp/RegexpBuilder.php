@@ -13,12 +13,13 @@ class RegexpBuilder
 
             if ($type === 'seq') {
                 $nextEl = $elements[$idx + 1] ?? null;
+                $regex = $this->elementToRegex($element);
 
                 if ($nextEl) {
-                    $regexParts[] = '(\d+)[-_]?(?=' . $this->elementToRegex($nextEl) . ')';
-                } else {
-                    $regexParts[] = '(\d+)[-_]?';
+                    $regex .= '(?=' . $this->elementToRegex($nextEl) . ')';
                 }
+
+                $regexParts[] = $regex;
             } else {
                 $regexParts[] = $this->elementToRegex($element);
             }
@@ -27,13 +28,14 @@ class RegexpBuilder
         return '/^' . implode('', $regexParts) . '$/';
     }
 
-    private function elementToRegex(array $el): string {
+    private function elementToRegex(array $el): string
+    {
         $type = $el['type'];
         $val = $el['value'] ?? '';
 
         return match ($type) {
             'seq' => '\d+' . preg_quote($val, '/'),
-            'guid' => '[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}[-_]?',
+            'guid' => $this->guidFormatToRegex($val),
             'date' => $this->dateFormatToRegex($val),
             'rand20', 'rand32', 'rand6', 'rand9' => $this->randFormatToRegex($val),
             'fixed' => preg_quote($val, '/'),
@@ -41,13 +43,20 @@ class RegexpBuilder
         };
     }
 
+    private function guidFormatToRegex(string $format): string
+    {
+        $suffix = $format ? '[-_]?' : '';
+
+        return '[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}' . $suffix;
+    }
+
     private function dateFormatToRegex(string $format): string
     {
         $map = [
             'yyyy' => '\d{4}',
-            'ddd'  => '[A-Z]{3}',
-            'mm'   => '\d{2}',
-            'dd'   => '\d{2}',
+            'ddd' => '[A-Z]{3}',
+            'mm' => '\d{2}',
+            'dd' => '\d{2}',
         ];
 
         return preg_replace_callback('/yyyy|ddd|mm|dd|[-_]/', function ($m) use ($map) {

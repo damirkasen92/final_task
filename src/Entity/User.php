@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Entity;
 
 use App\Enum\UserRoles;
@@ -9,6 +8,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
@@ -18,9 +18,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['json'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 180)]
+    #[Groups(['json'])]
     private ?string $email = null;
 
     /**
@@ -30,6 +32,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private array $roles = [];
 
     #[ORM\Column(length: 255)]
+    #[Groups(['json'])]
     private ?string $name = null;
 
     /**
@@ -55,7 +58,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function __construct()
     {
-        $this->inventories = new ArrayCollection();
+        $this->inventories      = new ArrayCollection();
         $this->writeInventories = new ArrayCollection();
     }
 
@@ -128,8 +131,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function __serialize(): array
     {
-        $data = (array) $this;
-        $data["\0".self::class."\0password"] = hash('crc32c', $this->password);
+        $data                                    = (array) $this;
+        $data["\0" . self::class . "\0password"] = hash('crc32c', $this->password);
 
         return $data;
     }
@@ -144,7 +147,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function addInventory(Inventory $inventory): static
     {
-        if (!$this->inventories->contains($inventory)) {
+        if (! $this->inventories->contains($inventory)) {
             $this->inventories->add($inventory);
             $inventory->setOwner($this);
         }
@@ -173,7 +176,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function addWriteInventory(Inventory $writeInventory): static
     {
-        if (!$this->writeInventories->contains($writeInventory)) {
+        if (! $this->writeInventories->contains($writeInventory)) {
             $this->writeInventories->add($writeInventory);
             $writeInventory->addWriter($this);
         }

@@ -39,7 +39,10 @@ registration:
     password: 'Password'
     repeat_password: 'Repeat Password'
     repeat_passwords_error: 'Passwords do not match'
+    email_already_exists: 'Such user already exists'
 forms:
+    upload_file: 'Upload a file'
+    file_not_selected: The file is not selected
     submit: 'Submit'
 home:
     title: 'Home'
@@ -70,6 +73,18 @@ inventory:
         category: 'Category'
         tags: 'Tags'
         picture: 'Picture'
+        description: 'Description'
+        empty: 'There are no inventories yet'
+        no_search_results: 'No search results'
+        search: 'Search'
+    access:
+        successful: 'Settings have been updated'
+
+    items:
+        toolbar:
+            create: Create
+            edit: Edit
+            delete: Delete
 
     modal:
         create:
@@ -94,8 +109,14 @@ inventory:
         tags: 'Tags'
         writers: 'Writers'
         is_public: 'Is Public'
+    update:
+        successful: 'The inventory has been updated successfully'
     settings:
         picture: 'Current picture'
+
+item:
+    table:
+        empty: There are no items yet
 
 item_fields:
     string: 'String'
@@ -106,6 +127,21 @@ item_fields:
 
 item_field:
     create_item_field_error: 'The number of allowed %field% fields is exceeded'
+    create:
+        title: Title
+        description: Description
+        is_displayed: Is Displayed
+        type: Type
+        success: The item field was created successfully
+    edit:
+        success: The item field was edited successfully
+    sort:
+        error: An error has occurred on the server. Please try again later
+    index:
+        title: Inventory Item Fields
+        create: Create
+        edit: Edit
+        delete: Delete
 
 custom_id:
     title: Custom id
@@ -127,5 +163,18 @@ custom_id:
     seq: |
         The current + 1 index for item will be used.
         Separators are possible at the end - or _ for example: seq-
+    add_element: Add element
+    check: Format of the custom ID is invalid
 
+    validation:
+        fixed: Fixed cannot be empty
+        suffix: There are only possible value - or _ for %type%
+        date: 'Wrong data format: %value% for %type%'
+        rand:
+            format: 'Wrong format: %value% for %type%'
+            number: 'The number is too big: %number% for %type%'
 
+conflict_resolve:
+    title: Resolve Conflict
+    description: You can resolve the conflict by choosing appropriate data
+    success: The conflict was successfully resolved

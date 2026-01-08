@@ -1,7 +1,8 @@
 <?php
-
 namespace App\Security\Voter;
 
+use \App\Entity\Item;
+use App\Entity\Inventory;
 use App\Enum\ItemAttributes;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Vote;
@@ -13,7 +14,7 @@ final class ItemVoter extends Voter
     protected function supports(string $attribute, mixed $subject): bool
     {
         return ItemAttributes::tryFrom($attribute) !== null
-            && $subject instanceof \App\Entity\Item;
+            && ($subject instanceof Item || $subject instanceof Inventory);
     }
 
     protected function voteOnAttribute(string $attribute, mixed $subject, TokenInterface $token, ?Vote $vote = null): bool
@@ -23,13 +24,16 @@ final class ItemVoter extends Voter
 
         if (
             $isAuthenticatedUser
-            && in_array('ROLE_ADMIN', $user->getRoles(), true)
+            && \in_array('ROLE_ADMIN', $user->getRoles(), true)
         ) {
             return true;
         }
 
-        $item = $subject;
-        $inventory = $item->getInventory();
+        if ($subject instanceof Inventory) {
+            $inventory = $subject;
+        } else {
+            $inventory = $subject->getInventory();
+        }
 
         switch ($attribute) {
             case ItemAttributes::ADD->value:
@@ -40,7 +44,9 @@ final class ItemVoter extends Voter
                     && ($inventory->getOwner() === $user
                         || $inventory->hasWriteAccess($user)
                         || $inventory->isPublic())
-                ) return true;
+                ) {
+                    return true;
+                }
 
                 return false;
 

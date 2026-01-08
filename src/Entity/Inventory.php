@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Entity;
 
 use App\Repository\InventoryRepository;
@@ -8,31 +7,36 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\UX\Turbo\Attribute\Broadcast;
+use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ORM\Entity(repositoryClass: InventoryRepository::class)]
-// #[Broadcast]
 class Inventory
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['json'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['json'])]
     private ?string $title = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
+    #[Groups(['json'])]
     private ?string $description = null;
 
     #[ORM\ManyToOne(targetEntity: Category::class)]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['json'])]
     private ?Category $category = null;
 
     #[ORM\Column]
+    #[Groups(['json'])]
     private ?bool $isPublic = null;
 
     #[ORM\Column(type: 'string', nullable: true)]
+    #[Groups(['json'])]
     private ?string $imageUrl = null;
 
     /**
@@ -55,6 +59,7 @@ class Inventory
      * @var Collection<int, Tag>
      */
     #[ORM\ManyToMany(targetEntity: Tag::class, mappedBy: 'inventories')]
+    #[Groups(['json'])]
     private Collection $tags;
 
     /**
@@ -73,9 +78,9 @@ class Inventory
 
     public function __construct()
     {
-        $this->items = new ArrayCollection();
-        $this->writers = new ArrayCollection();
-        $this->tags = new ArrayCollection();
+        $this->items      = new ArrayCollection();
+        $this->writers    = new ArrayCollection();
+        $this->tags       = new ArrayCollection();
         $this->itemFields = new ArrayCollection();
     }
 
@@ -142,7 +147,7 @@ class Inventory
 
     public function addItem(Item $item): static
     {
-        if (!$this->items->contains($item)) {
+        if (! $this->items->contains($item)) {
             $this->items->add($item);
             $item->setInventory($this);
         }
@@ -189,7 +194,7 @@ class Inventory
 
     public function addWriter(User $writer): static
     {
-        if (!$this->writers->contains($writer)) {
+        if (! $this->writers->contains($writer)) {
             $this->writers->add($writer);
         }
 
@@ -225,7 +230,7 @@ class Inventory
 
     public function addTag(Tag $tag): static
     {
-        if (!$this->tags->contains($tag)) {
+        if (! $this->tags->contains($tag)) {
             $this->tags->add($tag);
             $tag->addInventory($this);
         }
@@ -252,7 +257,7 @@ class Inventory
 
     public function addItemField(ItemField $itemField): static
     {
-        if (!$this->itemFields->contains($itemField)) {
+        if (! $this->itemFields->contains($itemField)) {
             $this->itemFields->add($itemField);
             $itemField->setInventory($this);
         }

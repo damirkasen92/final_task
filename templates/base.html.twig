@@ -1,42 +1,28 @@
 <!DOCTYPE html>
-<html lang="{{ app.request.locale }}" data-bs-theme="light">
+<html lang="{{ app.request.attributes.get('_locale') }}" data-bs-theme="light">
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
         <title>{% block title %} Inventory webapp {% endblock %}</title>
 
-        <link
-            href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css"
-            rel="stylesheet"
-        />
-        <link
-            rel="icon"
-            type="image/svg+xml"
-            href='data:image/svg+xml,<svg width="800px" height="800px" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><defs><linearGradient id="a" x1="-66.775" y1="-171.703" x2="-66.775" y2="-171.817" gradientTransform="matrix(240, 0, 0, -240, 16042, -41206)" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#ec790f"/><stop offset="1" stop-color="#f51032"/></linearGradient></defs><title>file_type_favicon</title><rect x="2" y="2" width="28" height="28" rx="1.75" ry="1.75" style="fill:url(#a)"/><polygon points="16 22.625 9.511 26.033 10.75 18.815 5.5 13.704 12.755 12.65 16 6.083 19.245 12.65 26.5 13.704 21.25 18.815 22.489 26.033 16 22.625" style="fill:#fff"/></svg>'
-        />
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet" />
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/easymde/dist/easymde.min.css" />
 
-        <link
-            rel="stylesheet"
-            href="https://cdn.jsdelivr.net/npm/easymde/dist/easymde.min.css"
-        />
         <script src="https://cdn.jsdelivr.net/npm/easymde/dist/easymde.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 
-        {% block stylesheets %} {% endblock %} {% block javascripts %} {% block
-        importmap %}
+        {% block stylesheets %} {% endblock %} {% block javascripts %} {% block importmap %}
         {{
             importmap('app')
         }}
         {% endblock %} {% endblock %}
     </head>
-    <body class="bg-body-tertiary">
+    <body class="bg-body-tertiary" data-lang="{{ app.request.locale }}">
         <header class="header mb-4">
             <nav class="navbar navbar-expand-lg bg-body-tertiary">
                 <div class="container">
-                    <a class="navbar-brand" href="{{ path('home') }}"
-                        >Inventories</a
-                    >
+                    <a class="navbar-brand" href="{{ path('home') }}">Inventories</a>
                     <button
                         class="navbar-toggler"
                         type="button"
@@ -54,86 +40,63 @@
                                 <li class="nav-item">
                                     <a
                                         class="nav-link {{
-                                            app.request.attributes.get(
-                                                '_route'
-                                            ) == 'home'
-                                                ? 'active'
-                                                : ''
+                                            app.request.attributes.get('_route') == 'home' ? 'active' : ''
                                         }}"
                                         aria-current="page"
                                         href="{{ path('home') }}"
-                                        >{{ 'navbar.menu.home' | trans }}</a
                                     >
+                                        {{ 'navbar.menu.home' | trans }}
+                                    </a>
                                 </li>
 
-                                {% if
-                                is_granted(constant('App\\Enum\\UserRoles::ADMIN').value)
-                                %}
+                                {% if is_granted(constant('App\\Enum\\UserRoles::ADMIN').value) %}
                                 <li class="nav-item">
                                     <a
                                         class="nav-link {{
-                                            app.request.attributes.get(
-                                                '_route'
-                                            ) == 'admin'
-                                                ? 'active'
-                                                : ''
+                                            app.request.attributes.get('_route') == 'admin' ? 'active' : ''
                                         }}"
                                         aria-current="page"
                                         href="{{ path('admin') }}"
-                                        >{{ 'admin.title' | trans }}</a
                                     >
+                                        {{ 'admin.title' | trans }}
+                                    </a>
                                 </li>
                                 {% endif %} {% if not app.user %}
                                 <li class="nav-item">
                                     <a
                                         class="nav-link {{
-                                            app.request.attributes.get(
-                                                '_route'
-                                            ) == 'login'
-                                                ? 'active'
-                                                : ''
+                                            app.request.attributes.get('_route') == 'login' ? 'active' : ''
                                         }}"
                                         href="{{ path('login') }}"
-                                        >{{ 'navbar.menu.login' | trans }}</a
                                     >
+                                        {{ 'navbar.menu.login' | trans }}
+                                    </a>
                                 </li>
                                 <li class="nav-item">
                                     <a
                                         class="nav-link {{
-                                            app.request.attributes.get(
-                                                '_route'
-                                            ) == 'show_registration'
-                                                ? 'active'
-                                                : ''
+                                            app.request.attributes.get('_route') == 'show_registration' ? 'active' : ''
                                         }}"
                                         href="{{ path('show_registration') }}"
-                                        >{{
-                                            'navbar.menu.registration' | trans
-                                        }}</a
                                     >
+                                        {{ 'navbar.menu.registration' | trans }}
+                                    </a>
                                 </li>
                                 {% else %}
                                 <li class="nav-item">
                                     <a
                                         class="nav-link {{
-                                            app.request.attributes.get(
-                                                '_route'
-                                            ) == 'inventories'
-                                                ? 'active'
-                                                : ''
+                                            app.request.attributes.get('_route') == 'inventories' ? 'active' : ''
                                         }}"
                                         href="{{ path('inventories') }}"
-                                        >{{
-                                            'navbar.menu.inventories' | trans
-                                        }}</a
                                     >
+                                        {{ 'navbar.menu.inventories' | trans }}
+                                    </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a
-                                        class="nav-link"
-                                        href="{{ path('logout') }}"
-                                        >{{ 'navbar.menu.logout' | trans }}</a
-                                    >
+                                    <a class="nav-link" href="{{ path('logout') }}">
+                                        {{ 'navbar.menu.logout' | trans }}
+                                    </a>
                                 </li>
                                 {% endif %}
                             </ul>
@@ -151,16 +114,32 @@
                                         <li>
                                             <a
                                                 class="dropdown-item"
-                                                href="{{ path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')|merge({ '_locale': 'en' })) }}"
-                                                >English</a
+                                                href="{{
+                                                    path('change_locale', {
+                                                        locale: 'en',
+                                                        route: app.request.attributes.get('_route'),
+                                                        params: app.request.attributes.get('_route_params'),
+                                                        query: app.request.query.all()
+                                                    })
+                                                }}"
                                             >
+                                                English
+                                            </a>
                                         </li>
                                         <li>
                                             <a
                                                 class="dropdown-item"
-                                                href="{{ path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')|merge({ '_locale': 'ru' })) }}"
-                                                >Русский</a
+                                                href="{{
+                                                    path('change_locale', {
+                                                        locale: 'ru',
+                                                        route: app.request.attributes.get('_route'),
+                                                        params: app.request.attributes.get('_route_params'),
+                                                        query: app.request.query.all()
+                                                    })
+                                                }}"
                                             >
+                                                Русский
+                                            </a>
                                         </li>
                                     </ul>
                                 </div>
@@ -171,10 +150,7 @@
                                     data-controller="ui--theme"
                                     data-action="click->ui--theme#change"
                                 >
-                                    <i
-                                        class="bi bi-sun-fill"
-                                        id="themeIcon"
-                                    ></i>
+                                    <i class="bi bi-sun-fill" id="themeIcon"></i>
                                 </button>
                             </div>
                         </div>

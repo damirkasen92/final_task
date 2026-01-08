@@ -1,6 +1,8 @@
 <?php
-namespace App\Controller;
 
+namespace App\Controller\Inventory;
+
+use App\Controller\BaseController;
 use App\Dto\InventoryIdsDto;
 use App\Entity\Inventory;
 use App\Entity\User;
@@ -61,7 +63,7 @@ class InventoryController extends BaseController
         }
 
         return $this->json([
-             ...$this->jsonErrorData,
+            ...$this->jsonErrorData,
             'errors' => $this->getErrors($form),
         ], Response::HTTP_BAD_REQUEST);
     }

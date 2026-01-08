@@ -33,20 +33,21 @@ class CustomIdElementType extends AbstractType
                     'Sequence'       => 'seq',
                 ],
                 'constraints' => [
-                    new Assert\Callback(fn ($type, ExecutionContextInterface $context) =>
-                        $this->validateForm($type, $context)),
+                    new Assert\Callback(fn($type, ExecutionContextInterface $context) =>
+                        $this->validateForm($type, $context)
+                    ),
                 ],
                 'choice_attr' => function ($choice, $key, $value) {
                     return match ($value) {
-                        'fixed' => ['data-description' => $this->translator->trans('custom_id.static')],
+                        'fixed'  => ['data-description' => $this->translator->trans('custom_id.static')],
                         'rand20' => ['data-description' => $this->translator->trans('custom_id.random')],
                         'rand32' => ['data-description' => $this->translator->trans('custom_id.random')],
-                        'rand6' => ['data-description' => $this->translator->trans('custom_id.random')],
-                        'rand9' => ['data-description' => $this->translator->trans('custom_id.random')],
-                        'guid' => ['data-description' => $this->translator->trans('custom_id.uuid')],
-                        'date' => ['data-description' => $this->translator->trans('custom_id.date')],
-                        'seq' => ['data-description' => $this->translator->trans('custom_id.seq')],
-                        default => [],
+                        'rand6'  => ['data-description' => $this->translator->trans('custom_id.random')],
+                        'rand9'  => ['data-description' => $this->translator->trans('custom_id.random')],
+                        'guid'   => ['data-description' => $this->translator->trans('custom_id.uuid')],
+                        'date'   => ['data-description' => $this->translator->trans('custom_id.date')],
+                        'seq'    => ['data-description' => $this->translator->trans('custom_id.seq')],
+                        default  => [],
                     };
                 },
             ])
@@ -61,12 +62,19 @@ class CustomIdElementType extends AbstractType
         /** @var \Symfony\Component\Form\FormInterface $form */
         $form  = $context->getObject()->getParent();
         $value = $form->get('value')->getData();
+        $label = array_search(
+            $type,
+            $form->get('type')->getConfig()->getOption('choices'),
+            true
+        );
 
         if (
             preg_match('/fixed/', $type)
         ) {
             if (empty($value)) {
-                $context->buildViolation("Fixed can not be empty")
+                $context->buildViolation(
+                    $this->translator->trans('custom_id.validation.fixed')
+                )
                     ->addViolation();
             }
 
@@ -74,26 +82,45 @@ class CustomIdElementType extends AbstractType
             preg_match('/guid|seq/', $type)
             && ! preg_match('/^([-_]?)$/', $value)
         ) {
-            $context->buildViolation("There are only possible value - or _ for " . $type)
+            $context->buildViolation(
+                $this->translator->trans('custom_id.validation.suffix', [
+                    '%type%' => $label,
+                ])
+            )
                 ->addViolation();
         } else if (
             preg_match('/date/', $type)
             && ! preg_match('/^(?:yyyy|dd|ddd|mm)+(?:[-_]{1}(?:yyyy|dd|ddd|mm))*([-_]?)$/', $value)
         ) {
-            $context->buildViolation("Wrong data format: " . $value . " for " . $type)
+            $context->buildViolation(
+                $this->translator->trans('custom_id.validation.date', [
+                    '%value%' => $value,
+                    '%type%'  => $label,
+                ])
+            )
                 ->addViolation();
         } else if (
             preg_match('/rand20|rand32|rand6|rand9/', $type)
-            && preg_match('/^(?:X|D|O|B)(\d+)([-_]?)$/', $value, $m)
         ) {
+            preg_match('/^(?:X|D|O|B)(\d+)([-_]?)$/', $value, $m);
 
             if (\count($m) === 0) {
-                $context->buildViolation("Wrong format: " . $value . " for " . $type)
+                $context->buildViolation(
+                    $this->translator->trans('custom_id.validation.rand.format', [
+                        '%value%' => $value,
+                        '%type%'  => $label,
+                    ])
+                )
                     ->addViolation();
             }
 
-            if ($m[1] > self::MAXIMUM_ZEROES_PREFIX) {
-                $context->buildViolation("The number is too big: " . $m[1] . " for " . $type)
+            if (isset($m[1]) && $m[1] > self::MAXIMUM_ZEROES_PREFIX) {
+                $context->buildViolation(
+                    $this->translator->trans('custom_id.validation.rand.format', [
+                        '%number%' => $m[1],
+                        '%type%'   => $label,
+                    ])
+                )
                     ->addViolation();
             }
         }

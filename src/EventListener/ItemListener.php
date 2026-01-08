@@ -9,7 +9,7 @@ use Doctrine\ORM\Events;
 use Symfony\Bundle\SecurityBundle\Security;
 
 #[AsEntityListener(event: Events::prePersist, entity: Item::class)]
-class ItemCreated
+class ItemListener
 {
     public function __construct(
         private Security $security,

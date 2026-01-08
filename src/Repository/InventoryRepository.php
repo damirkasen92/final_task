@@ -22,14 +22,4 @@ class InventoryRepository extends ServiceEntityRepository
             ...$criteria,
         ]);
     }
-
-    public function getMaxOrderIndex(Inventory $inventory)
-    {
-        return $this->createQueryBuilder('f')
-            ->select('MAX(f.orderIndex)')
-            ->where('f.inventory = :inventory')
-            ->setParameter('inventory', $inventory->getId())
-            ->getQuery()
-            ->getSingleScalarResult();
-    }
 }

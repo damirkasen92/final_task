@@ -19,11 +19,6 @@ export default class extends Controller {
             element: this.textareaTarget,
             spellChecker: false,
             forceSync: true,
-            // autosave: {
-            //     enabled: true,
-            //     uniqueId: "description_field",
-            //     delay: 1000,
-            // },
             toolbar: [
                 'bold',
                 'italic',

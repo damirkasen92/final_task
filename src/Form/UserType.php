@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Form;
 
 use App\Entity\User;
@@ -35,17 +34,16 @@ class UserType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'class' => User::class,
-            'autocomplete' => true,
-            'multiple' => true,
+            'class'              => User::class,
+            'autocomplete'       => true,
+            'multiple'           => true,
+            'by_reference'       => false,
             'tom_select_options' => [
-                'create' => true,
-                'createOnBlur' => true,
-                'delimiter' => ',',
+                'delimiter'         => ',',
                 'searchable_fields' => ['email', 'name'],
             ],
-            'required' => false,
-            'query_builder' => fn (EntityRepository $er) => $this->excludeCurrentUserFromQuery($er),
+            'required'           => false,
+            'query_builder'      => fn(EntityRepository $er)      => $this->excludeCurrentUserFromQuery($er),
         ]);
     }
 }

@@ -1,5 +1,6 @@
 import { Controller } from '@hotwired/stimulus';
 import { Popover } from 'bootstrap';
+import Sortable from 'sortablejs';
 
 export default class extends Controller {
     static targets = ['list'];
@@ -13,14 +14,17 @@ export default class extends Controller {
     connect() {
         this.#$form = $(this.listTarget).closest('form');
         this.#initSortable();
-        this.#setEvents();
+        this.#initInputs();
+        this.#initSelects();
     }
 
-    #setEvents() {
-        let onChange = this.#onChange.bind(this);
+    #initInputs() {
+        this.#$form
+            .find('[type="text"]')
+            .on('input', this.#onChange.bind(this));
+    }
 
-        this.#$form.find('[type="text"]').on('input', onChange);
-
+    #initSelects() {
         $(this.listTarget)
             .find('li')
             .each((_, li) => {
@@ -28,18 +32,10 @@ export default class extends Controller {
                 let $icon = $(li).find('[data-help]');
                 $select.on(
                     'change',
-                    this.#updatePopover.apply(this, [$select, $icon])
+                    this.#updatePopover.bind(this, $select, $icon)
                 );
-                $select.on('change', this.#updateDateType.bind(this, $select));
                 this.#updatePopover($select, $icon);
             });
-    }
-
-    #updateDateType($select) {
-        let type = $select.find('option:selected').val();
-        let $li = $select.parents('.list-group-item');
-        $li.find('input').attr('data-type', type);
-        this.#doPost();
     }
 
     #updatePopover($select, $icon) {
@@ -60,8 +56,10 @@ export default class extends Controller {
         new Sortable(this.listTarget, {
             animation: this.#duration,
             handle: '.drag-handle',
-            onEnd: (evt) => {
+            onChange: (evt) => {
                 this.#doPost();
+            },
+            onEnd: (evt) => {
                 this.#removeElement(evt);
             },
         });
@@ -74,50 +72,64 @@ export default class extends Controller {
             processData: false,
             contentType: false,
             success: (response) => {
-                console.log(response);
-
-                $('#custom-id .errors').html(null);
+                $('#custom-id .errors')
+                    .children()
+                    .slideUp(this.#duration, () => {
+                        $('#custom-id .errors').html(null);
+                    });
 
                 if (response.status) {
-                    $('.custom-id-preview').text(response.customId);
+                    $('.custom-id-preview')
+                        .text(response.customId)
+                        .fadeIn(this.#duration);
                 } else {
-                    this.#showError(response.error);
+                    this.#showError(response.responseJSON.error);
                 }
             },
             error: (response) => {
-                console.log(response);
-
-                this.#showError(response.error);
+                this.#showError(response.responseJSON.error);
             },
         });
     }
 
     #showError(error) {
-        $('#custom-id .errors').html(`
+        $('#custom-id .errors')
+            .html(
+                `
             <div class="alert alert-danger">
                 ${error.replace('\n', '<br />')}
             </div>
-        `);
+        `
+            )
+            .css('display', 'none')
+            .fadeIn(this.#duration);
     }
 
     #onChange() {
         if (!this.#isLoading) {
             this.#isLoading = true;
 
-            $('.custom-id-preview').html(`
-                <div class="spinner-border" role="status">
-                    <span class="visually-hidden">Loading...</span>
-                </div>
-            `);
+            $('.custom-id-preview')
+                .html(
+                    `
+                    <div class="spinner-border" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                `
+                )
+                .css('display', 'none')
+                .fadeIn(this.#duration);
         }
 
         clearTimeout(this.#timer);
 
         this.#timer = setTimeout(() => {
-            this.#doPost();
             if (this.#isLoading) {
                 this.#isLoading = false;
-                $('.custom-id-preview').html(null);
+                $('.custom-id-preview').fadeOut(this.#duration, () => {
+                    $('.custom-id-preview').html(null);
+                    this.#doPost();
+                });
             }
         }, this.#inputDuration);
     }
@@ -145,6 +157,7 @@ export default class extends Controller {
 
         $list.append(newForm);
 
-        this.#setEvents();
+        this.#initInputs();
+        this.#initSelects();
     }
 }

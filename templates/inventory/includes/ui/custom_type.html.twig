@@ -7,12 +7,10 @@
     <div class="mb-3">
         {{ form_label(form.elements.vars.prototype.children.value) }}
         <div class="input-group">
-            {{ form_widget(form.elements.vars.prototype.children.value, {
-                attr: {
-                    'data-type': 'fixed'
-                }
-            })|e('html_attr') }}
-            <span class="input-group-text" id="visible-addon"><i data-help class="bi bi-question-circle cursor-pointer"></i></span>
+            {{ form_widget(form.elements.vars.prototype.children.value)|e('html_attr') }}
+            <span class="input-group-text" id="visible-addon"
+                ><i data-help class="bi bi-question-circle cursor-pointer"></i
+            ></span>
         </div>
     </div>
 </li>

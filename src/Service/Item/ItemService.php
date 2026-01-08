@@ -7,7 +7,7 @@ use App\Entity\Item;
 use App\Enum\ItemFieldTypes;
 use App\Repository\ItemFieldRepository;
 use App\Repository\ItemRepository;
-use App\Service\Google\GoogleStorageService;
+use App\Service\FileStorage\FileStorageInterface;
 use App\Service\Inventory\InventoryService;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\Pagination\PaginationInterface;
@@ -21,8 +21,16 @@ class ItemService
         private ItemRepository $itemRepository,
         private ItemFieldRepository $itemFieldRepository,
         private PaginatorInterface $paginator,
-        private GoogleStorageService $googleStorageService
+        private FileStorageInterface $fileStorage
     ) {
+    }
+
+    public function createItem(Inventory $inventory, Item $item)
+    {
+        $inventory->addItem($item);
+
+        $this->em->persist($item);
+        $this->em->flush();
     }
 
     public function updateItem(): void
@@ -33,7 +41,7 @@ class ItemService
     public function deleteItems(array $itemIds, Inventory $inventory): void
     {
         $items = $this->itemRepository->findBy([
-            'id'        => $itemIds,
+            'id' => $itemIds,
             'inventory' => $inventory,
         ]);
 
@@ -48,9 +56,9 @@ class ItemService
     {
         $pagination = $this->getPagination($inventory, $page);
         $itemFields = $this->getItemFields($inventory);
-        $itemSlots  = $this->getItemSlots($itemFields);
+        $itemSlots = $this->getItemSlots($itemFields);
 
-        $this->setUrls($pagination, $itemSlots);
+        $this->setLinkUrls($pagination, $itemSlots);
 
         return new ItemsDto(
             $pagination,
@@ -62,7 +70,7 @@ class ItemService
     private function getItemFields(Inventory $inventory): array
     {
         return $this->itemFieldRepository->findBy([
-            'inventory'   => $inventory,
+            'inventory' => $inventory,
             'isDisplayed' => true,
         ], [
             'orderIndex' => 'asc',
@@ -96,7 +104,7 @@ class ItemService
         return array_map(fn($itemField) => $itemField->getTitle(), $itemFields);
     }
 
-    private function setUrls(PaginationInterface $pagination, array $itemSlots): void
+    private function setLinkUrls(PaginationInterface $pagination, array $itemSlots): void
     {
         /** @var Item $item */
         // maximum number of slots are constant, so it will be O(n)
@@ -110,7 +118,7 @@ class ItemService
                     && $item->{$getter}() !== null
                 ) {
                     $item->{$setter}(
-                        $this->googleStorageService->getFileUrl(
+                        $this->fileStorage->getFileUrl(
                             $item->{$getter}()
                         )
                     );

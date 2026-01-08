@@ -1,36 +1,65 @@
-<div class="modal fade" id="createInventory" tabindex="-1" aria-labelledby="createInventory" aria-hidden="true">
+<div
+    class="modal fade"
+    id="createInventory"
+    tabindex="-1"
+    aria-labelledby="createInventory"
+    aria-hidden="true"
+>
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title fs-5" id="createInventory">{{ 'inventory.modal.create.title'|trans }}</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <h1 class="modal-title fs-5" id="createInventory">
+                    {{ 'inventory.modal.create.title' | trans }}
+                </h1>
+                <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="modal"
+                    aria-label="Close"
+                ></button>
             </div>
             <div class="modal-body">
                 <div class="container">
-                    {{ form_start(form, {
-                        action: path('create_inventory'),
-                        method: 'POST',
-                        attr: {
-                            id: 'create-form',
-                            'data-controller': 'inventory--create-inventory',
-                            'data-inventory--create-inventory-target': 'form',
-                            'data-success-message': 'inventory.create.create_successful'|trans
-                        }})
+                    {{
+                        form_start(form, {
+                            action: path('create_inventory'),
+                            method: 'POST',
+                            attr: {
+                                id: 'create-form',
+                                'data-controller': 'inventory--create-inventory',
+                                'data-inventory--create-inventory-target': 'form',
+                            }
+                        })
                     }}
 
                     <div class="errors"></div>
 
                     {{ form_row(form.title) }}
-                    {{ form_row(form.description, { attr: { 'data-controller': 'ui--markdown', 'data-ui--markdown-target': 'textarea' } }) }}
+                    {{
+                        form_row(form.description, {
+                            attr: {
+                                'data-controller': 'ui--markdown',
+                                'data-ui--markdown-target': 'textarea'
+                            }
+                        })
+                    }}
                     {{ form_row(form.category) }}
                     {{ form_row(form.isPublic) }}
                     {{ form_row(form.imageUrl) }}
                     {{ form_row(form.writers) }}
                     {{ form_row(form.tags) }}
 
+                    {{ form_row(form._token) }}
+
                     {{ form_end(form) }}
                 </div>
             </div>
         </div>
     </div>
+
+    <script id="translations" type="application/json">
+        {{ {
+            'inventory.create.create_successful': 'inventory.create.create_successful'|trans,
+        }|json_encode|raw }}
+    </script>
 </div>

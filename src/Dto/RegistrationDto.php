@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Dto;
 
 use Symfony\Component\HttpFoundation\Request;
@@ -19,20 +18,20 @@ readonly class RegistrationDto
 
     #[Assert\Type('string')]
     #[Assert\NotBlank]
-    #[Assert\Length(min: 8, max: 16)]
+    #[Assert\Length(min: 1, max: 16)]
+    // #[Assert\PasswordStrength]
     public string $password;
 
     #[Assert\Type('string')]
     #[Assert\NotBlank]
-    #[Assert\Length(min: 8, max: 16)]
     public string $repeatPassword;
 
     public static function fromRequest(Request $request): self
     {
-        $dto = new self();
-        $dto->name = $request->request->get('name');
-        $dto->email = $request->request->get('email');
-        $dto->password = $request->request->get('password');
+        $dto                 = new self();
+        $dto->name           = $request->request->get('name');
+        $dto->email          = $request->request->get('email');
+        $dto->password       = $request->request->get('password');
         $dto->repeatPassword = $request->request->get('repeat_password');
 
         return $dto;

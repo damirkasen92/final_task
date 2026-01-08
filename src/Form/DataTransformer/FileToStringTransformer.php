@@ -1,7 +1,7 @@
 <?php
 namespace App\Form\DataTransformer;
 
-use App\Service\Google\GoogleStorageService;
+use App\Service\FileStorage\FileStorageInterface;
 use Symfony\Component\Form\DataTransformerInterface;
 
 class FileToStringTransformer implements DataTransformerInterface
@@ -9,8 +9,8 @@ class FileToStringTransformer implements DataTransformerInterface
     private ?string $fileUrl = null;
 
     public function __construct(
-        private GoogleStorageService $googleStorageService
-        ) {
+        private FileStorageInterface $fileStorage
+    ) {
 
     }
 
@@ -29,6 +29,10 @@ class FileToStringTransformer implements DataTransformerInterface
             return $this->fileUrl;
         }
 
-        return $this->googleStorageService->upload($value);
+        if (\is_string($value)) {
+            return $value;
+        }
+
+        return $this->fileStorage->upload($value);
     }
 }

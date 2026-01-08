@@ -1,14 +1,14 @@
 <?php
-
 namespace App\Form;
 
 use App\Entity\Category;
 use App\Entity\Inventory;
 use App\Entity\Tag;
-use App\Service\Google\GoogleStorageService;
+use App\Service\FileStorage\FileStorageInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -22,7 +22,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 class InventoryType extends AbstractType
 {
     public function __construct(
-        private GoogleStorageService $googleStorageService,
+        private FileStorageInterface $fileStorage,
         private TranslatorInterface $translator
     ) {
     }
@@ -72,13 +72,13 @@ class InventoryType extends AbstractType
                     'class' => Tag::class,
                     'autocomplete' => true,
                     'multiple' => true,
+                    'by_reference' => false,
                     'tom_select_options' => [
-                        'create' => true,
-                        'createOnBlur' => true,
                         'delimiter' => ',',
                     ],
                     'required' => false,
-                ]);
+                ])
+                ->add('version', HiddenType::class);
         }
 
         if ($options['update']) {
@@ -113,6 +113,9 @@ class InventoryType extends AbstractType
             'data_class' => Inventory::class,
             'update' => true,
             'create' => true,
+            'csrf_protection' => true,
+            'csrf_field_name' => '_token',
+            'csrf_token_id' => 'inventory_csrf',
         ]);
     }
 }

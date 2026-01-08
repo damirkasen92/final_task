@@ -116,7 +116,7 @@ final class AdminController extends BaseController
         /** @var ?User $currentUser */
         $currentUser = $this->getUser();
 
-        if ($currentUser && in_array($currentUser->getId(), $userIds)) {
+        if ($currentUser && \in_array($currentUser->getId(), $userIds)) {
             $this->addRedirect($this->generateUrl('home'));
         }
     }

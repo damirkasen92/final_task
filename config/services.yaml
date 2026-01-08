@@ -7,7 +7,7 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
 parameters:
-    google_cloud_key_path: '%env(GOOGLE_CLOUD_KEY_PATH)%'
+    google_cloud_key: '%env(GOOGLE_CLOUD_KEY)%'
     google_bucket_name: '%env(GOOGLE_BUCKET_NAME)%'
     meilisearch_uri: '%env(MEILISEARCH_URI)%'
     meilisearch_key: '%env(MEILISEARCH_KEY)%'
@@ -26,10 +26,12 @@ services:
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
 
-    App\Service\Google\GoogleStorageService:
+    App\Service\FileStorage\Google\GoogleStorageService:
         arguments:
-            $googleKeyPath: '%google_cloud_key_path%'
+            $googleKey: '%google_cloud_key%'
             $bucketName: '%google_bucket_name%'
+
+    App\Service\FileStorage\FileStorageInterface: '@App\Service\FileStorage\Google\GoogleStorageService'
 
     Meilisearch\Client:
         arguments:

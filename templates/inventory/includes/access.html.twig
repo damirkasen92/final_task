@@ -1,21 +1,34 @@
 <turbo-frame id="inventory-container">
     <div data-animate>
-        {{ form_start(form, {
-            action: path('update_access_settings', { id: inventory.id }),
-            method: 'PATCH',
-            attr: {
-                id: 'accessSettings',
-                'data-controller': 'inventory--access-settings',
-                'data-inventory--access-settings-target': 'form',
-                'data-success-message': 'inventory.access.successful'|trans
-            }})
+        {{
+            form_start(form, {
+                action: path('update_access_settings', { id: inventory.id }),
+                method: 'PATCH',
+                attr: {
+                    id: 'accessSettings',
+                    'data-controller':
+                        'inventory--access-settings inventory--autosave',
+                    'data-inventory--access-settings-target': 'form',
+                    'data-autosave-path': path('autosave_inventory_settings', {
+                        id: inventory.id
+                    })
+                }
+            })
         }}
 
-        <did class="errors"></did>
+        <div class="errors"></div>
 
         {{ form_row(form.writers) }}
         {{ form_row(form.isPublic) }}
 
+        {{ form_row(form._token) }}
+
         {{ form_end(form) }}
     </div>
+
+    <script id="translations" type="application/json">
+        {{ {
+            'inventory.access.successful': 'inventory.access.successful' | trans,
+        }|json_encode|raw }}
+    </script>
 </turbo-frame>

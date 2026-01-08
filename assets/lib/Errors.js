@@ -25,10 +25,12 @@ export default class Errors {
     }
 
     static hideErrors($form, callback = null) {
-        $form.find('.alert-danger').slideUp(this.animationSpeed, (evt) => {
-            $form.find('.alert-danger').remove();
+        if ($form.find('.alert-danger').length)
+            $form.find('.alert-danger').slideUp(this.animationSpeed, (evt) => {
+                $form.find('.alert-danger').remove();
 
-            if (callback) callback();
-        });
+                if (callback) callback();
+            });
+        else if (callback) callback();
     }
 }

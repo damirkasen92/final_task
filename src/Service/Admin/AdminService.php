@@ -88,7 +88,7 @@ class AdminService
     {
         $roles = $user->getRoles();
 
-        if (!in_array($role->value, $roles)) {
+        if (!\in_array($role->value, $roles)) {
             $roles[] = $role->value;
             $user->setRoles($roles);
         }

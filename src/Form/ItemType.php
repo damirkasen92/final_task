@@ -5,7 +5,7 @@ use App\Entity\Item;
 use App\Entity\ItemField;
 use App\Repository\InventoryRepository;
 use App\Repository\ItemFieldRepository;
-use App\Service\Google\GoogleStorageService;
+use App\Service\FileStorage\FileStorageInterface;
 use App\Service\Item\CustomIdGenerator;
 use App\Service\Regexp\RegexpBuilder;
 use Symfony\Component\Form\AbstractType;
@@ -18,6 +18,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class ItemType extends AbstractType
 {
@@ -28,7 +29,8 @@ class ItemType extends AbstractType
         private ItemFieldRepository $itemFieldRepository,
         private CustomIdGenerator $customIdGenerator,
         private RegexpBuilder $regexpBuilder,
-        private GoogleStorageService $googleStorageService
+        private FileStorageInterface $fileStorage,
+        private TranslatorInterface $translator
     ) {
     }
 
@@ -38,13 +40,13 @@ class ItemType extends AbstractType
 
         $builder
             ->add('customId', TextType::class, [
-                'data'        => $this->getCustomId($this->customIdElements),
+                'data' => $this->getCustomId($this->customIdElements),
                 'constraints' => [
-                    new Assert\Callback(function ($value, ExecutionContextInterface $context) use ($options) {
+                    new Assert\Callback(function ($value, ExecutionContextInterface $context) {
                         $regex = $this->regexpBuilder->buildRegex($this->customIdElements);
 
-                        if (! preg_match($regex, $value)) {
-                            $context->buildViolation('Неверный формат custom ID: ' . $value)->addViolation();
+                        if (!preg_match($regex, $value)) {
+                            $context->buildViolation($this->translator->trans('custom_id.check') . ': ' . $value)->addViolation();
                         }
                     }),
                 ],
@@ -53,8 +55,8 @@ class ItemType extends AbstractType
         $this->addDynamicFields($builder, $options);
 
         $builder->add('submit', SubmitType::class, [
-            'label' => 'Submit',
-            'attr'  => ['class' => 'btn btn-dark'],
+            'label' => $this->translator->trans('forms.submit'),
+            'attr' => ['class' => 'btn btn-dark'],
         ]);
     }
 
@@ -96,16 +98,16 @@ class ItemType extends AbstractType
     private function getOptionsForItemField($type, ?Item $item, ?ItemField $itemField): array
     {
         return match ($type) {
-            'text'  => [
+            'text' => [
                 'required' => false,
-                'attr'     => [
-                    'data-controller'          => 'ui--markdown',
+                'attr' => [
+                    'data-controller' => 'ui--markdown',
                     'data-ui--markdown-target' => 'textarea',
                 ],
             ],
-            'link'  => [
+            'link' => [
                 'required' => false,
-                'attr'     => [
+                'attr' => [
                     'data-preview-url' => $this->getLink($item, $itemField),
                 ],
             ],
@@ -115,9 +117,9 @@ class ItemType extends AbstractType
         };
     }
 
-    private function getLink(?Item $item, ?ItemField $itemField): string | null
+    private function getLink(?Item $item, ?ItemField $itemField): string|null
     {
-        if (! $item) {
+        if (!$item || !$itemField) {
             return null;
         }
 
@@ -127,17 +129,17 @@ class ItemType extends AbstractType
             return null;
         }
 
-        return $this->googleStorageService->getFileUrl($link);
+        return $this->fileStorage->getFileUrl($link);
     }
 
     private function getTypeFromItemFieldType(string $type): string
     {
         return match ($type) {
-            'string'  => TextType::class,
-            'text'    => TextareaType::class,
+            'string' => TextType::class,
+            'text' => TextareaType::class,
             'integer' => IntegerType::class,
-            'link'    => GoogleFileType::class,
-            'bool'    => CheckboxType::class,
+            'link' => GoogleFileType::class,
+            'bool' => CheckboxType::class,
         };
     }
 
@@ -145,7 +147,7 @@ class ItemType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Item::class,
-            'inventory'  => null,
+            'inventory' => null,
         ]);
     }
 }

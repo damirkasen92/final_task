@@ -16,6 +16,10 @@
     color: #fff;
 }
 
+[data-toast] {
+    z-index: 2000;
+}
+
 .table {
     table-layout: auto;
     width: 100%;
@@ -64,4 +68,22 @@
 
 .cursor-pointer {
     cursor: pointer;
+}
+
+.custom-id-preview-wrap {
+    height: 36px;
+}
+
+.custom-id-description {
+    max-width: 480px;
+    margin: 0 auto 2rem;
+    text-align: center;
+}
+
+.setting-image {
+    max-width: 500px;
+}
+
+.conflict-field img {
+    max-width: 400px;
 }

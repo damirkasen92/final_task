@@ -1,58 +1,85 @@
 <?php
+
+declare(strict_types=1);
+
 namespace App\Service\Inventory;
 
+use App\Dto\Result;
 use App\Entity\Inventory;
 use App\Entity\ItemField;
 use App\Exception\InventoryServiceException;
 use App\Repository\InventoryRepository;
 use App\Repository\ItemFieldRepository;
-use App\Service\Google\GoogleStorageService;
+use App\Service\FileStorage\FileStorageInterface;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\OptimisticLockException;
 use Meilisearch\Client;
+use Meilisearch\Exceptions\ApiException;
 use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 class InventoryService
 {
     private const int MAX_SLOT = 3;
+    private const int SEARCH_LIMIT = 10;
 
     private ?Inventory $inventory;
 
     public function __construct(
         private EntityManagerInterface $em,
         private InventoryRepository $inventoryRepository,
-        private GoogleStorageService $googleStorageService,
+        private FileStorageInterface $fileStorage,
         private Security $security,
         private ItemFieldRepository $itemFieldRepository,
         private TranslatorInterface $translator,
-        private Client $client
+        private Client $client,
+        private SerializerInterface $serializer
     ) {
     }
 
     public function getInventoriesWithImage(int $userId, string $query = '')
     {
         $inventories = $this->inventoryRepository->getInventories(
-            $userId, $this->getIndexesFromEngine($query)
+            $userId,
+            $this->getIndexesFromEngine($query)
         );
 
+        $this->setInventoriesImage($inventories);
+
+        return $inventories;
+    }
+
+    private function setInventoriesImage(array $inventories): void
+    {
         /** @var Inventory $inventory */
         foreach ($inventories as $inventory) {
             $imageName = $inventory->getImageUrl();
 
             if ($imageName) {
                 $inventory->setImageUrl(
-                    $this->googleStorageService->getFileUrl($imageName)
+                    $this->fileStorage->getFileUrl($imageName)
                 );
             }
         }
-
-        return $inventories;
     }
 
     private function getIndexesFromEngine(string $query): array
     {
-        $index   = $this->client->index('inventories');
-        $results = $index->search($query, ['limit' => 10])->getHits();
+        if (!$query) {
+            return [];
+        }
+
+        try {
+            $index = $this->client->getIndex('inventories');
+        } catch (ApiException $e) {
+            if ($e->errorCode === 'index_not_found') {
+                $index = $this->client->createIndex('inventories', ['primaryKey' => 'id']);
+            }
+        }
+
+        $results = $index->search($query, ['limit' => self::SEARCH_LIMIT])->getHits();
         return ['id' => array_column($results, 'id')];
     }
 
@@ -60,7 +87,7 @@ class InventoryService
     {
         $inventory->setCustomIdFormat([
             [
-                'type'  => 'seq',
+                'type' => 'seq',
                 'value' => '',
             ],
         ]);
@@ -69,9 +96,42 @@ class InventoryService
         $this->em->flush();
     }
 
-    public function updateInventory()
+    public function updateInventory(Inventory $inventoryFromDB, Inventory $inventoryFromForm): Result
     {
+        try {
+            $this->em->flush();
+
+            return Result::ok();
+        } catch (OptimisticLockException $e) {
+            return Result::conflict(
+                'Conflict',
+                $this->serializer->serialize(
+                    $inventoryFromDB,
+                    'json',
+                    ['groups' => ['json']]
+                ),
+                $this->serializer->serialize(
+                    $inventoryFromForm,
+                    'json',
+                    ['groups' => ['json']]
+                ),
+            );
+        }
+    }
+
+    public function handleAutosave(Inventory $inventory, ?UploadedFile $file): array
+    {
+        $json = [];
+
+        if ($file) {
+            $fileStorageName = $this->fileStorage->upload($file);
+            $inventory->setImageUrl($fileStorageName);
+            $json['imageUrl'] = $this->fileStorage->getFileUrl($fileStorageName);
+        }
+
         $this->em->flush();
+
+        return $json;
     }
 
     public function deleteInventories(array $inventoryIds): void
@@ -101,7 +161,7 @@ class InventoryService
 
         $itemField->setSlot($itemField->getType()->value . $slotNumber);
         $itemField->setInventory($inventory);
-        $maxOrderIndex = $this->inventoryRepository->getMaxOrderIndex($inventory);
+        $maxOrderIndex = $this->itemFieldRepository->getMaxOrderIndex($inventory);
         $itemField->setOrderIndex($maxOrderIndex + 1);
 
         $this->em->persist($itemField);
@@ -147,7 +207,7 @@ class InventoryService
     {
         $existingSlots = $this->itemFieldRepository->findBy([
             'inventory' => $inventory,
-            'type'      => $itemField->getType(),
+            'type' => $itemField->getType(),
         ]);
 
         $usedIndexes = [];
@@ -159,13 +219,13 @@ class InventoryService
             );
 
             if ($suffix > 0) {
-                $usedIndexes[] = $suffix;
+                $usedIndexes[$suffix] = true;
             }
         }
 
         $newIndex = 1;
 
-        while (\in_array($newIndex, $usedIndexes, true)) {
+        while (isset($usedIndexes[$newIndex])) {
             $newIndex++;
         }
 
@@ -180,7 +240,7 @@ class InventoryService
 
         foreach ($itemFields as $itemField) {
             $itemField->setOrderIndex(
-                $order[$itemField->getId()]
+                (int) $order[$itemField->getId()]
             );
         }
 

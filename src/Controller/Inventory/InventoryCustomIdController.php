@@ -4,12 +4,10 @@ namespace App\Controller\Inventory;
 use App\Controller\BaseController;
 use App\Entity\Inventory;
 use App\Enum\InventoryAttributes;
-use App\Enum\JsonStatuses;
 use App\Exception\CustomIdGeneratorException;
 use App\Form\CustomIdType;
 use App\Service\Inventory\InventoryService;
 use App\Service\Item\CustomIdGenerator;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -45,19 +43,19 @@ class InventoryCustomIdController extends BaseController
                 $inventoryService->saveCustomId($inventory, $form->getData());
 
                 return $this->json([
-                    ...$this->jsonSuccessData,
+                     ...$this->jsonSuccessData,
                     'customId' => $customIdGenerator->generate($inventory->getCustomIdFormat()),
                 ]);
             }
 
             return $this->json([
-                ...$this->jsonErrorData,
-                'error'  => (string) $form->getErrors(true),
+                 ...$this->jsonErrorData,
+                'error' => (string) $form->getErrors(true),
             ], Response::HTTP_BAD_REQUEST);
         } catch (CustomIdGeneratorException $e) {
             return $this->json([
-                ...$this->jsonErrorData,
-                'error'  => $e->getMessage(),
+                 ...$this->jsonErrorData,
+                'error' => $e->getMessage(),
             ], Response::HTTP_BAD_REQUEST);
         }
     }

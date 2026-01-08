@@ -17,6 +17,10 @@
             {{ 'inventory.tabs.discussions' | trans }}
         </button>
     </li>
+
+    {% if is_granted(constant('App\\Enum\\InventoryAttributes::EDIT').value,
+    inventory) %}
+
     <li class="nav-item">
         <button
             class="nav-link"
@@ -60,15 +64,16 @@
         </button>
     </li>
 
-    {# Inventory statistics/aggregation #}
+    {# Inventory statistics/aggregation #} {% endif %}
 </ul>
 
 <div class="tab-content">
     <div>
-        <turbo-frame id="inventory-container" src="{{ path('show_items', { id: inventory.id }) }}"></turbo-frame>
+        <turbo-frame
+            id="inventory-container"
+            src="{{ path('show_items', { id: inventory.id }) }}"
+        ></turbo-frame>
     </div>
 </div>
 
-{% include 'includes/toast.html.twig' %}
-
-{% endblock %}
+{% include 'includes/toast.html.twig' %} {% endblock %}

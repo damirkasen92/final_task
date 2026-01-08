@@ -3,21 +3,21 @@ x Admins have full access
 x admin panel when delete, block, unmake. It needs to search myself and refreshToken
 x refactor admin panel js
 x save chosen theme
-! save chosen lang
+x save chosen lang
 
-- refactor
-- protect inventory crud
-- protect item crud
-- writer access only change items and Discussion
-- as public (allowing any authenticated user to add items)
+x refactor
+x protect inventory crud
+x protect item crud
+x writer access only change items and Discussion
+x inventory as public (allowing any authenticated user to add items)
 x meilisearch on inventory
 - meilisearch on item (search)
-- autosave in inventory
+x autosave in inventory
 - You need to implement optimistic locking for inventories (which can be modified simultaneously by the creator and admins) and for items (which are modifiable by multiple users with write access at the same time).
 - TODO registration logic and authorization via google and facebook
 
 
-Users without write access can only view items; they cannot add, edit, or delete them.
+x Users without write access can only view items; they cannot add, edit, or delete them.
 
 Every user has their own personal page, where they can manage two sortable/filterable tables:
 * A table of inventories they own (with options to create new, delete, or edit).

@@ -30,9 +30,9 @@ class RegistrationController extends BaseController
         $dto = RegistrationDto::fromRequest($request);
         $errors = $this->validator->validate($dto);
 
-        if (count($errors) > 0) {
+        if (\count($errors) > 0) {
             foreach ($errors as $error) {
-                $this->addFlash('error', $error->getPropertyPath() . ': ' .  $error->getMessage());
+                $this->addFlash('error', $error->getPropertyPath() . ': ' . $error->getMessage());
             }
             return $this->redirectToRoute('show_registration');
         }

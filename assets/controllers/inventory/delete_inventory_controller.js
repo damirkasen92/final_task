@@ -1,5 +1,5 @@
-import {Controller} from "@hotwired/stimulus";
-import UndoPopover from "../../lib/UndoPopover.js";
+import { Controller } from '@hotwired/stimulus';
+import UndoPopover from '../../lib/UndoPopover.js';
 
 export default class extends Controller {
     static targets = ['deleteBtn'];
@@ -11,8 +11,8 @@ export default class extends Controller {
         this.#$deleteBtn = $(this.deleteBtnTarget);
         this.#popover = new UndoPopover(
             this.deleteBtnTarget,
-            this.#$deleteBtn.data("undo-text"),
-            this.#$deleteBtn.data("undo-title")
+            trans('popover.undo'),
+            trans('popover.popover_title')
         );
 
         this.#$deleteBtn.on('click', (evt) => {
@@ -29,18 +29,19 @@ export default class extends Controller {
             url: this.#$deleteBtn.data('delete-path'),
             method: 'DELETE',
             data: {
-                inventoryIds: this.#getIds()
+                inventoryIds: this.#getIds(),
             },
             success: () => {
-                let $list = $("#inventories-list");
+                let $list = $('#inventories-list');
                 let src = $list.attr('src');
-
                 $list.attr('src', src);
-            }
+            },
         });
     }
 
     #getIds() {
-        return Array.from($(".sub-checkbox:checked")).map(inventory => $(inventory).data('id'));
+        return Array.from($('.sub-checkbox:checked')).map((inventory) =>
+            $(inventory).data('id')
+        );
     }
 }

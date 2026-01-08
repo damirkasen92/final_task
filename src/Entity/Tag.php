@@ -1,11 +1,11 @@
 <?php
-
 namespace App\Entity;
 
 use App\Repository\TagRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ORM\Entity(repositoryClass: TagRepository::class)]
 class Tag
@@ -13,9 +13,11 @@ class Tag
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['json'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['json'])]
     private ?string $name = null;
 
     /**
@@ -56,7 +58,7 @@ class Tag
 
     public function addInventory(Inventory $inventory): static
     {
-        if (!$this->inventories->contains($inventory)) {
+        if (! $this->inventories->contains($inventory)) {
             $this->inventories->add($inventory);
         }
 

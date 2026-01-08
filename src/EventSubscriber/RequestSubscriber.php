@@ -24,8 +24,7 @@ class RequestSubscriber implements EventSubscriberInterface
         $user = $this->security->getUser();
 
         if (
-            $user
-            && $user->isBlocked()
+            $user?->isBlocked()
             && 'login' !== $event->getRequest()->attributes->get('_route')
         ) {
             $this->unauthorizeCurrentUser($event);
