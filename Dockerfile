@@ -36,7 +36,7 @@ COPY . .
 
 RUN if [ "$APP_ENV" = "prod" ]; then \
     echo "Запуск в продакшн-режиме"; \
-    composer install --no-dev --optimize-autoloader --classmap-authoritative; \
+    composer install --no-dev --optimize-autoloader --classmap-authoritative --no-scripts; \
     else \
     echo "Запуск в dev-режиме"; \
     composer install --optimize-autoloader; \
