@@ -42,6 +42,30 @@ class InventoryRepository extends ServiceEntityRepository
         return $qb->getQuery()->getResult();
     }
 
+    public function getLatestInventories(int $limit = 10)
+    {
+        $qb = $this->createQueryBuilder('i');
+
+        $qb->select('i')
+            ->orderBy('i.createdAt', 'DESC')
+            ->setMaxResults($limit);
+
+        return $qb->getQuery()->getResult();
+    }
+
+    public function getTopInventories(int $limit = 5)
+    {
+        $qb = $this->createQueryBuilder('i');
+
+        $qb->select('i')
+            ->join('i.items', 'items')
+            ->groupBy('i.id')
+            ->orderBy('COUNT(items.id)', 'DESC')
+            ->setMaxResults($limit);
+
+        return $qb->getQuery()->getResult();
+    }
+
     public function getWriteAccessOwnerIds(int $userId)
     {
         $qb = $this->createQueryBuilder('i');

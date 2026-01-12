@@ -18,5 +18,6 @@ class InventoryListener
     public function prePersist(Inventory $inventory, PrePersistEventArgs $event)
     {
         $inventory->setOwner($this->security->getUser());
+        $inventory->setCreatedAt(new \DateTimeImmutable());
     }
 }

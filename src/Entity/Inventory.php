@@ -76,11 +76,14 @@ class Inventory
     #[ORM\Column(nullable: true)]
     private ?array $customIdFormat = null;
 
+    #[ORM\Column(nullable: false)]
+    private ?\DateTimeImmutable $createdAt = null;
+
     public function __construct()
     {
-        $this->items      = new ArrayCollection();
-        $this->writers    = new ArrayCollection();
-        $this->tags       = new ArrayCollection();
+        $this->items = new ArrayCollection();
+        $this->writers = new ArrayCollection();
+        $this->tags = new ArrayCollection();
         $this->itemFields = new ArrayCollection();
     }
 
@@ -147,7 +150,7 @@ class Inventory
 
     public function addItem(Item $item): static
     {
-        if (! $this->items->contains($item)) {
+        if (!$this->items->contains($item)) {
             $this->items->add($item);
             $item->setInventory($this);
         }
@@ -194,7 +197,7 @@ class Inventory
 
     public function addWriter(User $writer): static
     {
-        if (! $this->writers->contains($writer)) {
+        if (!$this->writers->contains($writer)) {
             $this->writers->add($writer);
         }
 
@@ -230,7 +233,7 @@ class Inventory
 
     public function addTag(Tag $tag): static
     {
-        if (! $this->tags->contains($tag)) {
+        if (!$this->tags->contains($tag)) {
             $this->tags->add($tag);
             $tag->addInventory($this);
         }
@@ -257,7 +260,7 @@ class Inventory
 
     public function addItemField(ItemField $itemField): static
     {
-        if (! $this->itemFields->contains($itemField)) {
+        if (!$this->itemFields->contains($itemField)) {
             $this->itemFields->add($itemField);
             $itemField->setInventory($this);
         }
@@ -297,6 +300,18 @@ class Inventory
     public function setCustomIdFormat(?array $customIdFormat): static
     {
         $this->customIdFormat = $customIdFormat;
+
+        return $this;
+    }
+
+    public function getCreatedAt(): ?\DateTimeImmutable
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(\DateTimeImmutable $createdAt): static
+    {
+        $this->createdAt = $createdAt;
 
         return $this;
     }

@@ -46,6 +46,8 @@ forms:
     submit: 'Submit'
 home:
     title: 'Home'
+    last_inventories: 'Last inventories'
+    top_inventories: 'Top inventories'
 lang: 'Language'
 
 security:
@@ -77,6 +79,7 @@ inventory:
         empty: 'There are no inventories yet'
         no_search_results: 'No search results'
         search: 'Search'
+        creator: 'Creator'
     access:
         successful: 'Settings have been updated'
 

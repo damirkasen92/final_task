@@ -46,6 +46,8 @@ forms:
     submit: 'Отправить'
 home:
     title: 'Главная'
+    last_inventories: 'Последние инвентари'
+    top_inventories: 'Топ инвентари'
 lang: 'Язык'
 
 security:
@@ -77,6 +79,7 @@ inventory:
         empty: 'Инвентарей пока нет'
         no_search_results: 'Нет результатов поиска'
         search: 'Поиск'
+        creator: 'Создатель'
     access:
         successful: 'Настройки были обновлены'
 

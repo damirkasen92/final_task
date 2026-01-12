@@ -5,5 +5,60 @@
 {% endblock %}
 
 {% block body %}
-    <h1 class="mb-3">Hello world!</h1>
-{% endblock %}
+    <div>
+        <h2 class="mb-4 text-center">{{ 'home.last_inventories' | trans }}</h2>
+
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>{{ 'inventory.table.title' | trans }}</th>
+                        <th>{{ 'inventory.table.description' | trans }}</th>
+                        <th>{{ 'inventory.table.creator' | trans }}</th>
+                    </tr>
+                </thead>
+                <tbody data-controller="ui--mark-parse">
+                    {% for inventory in last_inventories %}
+                        <tr>
+                            <td>
+                                <a href="{{ path('show_inventory', {id: inventory.id}) }}">
+                                    {{ inventory.title }}
+                                </a>
+                            </td>
+                            <td data-description="{{ inventory.description ?: '' }}">{{ inventory.description ?: '-' }}</td>
+                            <td>{{ inventory.owner.email }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div>
+        <h2 class="mb-4 text-center">{{ 'home.top_inventories' | trans }}</h2>
+
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>{{ 'inventory.table.title' | trans }}</th>
+                        <th>{{ 'inventory.table.description' | trans }}</th>
+                        <th>{{ 'inventory.table.creator' | trans }}</th>
+                    </tr>
+                </thead>
+                <tbody data-controller="ui--mark-parse">
+                    {% for inventory in top_inventories %}
+                        <tr>
+                            <td>
+                                <a href="{{ path('show_inventory', {id: inventory.id}) }}">
+                                    {{ inventory.title }}
+                                </a>
+                            </td>
+                            <td data-description="{{ inventory.description ?: '' }}">{{ inventory.description ?: '-' }}</td>
+                            <td>{{ inventory.owner.email }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div></div>
+    {% endblock %}

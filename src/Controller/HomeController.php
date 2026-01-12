@@ -11,21 +11,15 @@ class HomeController extends BaseController
     #[Route('/', name: 'home', methods: ['GET'])]
     public function index(InventoryRepository $inventoryRepository)
     {
-        return $this->render('home/index.html.twig');
+        return $this->render('home/index.html.twig', [
+            'last_inventories' => $inventoryRepository->getLatestInventories(),
+            'top_inventories' => $inventoryRepository->getTopInventories(),
+        ]);
     }
 
     #[Route('/test', name: 'test', methods: ['GET', 'POST'])]
     public function test(Request $request, InventoryRepository $inventoryRepository)
     {
-        // dd($request->request->all());
-
-        $form = $this->createForm(InventoryConflictType::class, null, [
-            'currentData' => $inventoryRepository->find(13),
-            'dbData' => $inventoryRepository->find(15),
-        ]);
-
-        return $this->render('inventory/merge.html.twig', [
-            'form' => $form
-        ]);
+        return $this->render('home/index.html.twig');
     }
 }
