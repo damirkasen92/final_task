@@ -1,7 +1,9 @@
 <?php
 namespace App\Controller;
 
+use App\Form\InventoryConflictType;
 use App\Repository\InventoryRepository;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
 
 class HomeController extends BaseController
@@ -12,11 +14,18 @@ class HomeController extends BaseController
         return $this->render('home/index.html.twig');
     }
 
-    #[Route('/test', name: 'test', methods: ['GET'])]
-    public function test(InventoryRepository $inventoryRepository)
+    #[Route('/test', name: 'test', methods: ['GET', 'POST'])]
+    public function test(Request $request, InventoryRepository $inventoryRepository)
     {
-        dd($inventoryRepository->getWriteAccessInventories($this->getUser()->getId()));
+        // dd($request->request->all());
 
-        return $this->json(['status' => 'test']);
+        $form = $this->createForm(InventoryConflictType::class, null, [
+            'currentData' => $inventoryRepository->find(13),
+            'dbData' => $inventoryRepository->find(15),
+        ]);
+
+        return $this->render('inventory/merge.html.twig', [
+            'form' => $form
+        ]);
     }
 }

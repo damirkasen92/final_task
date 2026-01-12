@@ -11,18 +11,18 @@ x protect item crud
 x writer access only change items and Discussion
 x inventory as public (allowing any authenticated user to add items)
 x meilisearch on inventory
-- meilisearch on item (search)
 x autosave in inventory
-- You need to implement optimistic locking for inventories (which can be modified simultaneously by the creator and admins) and for items (which are modifiable by multiple users with write access at the same time).
+x You need to implement optimistic locking for inventories (which can be modified simultaneously by the creator and admins)
+- and for items (which are modifiable by multiple users with write access at the same time).
 - TODO registration logic and authorization via google and facebook
-- item field empty list
-
+x item field empty list
 x Users without write access can only view items; they cannot add, edit, or delete them.
 
 Every user has their own personal page, where they can manage two sortable/filterable tables:
 x A table of inventories they own (with options to create new, delete, or edit).
 x A table of inventories they have write access to.
 
+- meilisearch on item (search)
 The main page of the app contains:
 * A table of the latest inventories, showing the name, description (or image), and creator.
 * A table of the top 5 most popular inventories, based on the number of items.

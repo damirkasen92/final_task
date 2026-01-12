@@ -25,7 +25,7 @@ class InventoryAccessController extends BaseController
         ]);
 
         return $this->render('inventory/includes/access.html.twig', [
-            'form'      => $form,
+            'form' => $form,
             'inventory' => $inventory,
         ]);
     }
@@ -41,7 +41,7 @@ class InventoryAccessController extends BaseController
         ])->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $inventoryService->updateInventory();
+            $inventoryService->updateInventory($inventory);
 
             return $this->json($this->jsonSuccessData);
         }

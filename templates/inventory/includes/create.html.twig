@@ -2,35 +2,32 @@
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title fs-5" id="createInventory">
+                <h2 class="modal-title fs-5">
                     {{ 'inventory.modal.create.title' | trans }}
-                </h1>
+                </h2>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <div class="container">
                     {{
-                        form_start(form, {
-                            action: path('create_inventory'),
-                            method: 'POST',
-                            attr: {
-                                id: 'create-form',
-                                'data-controller': 'inventory--create-inventory',
-                                'data-inventory--create-inventory-target': 'form',
-                            }
-                        })
+                    form_start(
+                    form, {
+                    action: path('create_inventory'),
+                    method: 'POST',
+                    attr: {
+                    id: 'create-form',
+                    'data-controller': 'inventory--create-inventory',
+                    'data-inventory--create-inventory-target': 'form',
+                    }
+                    })
                     }}
 
                     <div class="errors"></div>
 
                     {{ form_row(form.title) }}
-                    {{
-                        form_row(form.description, {
-                            attr: {
-                                'data-controller': 'ui--markdown',
-                                'data-ui--markdown-target': 'textarea'
-                            }
-                        })
+                    {{ form_row(form.description, {
+                    attr: {'data-controller': 'ui--markdown','data-ui--markdown-target': 'textarea'}
+                    })
                     }}
                     {{ form_row(form.category) }}
                     {{ form_row(form.isPublic) }}
@@ -50,7 +47,7 @@
 
     <script data-translations type="application/json">
         {{ {
-            'inventory.create.create_successful': 'inventory.create.create_successful'|trans,
+                    'inventory.create.create_successful': 'inventory.create.create_successful'|trans,
         }|json_encode|raw }}
     </script>
 </div>

@@ -1,0 +1,53 @@
+<div class="modal fade" id="mergeInventory" tabindex="-1" aria-labelledby="mergeInventory" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h2 class="modal-title fs-5">
+                    {{ 'conflict_resolve.title' | trans }}
+                </h2>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body">
+                <p>{{ 'conflict_resolve.description' | trans }}</p>
+
+                {{ form_start(form, {attr: {
+                'data-controller': 'inventory--conflict'
+                }}) }}
+
+                {% for field in form.children %}
+                    {% if field.vars.name != '_token' %}
+
+                        {% if field.vars.name == 'imageUrl' %}
+
+                            <div class="mb-3">
+                                {{ form_label(field) }}
+                                {% for choice in field.children %}
+
+                                    <label class="form-check-label">
+
+                                        <img class="img-fluid img-thumbnail inventory-conflict-image" src="{{ choice.vars.attr['data-image-url'] }}" />
+
+                                        {{ form_widget(choice) }}
+
+                                    </label>
+
+                                {% endfor %}
+                            </div>
+
+                        {% else %}
+                            <div class="mb-3">
+                                {{ form_label(field) }}
+                                {{ form_widget(field) }}
+                            </div>
+                        {% endif %}
+
+                    {% endif %}
+                {% endfor %}
+
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </div>
+</div>

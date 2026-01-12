@@ -87,3 +87,7 @@
 .conflict-field img {
     max-width: 400px;
 }
+
+.inventory-conflict-image {
+    max-width: 300px;
+}

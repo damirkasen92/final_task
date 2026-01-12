@@ -6,8 +6,6 @@ class Result
     public function __construct(
         private string $status,
         private ?string $message = null,
-        private null | string | array $dbData = null,
-        private null | string | array $formData = null,
         private ?int $version = null
     ) {
     }
@@ -17,19 +15,9 @@ class Result
         return new self('ok');
     }
 
-    public static function conflict(string $message, string | array $dbData, string | array $formData): self
+    public static function conflict(string $message): self
     {
-        return new self('conflict', $message, $dbData, $formData);
-    }
-
-    public function getDbData(): array | string | null
-    {
-        return $this->dbData;
-    }
-
-    public function getFormData(): array | string | null
-    {
-        return $this->formData;
+        return new self('conflict', $message);
     }
 
     public function getStatus(): string

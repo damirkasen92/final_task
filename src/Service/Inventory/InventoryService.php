@@ -9,6 +9,7 @@ use App\Entity\Inventory;
 use App\Repository\InventoryRepository;
 use App\Service\FileStorage\FileStorageInterface;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\OptimisticLockException;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Serializer\SerializerInterface;
@@ -104,28 +105,20 @@ class InventoryService
         $this->em->flush();
     }
 
-    public function updateInventory(): Result
+    public function updateInventory(?Inventory $inventory): Result
     {
-        // Inventory $inventoryFromDB, Inventory $inventoryFromForm
-        // try {
-        $this->em->flush();
+        try {
+            $this->em->flush();
 
-        return Result::ok();
-        // } catch (OptimisticLockException $e) {
-        //     return Result::conflict(
-        //         'Conflict',
-        //         $this->serializer->serialize(
-        //             $inventoryFromDB,
-        //             'json',
-        //             ['groups' => ['json']]
-        //         ),
-        //         $this->serializer->serialize(
-        //             $inventoryFromForm,
-        //             'json',
-        //             ['groups' => ['json']]
-        //         ),
-        //     );
-        // }
+            return Result::ok();
+        } catch (OptimisticLockException $e) {
+            if ($inventory)
+                $this->em->detach($inventory);
+
+            return Result::conflict(
+                $this->translator->trans('conflict_resolve.title')
+            );
+        }
     }
 
     public function handleAutosave(Inventory $inventory, ?UploadedFile $file): array

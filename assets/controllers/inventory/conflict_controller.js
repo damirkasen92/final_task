@@ -3,37 +3,32 @@ import { Modal, Toast } from 'bootstrap';
 import Errors from '../../lib/Errors.js';
 
 export default class extends Controller {
-    static targets = ['form'];
-    static animationSpeed = 200;
+    #$form = null;
 
     connect() {
-        this.#init();
+        this.#$form = $(this.element);
 
-        console.log(this.formTarget);
-
-        $(this.formTarget).on('submit', (evt) => {
+        this.#$form.on('submit', (evt) => {
             evt.preventDefault();
-            this.#doPost($(evt.target));
+
+            this.#doPost();
         });
     }
 
-    #init() {
-        $('.toast .toast-body').text(trans('inventory.update.successful'));
-    }
-
-    #doPost($form) {
+    #doPost() {
         $.ajax({
-            url: $form.attr('action'),
+            url: this.#$form.attr('action'),
             method: 'POST',
-            data: new FormData($form.get(0)),
+            data: new FormData(this.#$form.get(0)),
             processData: false,
             contentType: false,
             success: (response) => {
                 console.log(response);
 
                 if (response.status) {
+                    Errors.hideErrors(this.#$form);
                     new Toast($('.toast').get(0)).show();
-                    Errors.hideErrors($form);
+                    Modal.getInstance($('#mergeInventory').get(0)).hide();
 
                     let $list = $('#inventory-container');
                     $list.attr('src', $list.attr('src'));
@@ -42,13 +37,9 @@ export default class extends Controller {
             error: (response) => {
                 console.log(response);
 
-                $('body').append(response.responseJSON.form);
-
-                new Modal($('#mergeInventory').get(0)).show();
-
                 if (response.responseJSON.errors) {
-                    Errors.hideErrors($form, () => {
-                        Errors.showErrors($form, response.responseJSON.errors);
+                    Errors.hideErrors(this.#$form, () => {
+                        Errors.showErrors(this.#$form, response.responseJSON.errors);
                     });
                 }
             },
