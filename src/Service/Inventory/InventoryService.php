@@ -6,6 +6,7 @@ namespace App\Service\Inventory;
 
 use App\Dto\Result;
 use App\Entity\Inventory;
+use App\Enum\IndexesEnum;
 use App\Repository\InventoryRepository;
 use App\Service\FileStorage\FileStorageInterface;
 use Doctrine\ORM\EntityManagerInterface;
@@ -36,7 +37,7 @@ class InventoryService
 
         if ($query) {
             $criteria = [
-                'id' => $this->searchEngine->search($query, [
+                'id' => $this->searchEngine->search($query, IndexesEnum::inventories->value, [
                     'filter' => 'user_id = ' . $userId
                 ])
             ];
@@ -59,7 +60,7 @@ class InventoryService
         if ($query) {
             $ownerIds = $this->inventoryRepository->getWriteAccessOwnerIds($userId);
             $searchIds = $ownerIds ?
-                $this->searchEngine->search($query, [
+                $this->searchEngine->search($query, IndexesEnum::inventories->value, [
                     'filter' => 'user_id IN [' . implode(', ', $ownerIds) . ']'
                 ])
                 : [];
