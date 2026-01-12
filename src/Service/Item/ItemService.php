@@ -4,10 +4,12 @@ namespace App\Service\Item;
 use App\Dto\ItemsDto;
 use App\Entity\Inventory;
 use App\Entity\Item;
+use App\Enum\IndexesEnum;
 use App\Enum\ItemFieldTypes;
 use App\Repository\ItemFieldRepository;
 use App\Repository\ItemRepository;
 use App\Service\FileStorage\FileStorageInterface;
+use App\Service\Inventory\SearchEngineInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\Pagination\PaginationInterface;
 use Knp\Component\Pager\PaginatorInterface;
@@ -19,7 +21,8 @@ class ItemService
         private ItemRepository $itemRepository,
         private ItemFieldRepository $itemFieldRepository,
         private PaginatorInterface $paginator,
-        private FileStorageInterface $fileStorage
+        private FileStorageInterface $fileStorage,
+        private SearchEngineInterface $searchEngine
     ) {
     }
 
@@ -50,9 +53,9 @@ class ItemService
         $this->em->flush();
     }
 
-    public function getItems(Inventory $inventory, int $page = 1): ItemsDto
+    public function getItems(Inventory $inventory, int $userId, int $page = 1, string $query = ''): ItemsDto
     {
-        $pagination = $this->getPagination($inventory, $page);
+        $pagination = $this->getPagination($inventory, $userId, $page, $query);
         $itemFields = $this->getItemFields($inventory);
         $itemSlots = $this->getItemSlots($itemFields);
 
@@ -75,16 +78,25 @@ class ItemService
         ]);
     }
 
-    private function getPagination(Inventory $inventory, int $page): PaginationInterface
+    private function getPagination(Inventory $inventory, int $userId, int $page, string $query): PaginationInterface
     {
         $queryBuilder = $this->itemRepository->createQueryBuilder('i')
             ->where('i.inventory = :inventory')
             ->setParameter('inventory', $inventory);
 
+        if ($query) {
+            $criteria = $this->searchEngine->search($query, IndexesEnum::inventories->value, [
+                'filter' => 'user_id = ' . $userId
+            ]);
+            $queryBuilder
+                ->andWhere('i.id IN (:ids)')
+                ->setParameter('ids', $criteria);
+        }
+
         return $this->paginator->paginate(
             $queryBuilder,
             $page,
-            10
+            1
         );
     }
 

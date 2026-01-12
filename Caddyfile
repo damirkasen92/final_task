@@ -9,3 +9,11 @@
         root /app/public
     }
 }
+
+// damirkassen92.duckdns.org {
+//     root * /app/public
+//     encode zstd br gzip
+//     php_server {
+//         root /app/public
+//     }
+// }

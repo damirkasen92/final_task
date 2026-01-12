@@ -7,26 +7,19 @@ export default class extends Controller {
     connect() {
         $(this.editBtnTarget).on('click', this.#doEdit.bind(this));
 
-        const undo = new Undo(
-            this.deleteBtnTarget,
-            trans('popover.undo'),
-            trans('popover.popover_title')
-        );
+        const undo = new Undo(this.deleteBtnTarget, trans('popover.undo'), trans('popover.popover_title'));
 
         $(this.deleteBtnTarget).on('click', (evt) => {
             undo.show(this.#doDelete.bind(this));
         });
 
-        this.#initCheckboxes();
+        $('#items_list').on('turbo:frame-load', () => {
+            this.#initCheckboxes();
+        });
     }
 
     #doEdit() {
-        $('#inventory-container').attr(
-            'src',
-            $('.table [type="checkbox"]:checked')
-                .parents('tr')
-                .data('edit-path')
-        );
+        $('#inventory-container').attr('src', $('.table [type="checkbox"]:checked').parents('tr').data('edit-path'));
     }
 
     #doDelete() {
@@ -40,10 +33,7 @@ export default class extends Controller {
                 item_ids: itemIds,
             },
             success: (response) => {
-                $('#inventory-container').attr(
-                    'src',
-                    $('#inventory-container').attr('src')
-                );
+                $('#inventory-container').attr('src', $('#inventory-container').attr('src'));
             },
             error: (response) => {},
         });

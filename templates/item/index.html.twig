@@ -1,82 +1,20 @@
 <turbo-frame id="inventory-container">
-    <div class="table-responsive" data-animate>
-        {% if is_granted(constant('App\\Enum\\ItemAttributes::EDIT').value, inventory) %}
-        <div class="items-toolbar mb-4" data-controller="item--items">
-            <a class="btn btn-dark me-3" href="{{ path('show_create_item', { id: inventory.id }) }}">
-                {{ 'inventory.items.toolbar.create' | trans }}
-            </a>
-            <button class="btn btn-dark me-3" id="edit-btn" data-item--items-target="editBtn" disabled>
-                {{ 'inventory.items.toolbar.edit' | trans }}
-            </button>
-            <button
-                class="btn btn-dark"
-                id="delete-btn"
-                data-item--items-target="deleteBtn"
-                data-path="{{ path('delete_items', { id: inventory.id }) }}"
-                disabled
-            >
-                {{ 'inventory.items.toolbar.delete' | trans }}
-            </button>
-        </div>
-        {% endif %} {% if pagination|length > 0 %}
 
-        <div class="table-responsive">
-            <table class="table">
-                <thead>
-                    <th></th>
-                    <th>Custom id</th>
-                    <th>Created At</th>
-                    <th>Created By</th>
+<div class="mb-3">
+    <input placeholder="{{ 'inventory.table.search' | trans }}..." class="form-control" type="text" id="item-search" autocomplete="off" data-controller="search" data-search-target="input" data-path="{{ path('show_items_list', {id: inventory.id}) }}"/>
+    <div id="search-results"></div>
+</div>
 
-                    {% for itemFieldName in itemFieldNames %}
-                    <th>{{ itemFieldName }}</th>
-                    {% endfor %}
-                </thead>
-                <tbody>
-                    {% for item in pagination %}
-                    <tr data-edit-path="{{ path('show_update_item', { id: item.id }) }}">
-                        <td style="width: 20px">
-                            <input class="form-check-input" type="checkbox" data-id="{{ item.id }}" />
-                        </td>
-                        <td>{{ item.customId }}</td>
-                        <td>{{ item.createdAt|date('d.m.Y H:i:s') }}</td>
-                        <td>{{ item.createdBy.email }}</td>
+{% include 'item/ui/items_toolbar.html.twig' %}
 
-                        {% for itemSlot in itemSlots %}
+<turbo-frame id="items_list" src="{{ path('show_items_list', {id: inventory.id}) }}">
+</turbo-frame>
 
-                        <td>
-                            {% if 'link' in itemSlot %}
-                            <img class="img-fluid" src="{{ attribute(item, itemSlot) }}" />
-                            {% else %}
-                            {{ attribute(item, itemSlot) }}
-                            {% endif %}
-                        </td>
-
-                        {% endfor %}
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
-        <div class="pagination">
-            {{ knp_pagination_render(pagination) }}
-        </div>
-
-        {% else %}
-
-        <h2 class="text-center mt-3">
-            {{ 'item.table.empty' | trans }}
-        </h2>
-
-        {% endif %}
-    </div>
-
-    <script data-translations type="application/json">
-        {{
-            {
+<script data-translations type="application/json">
+    {{{
                 'popover.popover_title': 'popover.popover_title' | trans,
                 'popover.undo': 'popover.undo' | trans
-            }|json_encode|raw
-        }}
-    </script>
+    }|json_encode|raw}}
+</script>
+
 </turbo-frame>

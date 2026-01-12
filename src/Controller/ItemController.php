@@ -57,6 +57,7 @@ class ItemController extends BaseController
 
         $form = $this->createForm(ItemType::class, $item, [
             'inventory' => $item->getInventory(),
+            'custom_id' => $item->getCustomId(),
         ]);
 
         return $this->render('item/edit.html.twig', [
@@ -103,11 +104,18 @@ class ItemController extends BaseController
     #[Route('/inventory/{id}/items', name: 'show_items', methods: ['GET'])]
     public function showItems(
         Inventory $inventory,
-        ItemService $itemService
     ) {
-        $itemsDto = $itemService->getItems($inventory);
-
         return $this->render('item/index.html.twig', [
+            'inventory' => $inventory,
+        ]);
+    }
+
+    #[Route('/inventory/{id}/items/list', name: 'show_items_list', methods: ['GET'])]
+    public function showListItems(Inventory $inventory, ItemService $itemService)
+    {
+        $itemsDto = $itemService->getItems($inventory, $this->getUser()->getId());
+
+        return $this->render('item/includes/items_list.html.twig', [
             'inventory' => $inventory,
             'pagination' => $itemsDto->pagination,
             'itemSlots' => $itemsDto->itemSlots,

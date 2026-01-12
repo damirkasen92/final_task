@@ -40,7 +40,7 @@ class ItemType extends AbstractType
 
         $builder
             ->add('customId', TextType::class, [
-                'data' => $this->getCustomId($this->customIdElements),
+                'data' => $options['custom_id'] ?? $this->getCustomId($this->customIdElements),
                 'constraints' => [
                     new Assert\Callback(function ($value, ExecutionContextInterface $context) {
                         $regex = $this->regexpBuilder->buildRegex($this->customIdElements);
@@ -154,6 +154,7 @@ class ItemType extends AbstractType
         $resolver->setDefaults([
             'data_class' => Item::class,
             'inventory' => null,
+            'custom_id' => null
         ]);
     }
 }

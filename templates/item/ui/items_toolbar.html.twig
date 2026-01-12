@@ -1,0 +1,13 @@
+{% if is_granted(constant('App\\Enum\\ItemAttributes::EDIT').value, inventory) %}
+    <div class="items-toolbar mb-4" data-controller="item--items">
+        <a class="btn btn-dark me-3" href="{{ path('show_create_item', { id: inventory.id }) }}">
+            {{ 'inventory.items.toolbar.create' | trans }}
+        </a>
+        <button class="btn btn-dark me-3" id="edit-btn" data-item--items-target="editBtn" disabled>
+            {{ 'inventory.items.toolbar.edit' | trans }}
+        </button>
+        <button class="btn btn-dark" id="delete-btn" data-item--items-target="deleteBtn" data-path="{{ path('delete_items', { id: inventory.id }) }}" disabled>
+            {{ 'inventory.items.toolbar.delete' | trans }}
+        </button>
+    </div>
+{% endif %}

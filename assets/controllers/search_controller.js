@@ -13,10 +13,7 @@ export default class extends Controller {
             clearTimeout(this.#timer);
 
             this.#timer = setTimeout(() => {
-                $('#inventories-list').attr(
-                    'src',
-                    $input.data('path') + '?q=' + e.target.value
-                );
+                $('#inventories-list, #items_list').attr('src', $input.data('path') + '?q=' + e.target.value);
             }, this.#delay);
         });
     }

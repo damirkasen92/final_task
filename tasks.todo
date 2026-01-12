@@ -24,8 +24,8 @@ x A table of inventories they have write access to.
 
 - meilisearch on item (search)
 The main page of the app contains:
-* A table of the latest inventories, showing the name, description (or image), and creator.
-* A table of the top 5 most popular inventories, based on the number of items.
+x A table of the latest inventories, showing the name, description (or image), and creator.
+x A table of the top 5 most popular inventories, based on the number of items.
 * A tag cloud — when a user clicks a tag, a list of related inventories is displayed (you should reuse the standard “search results” page layout for that)
 
 Each inventory page includes a discussion tab. Posts are linear—new posts are always added to the end; inserting posts between existing ones is not allowed. Posts should be updated automatically—when someone adds a post, it should appear for all users viewing the page within 2–5 seconds (real-time or near real-time updates). Every post displays Markdown text, user name (which works as a link to the user's personal page), and a date/time.
