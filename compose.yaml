@@ -16,7 +16,6 @@ services:
 
 ###> doctrine/doctrine-bundle ###
   database:
-    profiles: ["dev"]
     image: postgres:${POSTGRES_VERSION:-16}-alpine
     environment:
       POSTGRES_DB: ${POSTGRES_DB:-app}
@@ -35,7 +34,6 @@ services:
 ###< doctrine/doctrine-bundle ###
 
   meilisearch:
-    profiles: ["dev"]
     image: getmeili/meilisearch
     restart: unless-stopped
     ports:
