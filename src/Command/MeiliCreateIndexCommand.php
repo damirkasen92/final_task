@@ -26,19 +26,26 @@ class MeiliCreateIndexCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $this->client->createIndex(IndexesEnum::inventories->value, ['primaryKey' => 'id']);
+        /** @var array<\Meilisearch\Endpoints\Indexes> $indexes */
+        $indexes = $this->client->getIndexes()->getResults();
 
-        $index = $this->client->index(IndexesEnum::inventories->value);
-        $index->updateSettings([
-            'filterableAttributes' => ['user_id']
-        ]);
+        if (!array_find($indexes, fn($index) => $index->getUid() === IndexesEnum::inventories->value)) {
+            $this->client->createIndex(IndexesEnum::inventories->value, ['primaryKey' => 'id']);
 
-        $this->client->createIndex(IndexesEnum::items->value, ['primaryKey' => 'id']);
+            $index = $this->client->index(IndexesEnum::inventories->value);
+            $index->updateSettings([
+                'filterableAttributes' => ['user_id']
+            ]);
+        }
 
-        $index = $this->client->index(IndexesEnum::items->value);
-        $index->updateSettings([
-            'filterableAttributes' => ['inventory_id']
-        ]);
+        if (!array_find($indexes, fn($index) => $index->getUid() === IndexesEnum::items->value)) {
+            $this->client->createIndex(IndexesEnum::items->value, ['primaryKey' => 'id']);
+
+            $index = $this->client->index(IndexesEnum::items->value);
+            $index->updateSettings([
+                'filterableAttributes' => ['inventory_id']
+            ]);
+        }
 
         return Command::SUCCESS;
     }
