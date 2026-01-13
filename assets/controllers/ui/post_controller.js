@@ -4,7 +4,11 @@ export default class extends Controller {
     #delay = 500;
 
     connect() {
-        let eventSource = new EventSource(JSON.parse($('#mercure-url').text()));
+        let eventSource = null;
+
+        if (!eventSource) {
+            eventSource = new EventSource(JSON.parse($('#mercure-url').text()));
+        }
 
         eventSource.onmessage = (event) => {
             console.log(JSON.parse(event.data));
