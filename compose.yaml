@@ -58,9 +58,7 @@ services:
       MERCURE_SUBSCRIBER_JWT_KEY: '!ChangeThisMercureHubJWTSecretKey!'
       # Set the URL of your Symfony project (without trailing slash!) as value of the cors_origins directive
       MERCURE_EXTRA_DIRECTIVES: |
-        cors_origins http://localhost
-        cors_origins http://damirkassen.mooo.com
-        cors_origins http://damirkassen.mooo.com:80
+        cors_origins https://damirkassen.mooo.com
     # Comment the following line to disable the development mode
     # command: /usr/bin/caddy run --config /etc/caddy/dev.Caddyfile
     healthcheck:
