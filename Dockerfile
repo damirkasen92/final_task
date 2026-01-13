@@ -18,7 +18,7 @@ RUN install-php-extensions \
 ENV APP_ENV=prod
 ENV APP_DEBUG=0
 # ENV SERVER_NAME="damirkassen92.duckdns.org"
-ENV SERVER_NAME=":80"
+# ENV SERVER_NAME=":80"
 ENV FRANKENPHP_DOCUMENT_ROOT="/app/public"
 
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer

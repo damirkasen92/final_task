@@ -4,13 +4,14 @@ services:
     container_name: app
     ports:
       - "80:80"
-    #   - "443:443"
+      - "443:443"
     depends_on:
       database:
         condition: service_healthy
     environment:
       APP_ENV: ${APP_ENV}
       APP_DEBUG: ${APP_DEBUG}
+      SERVER_NAME: ${SERVER_NAME}
     volumes:
       - /app/var
       - caddy_data:/data
@@ -71,7 +72,7 @@ services:
       - mercure_data:/data
       - mercure_config:/config
     ports:
-      - "80"
+      - "6555:80"
 ###< symfony/mercure-bundle ###
 
 volumes:
