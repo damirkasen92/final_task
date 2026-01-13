@@ -6,5 +6,6 @@ mercure:
             jwt:
                 secret: "%env(MERCURE_JWT_SECRET)%"
                 # algorithm: "hmac.sha256"
-                # publish: ["*"]
-                # subscribe: ["*"]
+                publish: ["*"]
+                subscribe: ["*"]
+                # value: "ChangeThisMercureHubJWTSecretKey"

@@ -33,7 +33,8 @@ class PostService
                     'user' => $post->getCreatedBy(),
                     'time' => $post->getCreatedAt()->format('D-M-Y H:i:s'),
                 ]
-            )
+            ),
+            true
         );
 
         $this->hub->publish($update);

@@ -7,7 +7,9 @@ export default class extends Controller {
         let eventSource = null;
 
         if (!eventSource) {
-            eventSource = new EventSource(JSON.parse($('#mercure-url').text()));
+            eventSource = new EventSource(JSON.parse($('#mercure-url').text()), {
+                withCredentials: true,
+            });
         }
 
         eventSource.onmessage = (event) => {
