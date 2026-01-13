@@ -72,8 +72,8 @@ services:
       - mercure_data:/data
       - mercure_config:/config
     ports:
-      - "80"
-      - "443"
+      - "6666:80"
+      - "7777:443"
 ###< symfony/mercure-bundle ###
 
 volumes:
