@@ -16,6 +16,8 @@ use Knp\Component\Pager\PaginatorInterface;
 
 class ItemService
 {
+    private const int PAGE_LIMIT = 1;
+
     public function __construct(
         private EntityManagerInterface $em,
         private ItemRepository $itemRepository,
@@ -53,9 +55,9 @@ class ItemService
         $this->em->flush();
     }
 
-    public function getItems(Inventory $inventory, int $userId, int $page = 1, string $query = ''): ItemsDto
+    public function getItems(Inventory $inventory, int $page = 1, string $query = ''): ItemsDto
     {
-        $pagination = $this->getPagination($inventory, $userId, $page, $query);
+        $pagination = $this->getPagination($inventory, $page, $query);
         $itemFields = $this->getItemFields($inventory);
         $itemSlots = $this->getItemSlots($itemFields);
 
@@ -78,16 +80,19 @@ class ItemService
         ]);
     }
 
-    private function getPagination(Inventory $inventory, int $userId, int $page, string $query): PaginationInterface
+    private function getPagination(Inventory $inventory, int $page, string $query): PaginationInterface
     {
         $queryBuilder = $this->itemRepository->createQueryBuilder('i')
             ->where('i.inventory = :inventory')
             ->setParameter('inventory', $inventory);
 
         if ($query) {
-            $criteria = $this->searchEngine->search($query, IndexesEnum::inventories->value, [
-                'filter' => 'user_id = ' . $userId
+            $criteria = $this->searchEngine->search($query, IndexesEnum::items->value, [
+                'filter' => 'inventory_id = ' . $inventory->getId()
             ]);
+
+
+
             $queryBuilder
                 ->andWhere('i.id IN (:ids)')
                 ->setParameter('ids', $criteria);
@@ -96,7 +101,7 @@ class ItemService
         return $this->paginator->paginate(
             $queryBuilder,
             $page,
-            1
+            static::PAGE_LIMIT
         );
     }
 

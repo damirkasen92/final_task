@@ -27,10 +27,19 @@ class MeiliCreateIndexCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->client->createIndex(IndexesEnum::inventories->value, ['primaryKey' => 'id']);
+
         $index = $this->client->index(IndexesEnum::inventories->value);
         $index->updateSettings([
             'filterableAttributes' => ['user_id']
         ]);
+
+        $this->client->createIndex(IndexesEnum::items->value, ['primaryKey' => 'id']);
+
+        $index = $this->client->index(IndexesEnum::items->value);
+        $index->updateSettings([
+            'filterableAttributes' => ['inventory_id']
+        ]);
+
         return Command::SUCCESS;
     }
 }

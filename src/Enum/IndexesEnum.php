@@ -5,4 +5,5 @@ namespace App\Enum;
 enum IndexesEnum: string
 {
     case inventories = 'inventories';
+    case items = 'items';
 }

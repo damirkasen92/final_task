@@ -111,9 +111,11 @@ class ItemController extends BaseController
     }
 
     #[Route('/inventory/{id}/items/list', name: 'show_items_list', methods: ['GET'])]
-    public function showListItems(Inventory $inventory, ItemService $itemService)
+    public function showListItems(Inventory $inventory, ItemService $itemService, Request $request)
     {
-        $itemsDto = $itemService->getItems($inventory, $this->getUser()->getId());
+        $query = $request->query->getString('q', '');
+        $page = $request->query->getInt('page', 1);
+        $itemsDto = $itemService->getItems($inventory, $page, $query);
 
         return $this->render('item/includes/items_list.html.twig', [
             'inventory' => $inventory,
