@@ -1,0 +1,34 @@
+<turbo-frame id="inventory-container">
+
+<div class="container mt-4" {{ stimulus_controller('ui--post') }}>
+    <h1>{{ 'posts.title' | trans }}</h1>
+    <div id="posts" {{ stimulus_controller('ui--mark-parse') }}>
+        {% for post in posts %}
+            <div class="card mb-3">
+                <div class="card-body">
+                    <p class="card-text" data-description="{{ post.message | e('js') }}"></p>
+                </div>
+            </div>
+        {% else %}
+            <p>{{ 'posts.empty' | trans }}.</p>
+        {% endfor %}
+    </div>
+    <hr>
+    <h2>{{ 'posts.add_post' | trans }}</h2>
+    <form id="post-form" method="post" action="{{ path('create_post', {id: inventory.id}) }}">
+        <div class="mb-3">
+            <label for="content" class="form-label">{{ 'posts.message' | trans }}</label>
+            <textarea {{ stimulus_controller('ui--markdown') }} {{ stimulus_target('ui--markdown', 'textarea') }} name="message" id="content" class="form-control" rows="5" required></textarea>
+        </div>
+
+        <input id="post_item" type="hidden" name="_token" value="{{ csrf_token('post_item') }}">
+
+        <button type="submit" class="btn btn-dark">{{ 'forms.submit' | trans }}</button>
+    </form>
+</div>
+
+<script type="application/json" id="mercure-url">
+    {{ mercure('/posts')|json_encode(constant('JSON_UNESCAPED_SLASHES') b-or constant('JSON_HEX_TAG'))|raw }}
+</script>
+
+</turbo-frame>

@@ -12,8 +12,14 @@
             {{ 'inventory.tabs.items' | trans }}
         </button>
     </li>
+
     <li class="nav-item">
-        <button class="nav-link" id="discussions-tab" type="button">
+        <button
+            class="nav-link"
+            id="discussions-tab"
+            type="button"
+            data-src="{{ path('show_discussion', {id: inventory.id}) }}"
+        >
             {{ 'inventory.tabs.discussions' | trans }}
         </button>
     </li>

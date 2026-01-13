@@ -79,12 +79,19 @@ class Inventory
     #[ORM\Column(nullable: false)]
     private ?\DateTimeImmutable $createdAt = null;
 
+    /**
+     * @var Collection<int, Post>
+     */
+    #[ORM\OneToMany(targetEntity: Post::class, mappedBy: 'inventory', orphanRemoval: true)]
+    private Collection $posts;
+
     public function __construct()
     {
         $this->items = new ArrayCollection();
         $this->writers = new ArrayCollection();
         $this->tags = new ArrayCollection();
         $this->itemFields = new ArrayCollection();
+        $this->posts = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -312,6 +319,36 @@ class Inventory
     public function setCreatedAt(\DateTimeImmutable $createdAt): static
     {
         $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Post>
+     */
+    public function getPosts(): Collection
+    {
+        return $this->posts;
+    }
+
+    public function addPost(Post $post): static
+    {
+        if (!$this->posts->contains($post)) {
+            $this->posts->add($post);
+            $post->setInventory($this);
+        }
+
+        return $this;
+    }
+
+    public function removePost(Post $post): static
+    {
+        if ($this->posts->removeElement($post)) {
+            // set the owning side to null (unless already changed)
+            if ($post->getInventory() === $this) {
+                $post->setInventory(null);
+            }
+        }
 
         return $this;
     }

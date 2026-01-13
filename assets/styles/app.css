@@ -91,3 +91,9 @@
 .inventory-conflict-image {
     max-width: 300px;
 }
+
+#posts {
+    max-height: 500px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}

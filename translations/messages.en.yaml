@@ -185,3 +185,9 @@ conflict_resolve:
     title: Resolve Conflict
     description: You can resolve the conflict by choosing appropriate data
     success: The conflict was successfully resolved
+
+posts:
+    title: 'Posts'
+    empty: 'There are no posts yet'
+    add_post: 'Add post'
+    message: 'Your message'
