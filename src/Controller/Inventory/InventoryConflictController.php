@@ -16,8 +16,6 @@ final class InventoryConflictController extends BaseController
     #[Route('/inventory/{id}/conflict', name: 'inventory_conflict', methods: ['POST'])]
     public function conflictResolve(Request $request, Inventory $inventory, ConflictService $conflictService): Response
     {
-
-
         $form = $this->createForm(InventoryConflictResolvingType::class, $inventory)
             ->submit(
                 $request->request->all('inventory_conflict'),

@@ -69,8 +69,8 @@ services:
     volumes:
       - mercure_data:/data
       - mercure_config:/config
-    ports:
-      - "7777:3333"
+    expose:
+      - "3333"
 ###< symfony/mercure-bundle ###
 
 volumes:
