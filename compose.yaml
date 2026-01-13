@@ -52,7 +52,7 @@ services:
     restart: unless-stopped
     environment:
       # Uncomment the following line to disable HTTPS,
-      SERVER_NAME: ':8001'
+      SERVER_NAME: ':80'
       MERCURE_PUBLISHER_JWT_KEY: '!ChangeThisMercureHubJWTSecretKey!'
       MERCURE_SUBSCRIBER_JWT_KEY: '!ChangeThisMercureHubJWTSecretKey!'
       # Set the URL of your Symfony project (without trailing slash!) as value of the cors_origins directive
@@ -69,7 +69,7 @@ services:
       - mercure_data:/data
       - mercure_config:/config
     ports:
-      - "8001:8001"
+      - "8001:80"
 ###< symfony/mercure-bundle ###
 
 volumes:
