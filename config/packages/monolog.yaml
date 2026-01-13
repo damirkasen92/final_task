@@ -16,7 +16,7 @@ when@dev:
                 channels: ["!event", "!doctrine", "!console"]
             mercure:
                 type: stream
-                path: '%kernel.project_dir%/var/log/mercure.log'
+                path: "%kernel.project_dir%/var/log/mercure.log"
                 level: debug
 
 when@test:
@@ -57,3 +57,8 @@ when@prod:
                 channels: [deprecation]
                 path: php://stderr
                 formatter: monolog.formatter.json
+
+            mercure:
+                type: stream
+                path: "%kernel.project_dir%/var/log/mercure.log"
+                level: debug
