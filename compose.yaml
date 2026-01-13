@@ -12,6 +12,8 @@ services:
       APP_DEBUG: ${APP_DEBUG}
     volumes:
       - /app/var
+      - caddy_data:/data
+      - caddy_config:/config
     entrypoint: /app/entry.sh
 
 ###> doctrine/doctrine-bundle ###
@@ -49,3 +51,5 @@ volumes:
 ###< doctrine/doctrine-bundle ###
 
   meili_data:
+  caddy_data:
+  caddy_config:
