@@ -5,6 +5,6 @@ mercure:
             public_url: "%env(MERCURE_PUBLIC_URI)%"
             jwt:
                 secret: "%env(MERCURE_JWT_SECRET)%"
-                algorithm: "hmac.sha256"
-                publish: ["*"]
-                subscribe: ["*"]
+                # algorithm: "hmac.sha256"
+                # publish: ["*"]
+                # subscribe: ["*"]
