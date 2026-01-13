@@ -8,4 +8,5 @@ damirkassen.mooo.com {
     php_server {
         root /app/public
     }
+    reverse_proxy /mercure localhost:3333
 }
