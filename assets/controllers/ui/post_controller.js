@@ -3,40 +3,49 @@ import { Controller } from '@hotwired/stimulus';
 export default class extends Controller {
     #delay = 500;
     #eventSource = null;
+    _handler = null;
 
     connect() {
         if (!this.#eventSource) {
             this.#eventSource = new EventSource(JSON.parse($('#mercure-url').text()), {
                 withCredentials: true,
             });
-        }
 
-        this.#eventSource.onmessage = (event) => {
-            this.#addMessage(JSON.parse(event.data));
-            this.#scrollToBottom();
-        };
+            if (!this.#eventSource.onmessage)
+                this.#eventSource.onmessage = (event) => {
+                    this.#addMessage(JSON.parse(event.data));
+                    this.#scrollToBottom();
+                };
+        }
 
         setTimeout(() => {
             this.#scrollToBottom();
         }, 100);
 
-        $('#post-form')
-            .off('submit')
-            .on('submit', (evt) => {
-                evt.preventDefault();
+        this._handler = (evt) => this.#doPost(evt);
 
-                $.post({
-                    url: $(evt.target).attr('action'),
-                    data: new FormData(evt.target),
-                    processData: false,
-                    contentType: false,
-                    success: (response) => {
-                        if (response.status) {
-                            window.editors['content'].value('');
-                        }
-                    },
-                });
-            });
+        $('#post-form').on('submit.postForm', this._handler);
+    }
+
+    disconnect() {
+        $('#post-form').off('submit.postForm', this._handler);
+        this.#eventSource.onmessage = null;
+    }
+
+    #doPost(evt) {
+        evt.preventDefault();
+
+        $.post({
+            url: $(evt.target).attr('action'),
+            data: new FormData(evt.target),
+            processData: false,
+            contentType: false,
+            success: (response) => {
+                if (response.status) {
+                    window.editors['content'].value('');
+                }
+            },
+        });
     }
 
     #addMessage(data) {

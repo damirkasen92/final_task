@@ -22,7 +22,7 @@ Every user has their own personal page, where they can manage two sortable/filte
 x A table of inventories they own (with options to create new, delete, or edit).
 x A table of inventories they have write access to.
 
-- meilisearch on item (search)
+x meilisearch on item (search)
 The main page of the app contains:
 x A table of the latest inventories, showing the name, description (or image), and creator.
 x A table of the top 5 most popular inventories, based on the number of items.
@@ -36,7 +36,7 @@ x google storage symfony
 x Description markdown
 
 x Table of items in the inventory (with links to individual item pages).
-- Discussion section.
+x Discussion section.
 x General settings — title, description, etc.
 x ***Custom inventory numbers.***
 x Access settings — either all authenticated users (for public inventories) or specific users (for non-public ones).
