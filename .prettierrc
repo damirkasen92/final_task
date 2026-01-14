@@ -9,5 +9,11 @@
     "trailingComma": "es5",
     "bracketSpacing": true,
     "bracketSameLine": true,
-    "arrowParens": "always"
-  }
+    "arrowParens": "always",
+    "objectWrap": "preserve",
+    "proseWrap": "always",
+    "htmlWhitespaceSensitivity": "strict",
+    "singleAttributePerLine": true,
+    "plugins": ["@zackad/prettier-plugin-twig"],
+    "twigAlwaysBreakObjects": false
+}

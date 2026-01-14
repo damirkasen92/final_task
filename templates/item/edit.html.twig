@@ -1,21 +1,29 @@
 <turbo-frame id="inventory-container">
-<div data-animate>
-    {{ form_start(form, { action: path('update_item', { id: item.id }) }) }}
+    <div data-animate>
+        {{
+            form_start(
+                form,
+                {
+                    action: path(
+                        'update_item',
+                        {
+                            id: item.id
+                        }
+                    )
+                }
+            )
+        }}
 
-    {{ form_errors(form) }}
+        {{ form_errors(form) }}
 
-    {% for row in form %}
-        {% if 'link' in row.vars.name %}
+        {% for row in form %}
+            {% if 'link' in row.vars.name %}
+                {% include 'item/ui/form_file_field.html.twig' %}
+            {% else %}
+                {{ form_row(row) }}
+            {% endif %}
+        {% endfor %}
 
-            {% include "item/ui/form_file_field.html.twig" %}
-
-        {% else %}
-
-            {{ form_row(row) }}
-
-        {% endif %}
-    {% endfor %}
-
-    {{ form_end(form) }}
-</div>
+        {{ form_end(form) }}
+    </div>
 </turbo-frame>

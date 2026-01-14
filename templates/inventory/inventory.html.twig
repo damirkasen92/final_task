@@ -1,85 +1,74 @@
 {% extends 'base.html.twig' %} {% block title %}
-{{ inventory.title }}
+    {{ inventory.title }}
 {% endblock %} {% block body %}
-<ul class="nav nav-tabs mb-4" data-controller="inventory--inventory">
-    <li class="nav-item">
-        <button
-            class="nav-link active"
-            id="items-tab"
-            type="button"
-            data-src="{{ path('show_items', { id: inventory.id }) }}"
-        >
-            {{ 'inventory.tabs.items' | trans }}
-        </button>
-    </li>
+    <ul class="nav nav-tabs mb-4" data-controller="inventory--inventory">
+        <li class="nav-item">
+            <button
+                class="nav-link active"
+                id="items-tab"
+                type="button"
+                data-src="{{ path('show_items', { id: inventory.id }) }}">
+                {{ 'inventory.tabs.items'|trans }}
+            </button>
+        </li>
 
-    <li class="nav-item">
-        <button
-            class="nav-link"
-            id="discussions-tab"
-            type="button"
-            data-src="{{ path('show_discussion', {id: inventory.id}) }}"
-        >
-            {{ 'inventory.tabs.discussions' | trans }}
-        </button>
-    </li>
+        <li class="nav-item">
+            <button
+                class="nav-link"
+                id="discussions-tab"
+                type="button"
+                data-src="{{ path('show_discussion', { id: inventory.id }) }}">
+                {{ 'inventory.tabs.discussions'|trans }}
+            </button>
+        </li>
 
-    {% if is_granted(constant('App\\Enum\\InventoryAttributes::EDIT').value,
-    inventory) %}
+        {% if is_granted(constant('App\\Enum\\InventoryAttributes::EDIT').value, inventory) %}
+            <li class="nav-item">
+                <button
+                    class="nav-link"
+                    id="settings-tab"
+                    type="button"
+                    data-src="{{ path('show_inventory_settings', { id: inventory.id }) }}">
+                    {{ 'inventory.tabs.settings'|trans }}
+                </button>
+            </li>
+            <li class="nav-item">
+                <button
+                    class="nav-link"
+                    id="custom-id-tab"
+                    type="button"
+                    data-src="{{ path('get_custom_id', { id: inventory.id }) }}">
+                    {{ 'inventory.tabs.custom_id'|trans }}
+                </button>
+            </li>
+            <li class="nav-item">
+                <button
+                    class="nav-link"
+                    id="access-tab"
+                    type="button"
+                    data-src="{{ path('show_access_settings', { id: inventory.id }) }}">
+                    {{ 'inventory.tabs.access_settings'|trans }}
+                </button>
+            </li>
+            <li class="nav-item">
+                <button
+                    class="nav-link"
+                    id="fields-tab"
+                    type="button"
+                    data-src="{{ path('show_item_field', { id: inventory.id }) }}">
+                    {{ 'inventory.tabs.item_fields'|trans }}
+                </button>
+            </li>
 
-    <li class="nav-item">
-        <button
-            class="nav-link"
-            id="settings-tab"
-            type="button"
-            data-src="{{
-                path('show_inventory_settings', { id: inventory.id })
-            }}"
-        >
-            {{ 'inventory.tabs.settings' | trans }}
-        </button>
-    </li>
-    <li class="nav-item">
-        <button
-            class="nav-link"
-            id="custom-id-tab"
-            type="button"
-            data-src="{{ path('get_custom_id', { id: inventory.id }) }}"
-        >
-            {{ 'inventory.tabs.custom_id' | trans }}
-        </button>
-    </li>
-    <li class="nav-item">
-        <button
-            class="nav-link"
-            id="access-tab"
-            type="button"
-            data-src="{{ path('show_access_settings', { id: inventory.id }) }}"
-        >
-            {{ 'inventory.tabs.access_settings' | trans }}
-        </button>
-    </li>
-    <li class="nav-item">
-        <button
-            class="nav-link"
-            id="fields-tab"
-            type="button"
-            data-src="{{ path('show_item_field', { id: inventory.id }) }}"
-        >
-            {{ 'inventory.tabs.item_fields' | trans }}
-        </button>
-    </li>
+            {# Inventory statistics/aggregation #}
+        {% endif %}
+    </ul>
 
-    {# Inventory statistics/aggregation #} {% endif %}
-</ul>
-
-<div class="tab-content">
-    <div>
-        <turbo-frame
-            id="inventory-container"
-            src="{{ path('show_items', { id: inventory.id }) }}"
-        ></turbo-frame>
+    <div class="tab-content">
+        <div>
+            <turbo-frame id="inventory-container" src="{{ path('show_items', { id: inventory.id }) }}"></turbo-frame>
+        </div>
     </div>
-</div>
 
-{% include 'includes/toast.html.twig' %} {% endblock %}
+    {% include 'includes/toast.html.twig' %}
+{% endblock %}

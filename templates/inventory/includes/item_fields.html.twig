@@ -1,124 +1,118 @@
 <turbo-frame id="inventory-container">
-<div data-animate data-controller="inventory--item-field">
-    <h2 class="my-3 text-center">{{ 'item_field.index.title' | trans }}</h2>
+    <div data-animate data-controller="inventory--item-field">
+        <h2 class="my-3 text-center">{{ 'item_field.index.title'|trans }}</h2>
 
-    <div>
-        <div class="toolbar d-flex justify-content-center align-items-center mb-4">
-            <button class="btn btn-dark me-3" data-bs-toggle="modal" data-bs-target="#createItemField">
-                {{ 'item_field.index.create' | trans }}
-            </button>
-            <button class="btn btn-dark me-3" id="edit-btn" type="button" disabled>
-                {{ 'item_field.index.edit' | trans }}
-            </button>
-            <button
-            class="btn btn-dark"
-            type="button"
-            id="delete-btn"
-            data-delete="
+        <div>
+            <div class="toolbar d-flex justify-content-center align-items-center mb-4">
+                <button class="btn btn-dark me-3" data-bs-toggle="modal" data-bs-target="#createItemField">
+                    {{ 'item_field.index.create'|trans }}
+                </button>
+                <button class="btn btn-dark me-3" id="edit-btn" type="button" disabled>
+                    {{ 'item_field.index.edit'|trans }}
+                </button>
+                <button
+                    class="btn btn-dark"
+                    type="button"
+                    id="delete-btn"
+                    data-delete="
             {{ path('delete_item_fields', { id: inventory.id }) }}
             "
-            data-action="click->inventory--item-field#delete"
-            disabled
-            >
-            {{ 'item_field.index.delete' | trans }}
-        </button>
-    </div>
-    <turbo-frame
-    id="inventory-item-fields"
-    src="
+                    data-action="click->inventory--item-field#delete"
+                    disabled>
+                    {{ 'item_field.index.delete'|trans }}
+                </button>
+            </div>
+            <turbo-frame
+                id="inventory-item-fields"
+                src="
     {{ path('show_item_fields', { id: inventory.id }) }}
-    "
-    ></turbo-frame>
-</div>
-</div>
+    "></turbo-frame>
+        </div>
+    </div>
 
-<div class="modal fade" id="createItemField" tabindex="-1" aria-labelledby="createItemField" aria-hidden="true">
-    <div class="modal-dialog modal-xl">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2 class="modal-title fs-5">
-                    {{ 'inventory.modal.create.item_field' | trans }}
-                </h2>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <div class="container">
-                    {{
-                    form_start(form, {
-                    id: 'itemFieldForm',
-                    action: path('create_item_field', { id: inventory.id }),
-                    method: 'POST',
-                    })
-                    }}
+    <div class="modal fade" id="createItemField" tabindex="-1" aria-labelledby="createItemField" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title fs-5">{{ 'inventory.modal.create.item_field'|trans }}</h2>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="container">
+                        {{
+                            form_start(
+                                form,
+                                {
+                                    id: 'itemFieldForm',
+                                    action: path('create_item_field', { id: inventory.id }),
+                                    method: 'POST'
+                                }
+                            )
+                        }}
 
-                    <div class="errors"></div>
+                        <div class="errors"></div>
 
-                    {{ form_row(form.title) }}
-                    {{
-                    form_row(form.description, {
-                    attr: {
-                    'data-controller': 'ui--markdown',
-                    'data-ui--markdown-target': 'textarea'
-                    }
-                    })
-                    }}
-                    {{ form_row(form.isDisplayed) }}
-                    {{ form_row(form.type) }}
+                        {{ form_row(form.title) }}
+                        {{
+                            form_row(
+                                form.description,
+                                { attr: { 'data-controller': 'ui--markdown', 'data-ui--markdown-target': 'textarea' } }
+                            )
+                        }}
+                        {{ form_row(form.isDisplayed) }}
+                        {{ form_row(form.type) }}
 
-                    {{ form_end(form) }}
+                        {{ form_end(form) }}
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 
-{# edit #}
+    {# edit #}
 
-<div class="modal fade" id="editItemField" tabindex="-1" aria-labelledby="editItemField" aria-hidden="true">
-    <div class="modal-dialog modal-xl">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2 class="modal-title fs-5">
-                    {{ 'inventory.modal.edit.item_field' | trans }}
-                </h2>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <div class="container">
-                    {{
-                    form_start(editForm, {
-                    id: 'itemFieldForm',
-                    method: 'PUT',
-                    })
-                    }}
+    <div class="modal fade" id="editItemField" tabindex="-1" aria-labelledby="editItemField" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title fs-5">{{ 'inventory.modal.edit.item_field'|trans }}</h2>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="container">
+                        {{ form_start(editForm, { id: 'itemFieldForm', method: 'PUT' }) }}
 
-                    <div class="errors"></div>
+                        <div class="errors"></div>
 
-                    {{ form_row(editForm.title) }}
-                    {{
-                    form_row(editForm.description, {
-                    id: 'edit-description',
-                    attr: {
-                    'data-controller': 'ui--markdown',
-                    'data-ui--markdown-target': 'textarea',
-                    }
-                    })
-                    }}
-                    {{ form_row(editForm.isDisplayed) }}
-                    {{ form_row(editForm.type) }}
+                        {{ form_row(editForm.title) }}
+                        {{
+                            form_row(
+                                editForm.description,
+                                {
+                                    id: 'edit-description',
+                                    attr: { 'data-controller': 'ui--markdown', 'data-ui--markdown-target': 'textarea' }
+                                }
+                            )
+                        }}
+                        {{ form_row(editForm.isDisplayed) }}
+                        {{ form_row(editForm.type) }}
 
-                    {{ form_end(editForm) }}
+                        {{ form_end(editForm) }}
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 
-<script data-translations type="application/json">
-    {{ {
-                'form.create.success': 'item_field.create.success' | trans,
-                'form.edit.success': 'item_field.edit.success' | trans,
-                'sort.error': 'item_field.sort.error' | trans,
-    }|json_encode|raw }}
-</script>
+    <script data-translations type="application/json">
+        {{
+            {
+                'form.create.success': 'item_field.create.success'|trans,
+                'form.edit.success': 'item_field.edit.success'|trans,
+                'sort.error': 'item_field.sort.error'|trans
+            }
+                |json_encode
+                |raw
+        }}
+    </script>
 </turbo-frame>

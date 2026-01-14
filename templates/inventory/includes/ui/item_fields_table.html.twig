@@ -1,57 +1,52 @@
 <turbo-frame id="inventory-item-fields">
-    {% if itemFields|length > 0 %}
-
-    <div data-animate>
-        <div class="table-responsive">
-            <table
-                class="table"
-                data-controller="inventory--sort"
-                data-reorder-path="{{
-                    path('inventory_field_reorder', {
-                        id: inventory.id
-                    })
-                }}"
-            >
-                <thead>
-                    <tr>
-                        <th></th>
-                        <th>Title</th>
-                        <th>Type</th>
-                        <th>Is Displayed</th>
-                    </tr>
-                </thead>
-                <tbody id="sortable">
-                    {% for itemField in itemFields %}
-                    <tr
-                        data-id="{{ itemField.id }}"
-                        data-order="{{ itemField.orderIndex }}"
-                        data-inventory-id="{{ itemField.inventory.id }}"
-                        data-title="{{ itemField.title }}"
-                        data-description="{{ itemField.description }}"
-                        data-type="{{ itemField.type.value }}"
-                        data-is-displayed="{{ itemField.isDisplayed ? true : false }}"
-                        data-url="{{
-                            path('edit_item_fields', { id: itemField.inventory.id, itemFieldId: itemField.id })
-                        }}"
-                    >
-                        <td>
-                            <input class="form-check-input" type="checkbox" value="{{ itemField.id }}" />
-                        </td>
-                        <td>{{ itemField.title }}</td>
-                        <td>{{ itemField.type.value }}</td>
-                        <td>{% if itemField.isDisplayed %} yes {% else %} no {% endif %}</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+    {% if (itemFields|length) > 0 %}
+        <div data-animate>
+            <div class="table-responsive">
+                <table
+                    class="table"
+                    data-controller="inventory--sort"
+                    data-reorder-path="{{ path('inventory_field_reorder', { id: inventory.id }) }}">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>Title</th>
+                            <th>Type</th>
+                            <th>Is Displayed</th>
+                        </tr>
+                    </thead>
+                    <tbody id="sortable">
+                        {% for itemField in itemFields %}
+                            <tr
+                                data-id="{{ itemField.id }}"
+                                data-order="{{ itemField.orderIndex }}"
+                                data-inventory-id="{{ itemField.inventory.id }}"
+                                data-title="{{ itemField.title }}"
+                                data-description="{{ itemField.description }}"
+                                data-type="{{ itemField.type.value }}"
+                                data-is-displayed="{{ itemField.isDisplayed ? true : false }}"
+                                data-url="{{
+                                path(
+                                    'edit_item_fields',
+                                    { id: itemField.inventory.id, itemFieldId: itemField.id }
+                                )
+                                }}">
+                                <td><input class="form-check-input" type="checkbox" value="{{ itemField.id }}" /></td>
+                                <td>{{ itemField.title }}</td>
+                                <td>{{ itemField.type.value }}</td>
+                                <td>
+                                    {% if itemField.isDisplayed %}
+                                        yes
+                                    {% else %}
+                                        no
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
         </div>
-    </div>
-
     {% else %}
-
-    <h2 class="text-center mt-3">
-        {{ 'item_field.empty_list' | trans }}
-    </h2>
-
+        <h2 class="text-center mt-3">{{ 'item_field.empty_list'|trans }}</h2>
     {% endif %}
 </turbo-frame>

@@ -8,12 +8,46 @@
     <div class="admin-wrapper p-2">
         <h1 class="mb-3">{{ 'admin.title'|trans }}</h1>
 
-        <div class="admin-toolbar flex-row gap-2 mb-4" data-controller="admin--admin-panel" data-popover-title="{{ 'popover.popover_title'|trans }}" data-popover-btn="{{ 'popover.undo'|trans }}">
-            <button type="button" class="btn btn-dark my-1" data-action="click->admin--admin-panel#handle" data-src="{{ path('admin_block') }}">{{ 'admin.buttons.block'|trans }}</button>
-            <button type="button" class="btn btn-dark my-1" data-action="click->admin--admin-panel#handle" data-src="{{ path('admin_unblock') }}">{{ 'admin.buttons.unblock'|trans }}</button>
-            <button type="button" class="btn btn-dark my-1" data-action="click->admin--admin-panel#handle" data-src="{{ path('admin_delete') }}">{{ 'admin.buttons.delete'|trans }}</button>
-            <button type="button" class="btn btn-dark my-1" data-action="click->admin--admin-panel#handle" data-src="{{ path('admin_make_admin') }}">{{ 'admin.buttons.make_admin'|trans }}</button>
-            <button type="button" class="btn btn-dark my-1" data-action="click->admin--admin-panel#handle" data-src="{{ path('admin_unmake_admin') }}">{{ 'admin.buttons.unmake_admin'|trans }}</button>
+        <div
+            class="admin-toolbar flex-row gap-2 mb-4"
+            data-controller="admin--admin-panel"
+            data-popover-title="{{ 'popover.popover_title'|trans }}"
+            data-popover-btn="{{ 'popover.undo'|trans }}">
+            <button
+                type="button"
+                class="btn btn-dark my-1"
+                data-action="click->admin--admin-panel#handle"
+                data-src="{{ path('admin_block') }}">
+                {{ 'admin.buttons.block'|trans }}
+            </button>
+            <button
+                type="button"
+                class="btn btn-dark my-1"
+                data-action="click->admin--admin-panel#handle"
+                data-src="{{ path('admin_unblock') }}">
+                {{ 'admin.buttons.unblock'|trans }}
+            </button>
+            <button
+                type="button"
+                class="btn btn-dark my-1"
+                data-action="click->admin--admin-panel#handle"
+                data-src="{{ path('admin_delete') }}">
+                {{ 'admin.buttons.delete'|trans }}
+            </button>
+            <button
+                type="button"
+                class="btn btn-dark my-1"
+                data-action="click->admin--admin-panel#handle"
+                data-src="{{ path('admin_make_admin') }}">
+                {{ 'admin.buttons.make_admin'|trans }}
+            </button>
+            <button
+                type="button"
+                class="btn btn-dark my-1"
+                data-action="click->admin--admin-panel#handle"
+                data-src="{{ path('admin_unmake_admin') }}">
+                {{ 'admin.buttons.unmake_admin'|trans }}
+            </button>
         </div>
 
         <div class="admin-user-table">

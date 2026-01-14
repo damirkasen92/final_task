@@ -1,20 +1,45 @@
 <turbo-frame id="inventory-container">
+    <div class="mb-3">
+        <input
+            class="form-control"
+            type="text"
+            id="item-search"
+            autocomplete="off"
+            data-controller="search"
+            data-search-target="input"
+            placeholder="{{ 'inventory.table.search'|trans }}..."
+            data-path="{{
+            path(
+                'show_items_list',
+                {
+                    id: inventory.id
+                }
+            )
+            }}" />
+        <div id="search-results"></div>
+    </div>
 
-<div class="mb-3">
-    <input placeholder="{{ 'inventory.table.search' | trans }}..." class="form-control" type="text" id="item-search" autocomplete="off" data-controller="search" data-search-target="input" data-path="{{ path('show_items_list', {id: inventory.id}) }}"/>
-    <div id="search-results"></div>
-</div>
+    {% include 'item/ui/items_toolbar.html.twig' %}
 
-{% include 'item/ui/items_toolbar.html.twig' %}
+    <turbo-frame
+        id="items_list"
+        src="{{
+        path(
+            'show_items_list',
+            {
+                id: inventory.id
+            }
+        )
+        }}"></turbo-frame>
 
-<turbo-frame id="items_list" src="{{ path('show_items_list', {id: inventory.id}) }}">
-</turbo-frame>
-
-<script data-translations type="application/json">
-    {{{
-                'popover.popover_title': 'popover.popover_title' | trans,
-                'popover.undo': 'popover.undo' | trans
-    }|json_encode|raw}}
-</script>
-
+    <script data-translations type="application/json">
+        {{
+            {
+                'popover.popover_title': 'popover.popover_title'|trans,
+                'popover.undo': 'popover.undo'|trans
+            }
+                |json_encode
+                |raw
+        }}
+    </script>
 </turbo-frame>

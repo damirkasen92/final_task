@@ -1,95 +1,89 @@
 <turbo-frame id="inventories-list">
     <div data-animate>
-        <h2 class="text-center my-3">{{ 'inventory.mine' | trans }}</h2>
+        <h2 class="text-center my-3">{{ 'inventory.mine'|trans }}</h2>
 
-        {% if inventories|length > 0 %}
-
-        <div class="table-responsive">
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>
-                            <input
-                                class="main-checkbox form-check-input"
-                                type="checkbox"
-                                name="check"
-                                data-controller="ui--checkbox"
-                                data-action="click->ui--checkbox#click"
-                            />
-                        </th>
-                        <th>{{ 'inventory.table.title' | trans }}</th>
-                        {#
+        {% if (inventories|length) > 0 %}
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>
+                                <input
+                                    class="main-checkbox form-check-input"
+                                    type="checkbox"
+                                    name="check"
+                                    data-controller="ui--checkbox"
+                                    data-action="click->ui--checkbox#click" />
+                            </th>
+                            <th>{{ 'inventory.table.title'|trans }}</th>
+                            {#
                         <th>{{ 'inventory.table.description' | trans }}</th>
                         #}
-                        <th>{{ 'inventory.table.category' | trans }}</th>
-                        <th>{{ 'inventory.table.tags' | trans }}</th>
-                        <th>{{ 'inventory.table.picture' | trans }}</th>
-                    </tr>
-                </thead>
-                <tbody data-controller="ui--mark-parse">
-                    {% for inventory in inventories %} {% include "inventory/includes/ui/inventory_row.html.twig" %} {%
-                    endfor %}
-                </tbody>
-            </table>
-        </div>
-
+                            <th>{{ 'inventory.table.category'|trans }}</th>
+                            <th>{{ 'inventory.table.tags'|trans }}</th>
+                            <th>{{ 'inventory.table.picture'|trans }}</th>
+                        </tr>
+                    </thead>
+                    <tbody data-controller="ui--mark-parse">
+                        {% for inventory in inventories %}
+                            {% include 'inventory/includes/ui/inventory_row.html.twig' %}
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
         {% else %}
-
-        <h3 class="text-center mt-3">
-            {% if app.request.query.get('q')|length > 0 %}
-            {{ 'inventory.table.no_search_results' | trans }}
-            {% else %}
-            {{ 'inventory.table.empty' | trans }}
-            {% endif %}
-        </h3>
-
+            <h3 class="text-center mt-3">
+                {% if (app.request.query.get('q')|length) > 0 %}
+                    {{ 'inventory.table.no_search_results'|trans }}
+                {% else %}
+                    {{ 'inventory.table.empty'|trans }}
+                {% endif %}
+            </h3>
         {% endif %}
     </div>
 
     <div data-animate>
-        <h2 class="text-center my-3">{{ 'inventory.theirs' | trans }}</h2>
+        <h2 class="text-center my-3">{{ 'inventory.theirs'|trans }}</h2>
 
-        {% if inventories_writes|length > 0 %}
-
-        <div class="table-responsive">
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>
-                            <input
-                                class="main-checkbox form-check-input"
-                                type="checkbox"
-                                name="check"
-                                data-controller="ui--checkbox"
-                                data-action="click->ui--checkbox#click"
-                            />
-                        </th>
-                        <th>{{ 'inventory.table.title' | trans }}</th>
-                        {#
+        {% if (inventories_writes|length) > 0 %}
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>
+                                <input
+                                    class="main-checkbox form-check-input"
+                                    type="checkbox"
+                                    name="check"
+                                    data-controller="ui--checkbox"
+                                    data-action="click->ui--checkbox#click" />
+                            </th>
+                            <th>{{ 'inventory.table.title'|trans }}</th>
+                            {#
                         <th>{{ 'inventory.table.description' | trans }}</th>
                         #}
-                        <th>{{ 'inventory.table.category' | trans }}</th>
-                        <th>{{ 'inventory.table.tags' | trans }}</th>
-                        <th>{{ 'inventory.table.picture' | trans }}</th>
-                    </tr>
-                </thead>
-                <tbody data-controller="ui--mark-parse">
-                    {% for inventory_write in inventories_writes %} {% include
-                    "inventory/includes/ui/inventory_row.html.twig" with {inventory: inventory_write} %} {% endfor %}
-                </tbody>
-            </table>
-        </div>
-
+                            <th>{{ 'inventory.table.category'|trans }}</th>
+                            <th>{{ 'inventory.table.tags'|trans }}</th>
+                            <th>{{ 'inventory.table.picture'|trans }}</th>
+                        </tr>
+                    </thead>
+                    <tbody data-controller="ui--mark-parse">
+                        {% for inventory_write in inventories_writes %}
+                            {% include 'inventory/includes/ui/inventory_row.html.twig' with {
+                                inventory: inventory_write
+                            } %}
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
         {% else %}
-
-        <h3 class="text-center mt-3">
-            {% if app.request.query.get('q')|length > 0 %}
-            {{ 'inventory.table.no_search_results' | trans }}
-            {% else %}
-            {{ 'inventory.table.empty' | trans }}
-            {% endif %}
-        </h3>
-
+            <h3 class="text-center mt-3">
+                {% if (app.request.query.get('q')|length) > 0 %}
+                    {{ 'inventory.table.no_search_results'|trans }}
+                {% else %}
+                    {{ 'inventory.table.empty'|trans }}
+                {% endif %}
+            </h3>
         {% endif %}
     </div>
 </turbo-frame>

@@ -1,51 +1,53 @@
 {% extends 'base.html.twig' %} {% block title %}
-{{ 'inventory.title' | trans }}
+    {{ 'inventory.title'|trans }}
 {% endblock %} {% block body %}
-<div class="inventories-wrapper">
-    <h1 class="mb-3 text-center">{{ 'inventory.title' | trans }}</h1>
+    <div class="inventories-wrapper">
+        <h1 class="mb-3 text-center">{{ 'inventory.title'|trans }}</h1>
 
-    <div data-animate>
-        <div class="inventory-toolbar flex-row gap-2 mb-4">
-            <button
-                type="button"
-                class="btn btn-dark my-1"
-                data-controller="inventory--delete-inventory"
-                data-inventory--delete-inventory-target="deleteBtn"
-                data-delete-path="{{ path('delete_inventory') }}"
-            >
-                {{ 'inventory.toolbar.delete' | trans }}
-            </button>
+        <div data-animate>
+            <div class="inventory-toolbar flex-row gap-2 mb-4">
+                <button
+                    type="button"
+                    class="btn btn-dark my-1"
+                    data-controller="inventory--delete-inventory"
+                    data-inventory--delete-inventory-target="deleteBtn"
+                    data-delete-path="{{ path('delete_inventory') }}">
+                    {{ 'inventory.toolbar.delete'|trans }}
+                </button>
 
-            <button type="button" class="btn btn-dark my-1" data-bs-toggle="modal" data-bs-target="#createInventory">
-                {{ 'inventory.toolbar.create' | trans }}
-            </button>
+                <button
+                    type="button"
+                    class="btn btn-dark my-1"
+                    data-bs-toggle="modal"
+                    data-bs-target="#createInventory">
+                    {{ 'inventory.toolbar.create'|trans }}
+                </button>
+            </div>
+
+            <div class="mb-3">
+                <input
+                    class="form-control"
+                    type="text"
+                    id="inventory-search"
+                    placeholder="{{ 'inventory.table.search'|trans }}..."
+                    autocomplete="off"
+                    data-controller="search"
+                    data-search-target="input"
+                    data-path="{{ path('inventories_list') }}" />
+                <div id="search-results"></div>
+            </div>
+
+            <turbo-frame id="inventories-list" src="{{ path('inventories_list') }}"></turbo-frame>
         </div>
-
-        <div class="mb-3">
-            <input
-                class="form-control"
-                type="text"
-                id="inventory-search"
-                placeholder="{{ 'inventory.table.search' | trans }}..."
-                autocomplete="off"
-                data-controller="search"
-                data-search-target="input"
-                data-path="{{ path('inventories_list') }}"
-            />
-            <div id="search-results"></div>
-        </div>
-
-        <turbo-frame id="inventories-list" src="{{ path('inventories_list') }}"></turbo-frame>
     </div>
-</div>
 
-{% include 'inventory/includes/create.html.twig' %} {% include 'includes/toast.html.twig' %}
+    {% include 'inventory/includes/create.html.twig' %} {% include 'includes/toast.html.twig' %}
 
-<script data-translations type="application/json">
-    {{ {
-        'popover.undo': 'popover.undo' | trans,
-        'popover.popover_title': 'popover.popover_title' | trans
-    }|json_encode|raw }}
-</script>
-
+    <script data-translations type="application/json">
+        {{
+            { 'popover.undo': 'popover.undo'|trans, 'popover.popover_title': 'popover.popover_title'|trans }
+                |json_encode
+                |raw
+        }}
+    </script>
 {% endblock %}

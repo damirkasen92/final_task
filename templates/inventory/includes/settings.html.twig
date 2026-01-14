@@ -1,51 +1,54 @@
 <turbo-frame id="inventory-container">
-<div id="conflict"></div>
-<div data-animate>
-    <h2 class="my-3 text-center">Edit Inventory</h2>
-    {{
-    form_start(form, {
-    action: path('update_inventory_settings', { id: inventory.id }),
-    method: 'PATCH',
-    attr: {
-    id: 'update-form',
-    'data-controller': 'inventory--update-inventory inventory--autosave',
-    'data-inventory--update-inventory-target': 'form',
-    'data-autosave-path': path('autosave_inventory_settings', {
-    id: inventory.id
-    })
-    }
-    })
-    }}
+    <div id="conflict"></div>
+    <div data-animate>
+        <h2 class="my-3 text-center">Edit Inventory</h2>
+        {{
+            form_start(
+                form,
+                {
+                    action: path('update_inventory_settings', { id: inventory.id }),
+                    method: 'PATCH',
+                    attr: {
+                        id: 'update-form',
+                        'data-controller': 'inventory--update-inventory inventory--autosave',
+                        'data-inventory--update-inventory-target': 'form',
+                        'data-autosave-path': path('autosave_inventory_settings', { id: inventory.id })
+                    }
+                }
+            )
+        }}
 
-    <div class="errors"></div>
+        <div class="errors"></div>
 
-    {{ form_row(form.title) }}
-    {{
-    form_row(form.description, {
-    attr: {
-    'data-controller': 'ui--markdown',
-    'data-ui--markdown-target': 'textarea',
-    }
-    })
-    }}
-    {{ form_row(form.category) }}
+        {{ form_row(form.title) }}
+        {{
+            form_row(
+                form.description,
+                { attr: { 'data-controller': 'ui--markdown', 'data-ui--markdown-target': 'textarea' } }
+            )
+        }}
+        {{ form_row(form.category) }}
 
-    {% include "inventory/includes/ui/form_file_field.html.twig" %}
+        {% include 'inventory/includes/ui/form_file_field.html.twig' %}
 
-    {{ form_row(form.tags) }}
+        {{ form_row(form.tags) }}
 
-    {{ form_row(form._token) }}
+        {{ form_row(form._token) }}
 
-    {{ form_end(form) }}
-</div>
+        {{ form_end(form) }}
+    </div>
 
-<script data-translations type="application/json">
-    {{ {
-                'inventory.update.successful': 'inventory.update.successful' | trans,
-                'forms.submit': 'forms.submit' | trans,
-                'conflict_resolve.title': 'conflict_resolve.title' | trans,
-                'conflict_resolve.success': 'conflict_resolve.success' | trans,
-                'conflict_resolve.description': 'conflict_resolve.description' | trans,
-    }|json_encode|raw }}
-</script>
+    <script data-translations type="application/json">
+        {{
+            {
+                'inventory.update.successful': 'inventory.update.successful'|trans,
+                'forms.submit': 'forms.submit'|trans,
+                'conflict_resolve.title': 'conflict_resolve.title'|trans,
+                'conflict_resolve.success': 'conflict_resolve.success'|trans,
+                'conflict_resolve.description': 'conflict_resolve.description'|trans
+            }
+                |json_encode
+                |raw
+        }}
+    </script>
 </turbo-frame>

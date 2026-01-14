@@ -4,7 +4,12 @@
             <thead>
                 <tr>
                     <th>
-                        <input class="main-checkbox" type="checkbox" name="check" data-controller="ui--checkbox" data-action="click->ui--checkbox#click" />
+                        <input
+                            class="main-checkbox"
+                            type="checkbox"
+                            name="check"
+                            data-controller="ui--checkbox"
+                            data-action="click->ui--checkbox#click" />
                     </th>
                     <th>{{ 'admin.table.header.name'|trans }}</th>
                     <th>{{ 'admin.table.header.email'|trans }}</th>
@@ -16,7 +21,13 @@
                 {% for user in users %}
                     <tr>
                         <td>
-                            <input class="sub-checkbox" type="checkbox" name="check" data-controller="ui--sub-checkbox" data-action="click->ui--sub-checkbox#click" data-id="{{ user.id }}" />
+                            <input
+                                class="sub-checkbox"
+                                type="checkbox"
+                                name="check"
+                                data-controller="ui--sub-checkbox"
+                                data-action="click->ui--sub-checkbox#click"
+                                data-id="{{ user.id }}" />
                         </td>
                         <td>{{ user.name }}</td>
                         <td>{{ user.email }}</td>
