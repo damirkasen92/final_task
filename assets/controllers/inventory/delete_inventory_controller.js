@@ -8,12 +8,15 @@ export default class extends Controller {
     #popover;
 
     connect() {
-        console.log(trans('popover.undo'));
+        if (!this.#$deleteBtn) this.#$deleteBtn = $(this.deleteBtnTarget);
+        if (!this.#popover)
+            this.#popover = new UndoPopover(
+                this.deleteBtnTarget,
+                trans('popover.undo'),
+                trans('popover.popover_title')
+            );
 
-        this.#$deleteBtn = $(this.deleteBtnTarget);
-        this.#popover = new UndoPopover(this.deleteBtnTarget, trans('popover.undo'), trans('popover.popover_title'));
-
-        this.#$deleteBtn.on('click', (evt) => {
+        this.#$deleteBtn.off('click').on('click', (evt) => {
             if (this.#getIds().length === 0) return;
 
             this.#popover.show(() => {

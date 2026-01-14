@@ -8,9 +8,33 @@ export default class extends Controller {
     #duration = 300;
 
     connect() {
-        this.#$form = $('#createItemField form');
-        this.#$editForm = $('#editItemField form');
+        if (!this.#$form) this.#$form = $('#createItemField form');
+        if (!this.#$editForm) this.#$editForm = $('#editItemField form');
         this.#init();
+    }
+
+    #init() {
+        this.#$form.off('submit').on('submit', (evt) => {
+            evt.preventDefault();
+            this.#createItemField();
+        });
+
+        this.#$editForm.off('submit').on('submit', (evt) => {
+            evt.preventDefault();
+            this.#updateItemField();
+        });
+
+        $('#edit-btn')
+            .off('click')
+            .on('click', () => {
+                this.#openEditForm();
+            });
+
+        $('#inventory-item-fields')
+            .off('turbo:frame-load')
+            .on('turbo:frame-load', () => {
+                this.#initToolbarBtns();
+            });
     }
 
     delete(evt) {
@@ -77,24 +101,6 @@ export default class extends Controller {
                 });
             },
         });
-    }
-
-    #init() {
-        this.#$form.on('submit', (evt) => {
-            evt.preventDefault();
-            this.#createItemField();
-        });
-
-        this.#$editForm.on('submit', (evt) => {
-            evt.preventDefault();
-            this.#updateItemField();
-        });
-
-        $('#edit-btn').on('click', () => {
-            this.#openEditForm();
-        });
-
-        $('#inventory-item-fields').on('turbo:frame-load', this.#initToolbarBtns.bind(this));
     }
 
     #initToolbarBtns() {

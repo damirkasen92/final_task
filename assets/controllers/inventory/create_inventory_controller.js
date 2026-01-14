@@ -13,10 +13,12 @@ export default class extends Controller {
     #init() {
         $('.toast .toast-body').text(trans('inventory.create.create_successful'));
 
-        $(this.formTarget).on('submit', (evt) => {
-            evt.preventDefault();
-            this.#doPost($(evt.target));
-        });
+        $(this.formTarget)
+            .off('submit')
+            .on('submit', (evt) => {
+                evt.preventDefault();
+                this.#doPost($(evt.target));
+            });
     }
 
     #doPost($form) {

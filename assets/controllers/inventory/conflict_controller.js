@@ -6,11 +6,10 @@ export default class extends Controller {
     #$form = null;
 
     connect() {
-        this.#$form = $(this.element);
+        if (!this.#$form) this.#$form = $(this.element);
 
-        this.#$form.on('submit', (evt) => {
+        this.#$form.off('submit').on('submit', (evt) => {
             evt.preventDefault();
-
             this.#doPost();
         });
     }

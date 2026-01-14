@@ -13,11 +13,11 @@ export default class extends Controller {
     }
 
     #init() {
-        this.#$form = $(this.formTarget);
+        if (!this.#$form) this.#$form = $(this.formTarget);
 
         $('.toast .toast-body').text(trans('inventory.access.successful'));
 
-        this.#$form.on('submit', (evt) => {
+        this.#$form.off('submit').on('submit', (evt) => {
             evt.preventDefault();
             this.#doPost($(evt.target));
         });

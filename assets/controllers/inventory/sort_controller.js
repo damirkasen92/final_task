@@ -6,37 +6,37 @@ export default class extends Controller {
     #sortable;
     #$toast;
     #Toast;
+    #Sortable;
     #duration = 200;
 
     connect() {
-        this.#$toast = $('.toast');
-        this.#Toast = new Toast(this.#$toast.get(0));
-        this.#sortable = $('#sortable').get(0);
+        if (!this.#$toast) this.#$toast = $('.toast');
+        if (!this.#Toast) this.#Toast = new Toast(this.#$toast.get(0));
+        if (!this.#sortable) this.#sortable = $('#sortable').get(0);
 
-        new Sortable(this.#sortable, {
-            animation: this.#duration,
-            onEnd: (evt) => {
-                $.ajax({
-                    data: {
-                        inventoryId: $('[data-inventory-id]').attr(
-                            'data-inventory-id'
-                        ),
-                        order: this.#reorderList(),
-                    },
-                    url: $('[data-reorder-path]').data('reorder-path'),
-                    method: 'PATCH',
-                    success: (response) => {
-                        // console.log(response);
-                    },
-                    error: (response) => {
-                        if (evt.oldIndex !== evt.newIndex) {
-                            this.#returnElement(evt);
-                            this.#showToast(trans('sort.error'));
-                        }
-                    },
-                });
-            },
-        });
+        if (!this.#Sortable)
+            this.#Sortable = new Sortable(this.#sortable, {
+                animation: this.#duration,
+                onEnd: (evt) => {
+                    $.ajax({
+                        data: {
+                            inventoryId: $('[data-inventory-id]').attr('data-inventory-id'),
+                            order: this.#reorderList(),
+                        },
+                        url: $('[data-reorder-path]').data('reorder-path'),
+                        method: 'PATCH',
+                        success: (response) => {
+                            // console.log(response);
+                        },
+                        error: (response) => {
+                            if (evt.oldIndex !== evt.newIndex) {
+                                this.#returnElement(evt);
+                                this.#showToast(trans('sort.error'));
+                            }
+                        },
+                    });
+                },
+            });
     }
 
     #reorderList() {

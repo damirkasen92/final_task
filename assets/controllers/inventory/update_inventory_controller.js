@@ -9,12 +9,12 @@ export default class extends Controller {
     connect() {
         this.#init();
 
-        console.log(this.formTarget);
-
-        $(this.formTarget).on('submit', (evt) => {
-            evt.preventDefault();
-            this.#doPost($(evt.target));
-        });
+        $(this.formTarget)
+            .off('submit')
+            .on('submit', (evt) => {
+                evt.preventDefault();
+                this.#doPost($(evt.target));
+            });
     }
 
     #init() {

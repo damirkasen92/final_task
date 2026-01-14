@@ -2,18 +2,16 @@ import { Controller } from '@hotwired/stimulus';
 
 export default class extends Controller {
     #delay = 500;
+    #eventSource = null;
 
     connect() {
-        let eventSource = null;
-
-        if (!eventSource) {
-            eventSource = new EventSource(JSON.parse($('#mercure-url').text()), {
+        if (!this.#eventSource) {
+            this.#eventSource = new EventSource(JSON.parse($('#mercure-url').text()), {
                 withCredentials: true,
             });
         }
 
-        eventSource.onmessage = (event) => {
-            console.log(JSON.parse(event.data));
+        this.#eventSource.onmessage = (event) => {
             this.#addMessage(JSON.parse(event.data));
             this.#scrollToBottom();
         };
@@ -22,21 +20,23 @@ export default class extends Controller {
             this.#scrollToBottom();
         }, 100);
 
-        $('#post-form').on('submit', (evt) => {
-            evt.preventDefault();
+        $('#post-form')
+            .off('submit')
+            .on('submit', (evt) => {
+                evt.preventDefault();
 
-            $.post({
-                url: $(evt.target).attr('action'),
-                data: new FormData(evt.target),
-                processData: false,
-                contentType: false,
-                success: (response) => {
-                    if (response.status) {
-                        window.editors['content'].value('');
-                    }
-                },
+                $.post({
+                    url: $(evt.target).attr('action'),
+                    data: new FormData(evt.target),
+                    processData: false,
+                    contentType: false,
+                    success: (response) => {
+                        if (response.status) {
+                            window.editors['content'].value('');
+                        }
+                    },
+                });
             });
-        });
     }
 
     #addMessage(data) {
@@ -51,7 +51,6 @@ export default class extends Controller {
     #scrollToBottom() {
         let $posts = $('#posts');
         if ($posts.length) {
-            // $posts.scrollTop($posts[0].scrollHeight);
             $posts.animate({ scrollTop: $posts[0].scrollHeight }, this.#delay);
         }
     }

@@ -12,7 +12,7 @@ export default class extends Controller {
     #$form;
 
     connect() {
-        this.#$form = $(this.listTarget).closest('form');
+        if (!this.#$form) this.#$form = $(this.listTarget).closest('form');
         this.#initSortable();
         this.#initInputs();
         this.#initSelects();

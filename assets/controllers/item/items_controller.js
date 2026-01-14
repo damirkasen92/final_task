@@ -3,19 +3,25 @@ import Undo from '../../lib/UndoPopover.js';
 
 export default class extends Controller {
     static targets = ['editBtn', 'deleteBtn'];
+    #undo = null;
 
     connect() {
-        $(this.editBtnTarget).on('click', this.#doEdit.bind(this));
+        $(this.editBtnTarget).off('click').on('click', this.#doEdit.bind(this));
 
-        const undo = new Undo(this.deleteBtnTarget, trans('popover.undo'), trans('popover.popover_title'));
+        if (!this.#undo)
+            this.#undo = new Undo(this.deleteBtnTarget, trans('popover.undo'), trans('popover.popover_title'));
 
-        $(this.deleteBtnTarget).on('click', (evt) => {
-            undo.show(this.#doDelete.bind(this));
-        });
+        $(this.deleteBtnTarget)
+            .off('click')
+            .on('click', (evt) => {
+                this.#undo.show(this.#doDelete.bind(this));
+            });
 
-        $('#items_list').on('turbo:frame-load', () => {
-            this.#initCheckboxes();
-        });
+        $('#items_list')
+            .off('turbo:frame-load')
+            .on('turbo:frame-load', () => {
+                this.#initCheckboxes();
+            });
     }
 
     #doEdit() {

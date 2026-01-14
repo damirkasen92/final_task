@@ -8,7 +8,7 @@ use App\Enum\InventoryAttributes;
 use App\Form\ItemFieldType;
 use App\Repository\ItemFieldRepository;
 use App\Service\Inventory\ItemField\ItemFieldService;
-use Src\Exception\ItemFieldServiceException;
+use App\Exception\ItemFieldServiceException;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;

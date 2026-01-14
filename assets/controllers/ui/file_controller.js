@@ -2,11 +2,18 @@ import { Controller } from '@hotwired/stimulus';
 
 export default class extends Controller {
     #duration = 200;
+    #$element = null;
 
     connect() {
-        $(this.element).on('change', (e) => {
+        if (!this.#$element) {
+            this.#$element = $(this.element);
+        }
+
+        this.#$element.off('change').on('change', (e) => {
             const file = e.target.files[0];
             const $preview = $('#preview');
+            const $fileNameSpan = $('#file-name');
+            const initialText = $fileNameSpan.text();
 
             if (file) {
                 const reader = new FileReader();
@@ -20,14 +27,7 @@ export default class extends Controller {
             } else {
                 $preview.attr('src', null);
             }
-        });
 
-        const $input = $(this.element);
-        const $fileNameSpan = $('#file-name');
-        const initialText = $fileNameSpan.text();
-
-        $input.on('change', function () {
-            const file = $input[0].files[0];
             $fileNameSpan.text(file ? file.name : initialText);
         });
     }
