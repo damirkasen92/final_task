@@ -4,7 +4,7 @@ namespace App\Service\Inventory\ItemField;
 
 use App\Entity\Inventory;
 use App\Entity\ItemField;
-use App\Exception\InventoryServiceException;
+use App\Exception\ItemFieldServiceException;
 use App\Repository\ItemFieldRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -21,14 +21,14 @@ class ItemFieldService
     }
 
     /**
-     * @throws InventoryServiceException
+     * @throws ItemFieldServiceException
      */
     public function createItemField(ItemField $itemField, Inventory $inventory)
     {
         $slotNumber = $this->getFreeSlotNumber($inventory, $itemField);
 
         if ($slotNumber > self::MAX_SLOT) {
-            throw new InventoryServiceException($this->translator->trans('item_field.create_item_field_error', [
+            throw new ItemFieldServiceException($this->translator->trans('item_field.create_item_field_error', [
                 '%field%' => $itemField->getType(),
             ]));
         }
@@ -43,7 +43,7 @@ class ItemFieldService
     }
 
     /**
-     * @throws InventoryServiceException
+     * @throws ItemFieldServiceException
      */
     public function updateItemField(ItemField $itemField, Inventory $inventory)
     {
@@ -53,7 +53,7 @@ class ItemFieldService
             $slotNumber = $this->getFreeSlotNumber($inventory, $itemField);
 
             if ($slotNumber > self::MAX_SLOT) {
-                throw new InventoryServiceException($this->translator->trans('item_field.create_item_field_error', [
+                throw new ItemFieldServiceException($this->translator->trans('item_field.create_item_field_error', [
                     '%field%' => $itemField->getType(),
                 ]));
             }

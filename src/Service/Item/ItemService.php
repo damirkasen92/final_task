@@ -91,8 +91,6 @@ class ItemService
                 'filter' => 'inventory_id = ' . $inventory->getId()
             ]);
 
-
-
             $queryBuilder
                 ->andWhere('i.id IN (:ids)')
                 ->setParameter('ids', $criteria);
