@@ -13,6 +13,7 @@ navbar:
         logout: 'Logout'
         registration: 'Sign Up'
         inventories: 'Inventories'
+        user: User
 admin:
     title: 'Admin panel'
     buttons:
@@ -191,3 +192,6 @@ posts:
     empty: 'There are no posts yet'
     add_post: 'Add post'
     message: 'Your message'
+
+salesforce:
+    create: Create an Account in Salesforce

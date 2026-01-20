@@ -13,6 +13,7 @@ navbar:
         logout: 'Выход'
         registration: 'Регистрация'
         inventories: 'Инвентари'
+        User: Пользователь
 admin:
     title: 'Админ-панель'
     buttons:
@@ -191,3 +192,6 @@ posts:
     empty: 'Постов пока нет'
     add_post: 'Добавить пост'
     message: 'Ваше сообщение'
+
+salesforce:
+    create: Создать Account в Salesforce

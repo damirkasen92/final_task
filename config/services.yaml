@@ -39,3 +39,18 @@ services:
         arguments:
             - '%meilisearch_uri%'
             - '%meilisearch_key%'
+
+
+    App\Service\Salesforce\SalesforceOAuthService:
+        arguments:
+            $instanceUri: '%env(SALESFORCE_INSTANCE_URI)%'
+
+    Firebase\JWT\JWT: ~
+
+    App\Service\Salesforce\JWTGenerator:
+        arguments:
+            - '@Firebase\JWT\JWT'
+            - '%env(SALESFORCE_PRIVATE_PEM)%'
+            - '%env(SALESFORCE_CLIENT_ID)%'
+            - '%env(SALESFORCE_USERNAME)%'
+

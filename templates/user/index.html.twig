@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+{% endblock %}
+
+{% block body %}
+    <div class="example-wrapper">
+        {% if app.user == currentUser or is_granted('ROLE_ADMIN') %}
+            <a href="{{ path('salesforce_create_account') }}" class="btn btn-dark mb-4">
+                {{ 'salesforce.create' | trans }}
+            </a>
+        {% endif %}
+
+        {% include 'includes/errors_alert.html.twig' %}
+
+        {{ form(form, {
+        action: path('edit_user', {id: currentUser.id}),
+        method: 'PATCH'
+        }) }}
+    </div>
+{% endblock %}

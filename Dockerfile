@@ -13,7 +13,8 @@ RUN install-php-extensions \
     gd \
     mbstring \
     openssl \
-    xsl
+    xsl \
+    redis
 
 ENV APP_ENV=prod
 ENV APP_DEBUG=0

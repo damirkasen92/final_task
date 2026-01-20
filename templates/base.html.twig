@@ -104,6 +104,17 @@
                                             {{ 'navbar.menu.inventories'|trans }}
                                         </a>
                                     </li>
+                                    <li>
+                                        <a
+                                            class="nav-link {{
+                                            app.request.attributes.get('_route') == 'show_user'
+                                                ? 'active'
+                                                : ''
+                                            }}"
+                                            href="{{ path('show_user', {id: app.user.id}) }}">
+                                            {{ 'navbar.menu.user'|trans }}
+                                        </a>
+                                    </li>
                                     <li class="nav-item">
                                         <a class="nav-link" href="{{ path('logout') }}">
                                             {{ 'navbar.menu.logout'|trans }}
