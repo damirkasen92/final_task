@@ -11,11 +11,15 @@ class SalesforceService
     public function __construct(
         private SalesforceOAuthService $salesforceOAuthService,
         private SalesforceApiService $salesforceApiService
-    ) {}
+    ) {
+    }
 
-    public function addUserToCrm(User $user): ServiceResult {
+    public function addUserToCrm(User $user): ServiceResult
+    {
         $response = $this->salesforceOAuthService->getAccessToken();
         $dto = SalesforceAccessDataDto::fromArray($response);
+
+        //TODO if Account is already exists
         $accountData = $this->salesforceApiService->createAccount($dto, $user);
 
         if (!isset($accountData['success'])) {

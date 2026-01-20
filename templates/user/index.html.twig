@@ -5,6 +5,7 @@
 
 {% block body %}
     <div class="example-wrapper">
+        {# we can check if user is already in salesforce #}
         {% if app.user == currentUser or is_granted('ROLE_ADMIN') %}
             <a href="{{ path('salesforce_create_account') }}" class="btn btn-dark mb-4">
                 {{ 'salesforce.create' | trans }}

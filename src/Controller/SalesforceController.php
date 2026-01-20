@@ -18,15 +18,13 @@ final class SalesforceController extends BaseController
         /**
          * @var ServiceResult $result
          */
+        // a very simple implementation without additional tests
         $result = $salesforceService->addUserToCrm($this->getUser());
 
         if ($result->isFaulty()) {
-            return $this->json([
-                ...$this->jsonErrorData,
-                'errors' => $result->getErrors(),
-            ]);
+            $this->addFlash('error', $result->getErrors());
         }
 
-        return $this->json($this->jsonSuccessData);
+        return $this->redirectToRoute('show_user', ['id' => $this->getUser()->getId()]);
     }
 }
